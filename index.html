@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>YourBrand Agency</title>
+    <title>MQSD Agency</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            /* Base palette — overridden by Telegram theme if available */
-            --bg: #0a0a0f;
-            --bg-card: #13131a;
-            --bg-card-hover: #1a1a24;
-            --surface: #1e1e2a;
-            --border: rgba(255, 255, 255, 0.06);
-            --border-active: rgba(255, 255, 255, 0.15);
-            --text-primary: #f0eff4;
-            --text-secondary: #8a889a;
-            --text-muted: #5c5a6a;
-            --accent: #6c5ce7;
-            --accent-light: #a29bfe;
-            --accent-glow: rgba(108, 92, 231, 0.15);
-            --success: #2ed573;
-            --warning: #ffa502;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg:        #f6f4f0;
+            --surface:   #ffffff;
+            --surface-hi:#ede9e3;
+            --text:      #002347;
+            --dim:       rgba(0,35,71,0.60);
+            --muted:     rgba(0,35,71,0.38);
+            --faint:     rgba(0,35,71,0.07);
+            --accent:    #bf1a1a;
+            --accent-s:  rgba(191,26,26,0.10);
+            --green:     #22C55E;
+            --red-m:     #F87171;
+            --border:    rgba(0,35,71,0.10);
+            --border-hi: rgba(0,35,71,0.18);
+            --r:         10px;
+            --r-sm:      6px;
+            --ease:      0.22s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -36,1356 +34,1169 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Outfit', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
-            color: var(--text-primary);
-            line-height: 1.6;
+            color: var(--text);
+            line-height: 1.55;
             overflow-x: hidden;
-            padding-bottom: 100px;
+            padding-bottom: 88px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ── NOISE TEXTURE OVERLAY ─────────────────────── */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ── HERO SECTION ──────────────────────────────── */
-        .hero {
-            position: relative;
-            padding: 48px 20px 40px;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -60%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .hero-badge {
-            display: inline-flex;
+        /* ── HEADER ──────────────────────────────────── */
+        .header {
+            display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--accent-light);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            animation: fadeUp 0.6s ease both;
+            justify-content: space-between;
+            padding: 20px 20px 0;
         }
 
-        .hero-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s ease infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .hero h1 {
-            font-size: 32px;
-            font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
-            animation: fadeUp 0.6s ease 0.1s both;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent-light), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 15px;
-            color: var(--text-secondary);
-            max-width: 320px;
-            margin: 0 auto;
-            animation: fadeUp 0.6s ease 0.2s both;
-        }
-
-        /* ── STATS BAR ─────────────────────────────────── */
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            padding: 20px;
-            margin: 0 20px 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            animation: fadeUp 0.6s ease 0.3s both;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
-
-        /* ── NAVIGATION TABS ───────────────────────────── */
-        .nav-tabs {
-            display: flex;
-            gap: 6px;
-            padding: 0 20px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            animation: fadeUp 0.6s ease 0.35s both;
-        }
-
-        .nav-tabs::-webkit-scrollbar { display: none; }
-
-        .nav-tab {
-            flex-shrink: 0;
-            padding: 8px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .nav-tab:active {
-            transform: scale(0.96);
-        }
-
-        .nav-tab.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
-
-        /* ── SECTIONS ──────────────────────────────────── */
-        .section {
-            display: none;
-            padding: 0 20px;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .section.active {
+        .logo img {
+            height: 26px;
+            width: auto;
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title .icon {
+        .logo-text {
             font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -1.2px;
+            color: var(--text);
+            line-height: 1;
         }
 
-        /* ── SERVICE CARDS ─────────────────────────────── */
-        .service-card {
-            background: var(--bg-card);
+        .logo-text .dot { color: var(--accent); }
+
+        /* ── LANG TOGGLE ─────────────────────────────── */
+        .lang-toggle {
+            display: flex;
+            background: var(--faint);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 12px;
-            transition: var(--transition);
+            border-radius: 100px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .lang-btn {
+            padding: 4px 11px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            border-radius: 100px;
+            transition: var(--ease);
         }
 
-        .service-card:active {
-            transform: scale(0.98);
-            border-color: var(--accent);
+        .lang-btn.active {
+            background: var(--text);
+            color: var(--bg);
         }
 
-        .service-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            opacity: 0;
-            transition: var(--transition);
+        /* ── HERO ────────────────────────────────────── */
+        .hero {
+            padding: 28px 20px 22px;
         }
 
-        .service-card:active::after {
-            opacity: 1;
-        }
-
-        .service-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .service-icon {
-            width: 40px;
-            height: 40px;
-            display: flex;
+        .overline {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            background: var(--accent-glow);
-            border-radius: var(--radius-sm);
-            font-size: 20px;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .overline-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
             flex-shrink: 0;
         }
 
-        .service-price {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: var(--accent-light);
-            padding: 4px 10px;
-            background: var(--accent-glow);
-            border-radius: 100px;
+        .hero h1 {
+            font-size: clamp(30px, 9vw, 38px);
+            font-weight: 900;
+            letter-spacing: -1.8px;
+            line-height: 1.06;
+            margin-bottom: 14px;
         }
 
-        .service-name {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 6px;
+        .hero h1 .brand {
+            color: var(--text);
         }
 
-        .service-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
+        .hero h1 .tagline {
+            color: var(--dim);
+            font-weight: 300;
         }
 
-        .service-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 12px;
+        .hero-desc {
+            font-size: 13.5px;
+            color: var(--dim);
+            line-height: 1.7;
+            max-width: 300px;
         }
 
-        .service-tag {
-            font-size: 11px;
-            padding: 3px 10px;
-            background: var(--surface);
-            border-radius: 100px;
-            color: var(--text-muted);
-        }
-
-        /* ── PROJECT CARDS ─────────────────────────────── */
-        .project-card {
-            background: var(--bg-card);
+        /* ── STATS ROW ───────────────────────────────── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin: 0 20px 28px;
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--r);
             overflow: hidden;
-            margin-bottom: 12px;
+            background: var(--surface);
         }
 
-        .project-image {
-            width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, var(--surface), var(--bg-card));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
+        .stat {
+            padding: 16px 6px;
+            text-align: center;
+            border-right: 1px solid var(--border);
             position: relative;
         }
 
-        .project-image .placeholder-text {
-            position: absolute;
-            bottom: 10px;
-            right: 12px;
-            font-size: 10px;
-            color: var(--text-muted);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .stat:last-child { border-right: none; }
 
-        .project-info {
-            padding: 16px;
-        }
-
-        .project-client {
-            font-size: 11px;
-            color: var(--accent-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .stat-val {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            line-height: 1;
+            color: var(--text);
             margin-bottom: 4px;
         }
 
-        .project-name {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .project-result {
+        .stat-val sup {
             font-size: 13px;
-            color: var(--text-secondary);
+            letter-spacing: 0;
+            color: var(--accent);
+            vertical-align: super;
         }
 
-        .project-metrics {
+        .stat-lbl {
+            font-size: 9.5px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        /* ── TABS ────────────────────────────────────── */
+        .tabs-wrap {
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .tabs {
             display: flex;
-            gap: 16px;
-            margin-top: 12px;
-            padding-top: 12px;
+            gap: 3px;
+            background: var(--faint);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 3px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px 10px;
+            background: transparent;
+            border: none;
+            border-radius: 100px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dim);
+            cursor: pointer;
+            transition: var(--ease);
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .tab.active {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* ── SECTIONS ────────────────────────────────── */
+        .section {
+            display: none;
+            padding: 0 20px;
+            animation: fadeUp 0.28s ease both;
+        }
+
+        .section.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── SECTION HEAD ────────────────────────────── */
+        .sec-head {
+            margin-bottom: 20px;
+        }
+
+        .sec-title {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            line-height: 1.1;
+        }
+
+        .sec-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* ── PROJECT CARD ────────────────────────────── */
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            overflow: hidden;
+            margin-bottom: 10px;
+            transition: border-color var(--ease);
+        }
+
+        .project-card:active { border-color: var(--border-hi); }
+
+        .project-thumb {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Placeholder visual when no image */
+        .project-ph {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(150deg, var(--surface-hi) 0%, var(--surface) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 16px 18px;
+            position: relative;
+        }
+
+        .ph-index {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 1;
+            color: var(--border-hi);
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            user-select: none;
+        }
+
+        .ph-type-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--dim);
+            border: 1px solid var(--border-hi);
+            border-radius: 100px;
+            padding: 4px 10px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .project-body { padding: 18px; }
+
+        .project-type {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .project-name {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            line-height: 1.2;
+            margin-bottom: 3px;
+        }
+
+        .project-client {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .proj-block { margin-bottom: 14px; }
+
+        .proj-block-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 7px;
+        }
+
+        .proj-block-text {
+            font-size: 13px;
+            color: var(--dim);
+            line-height: 1.6;
+        }
+
+        .tool-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tool-tag {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 11px;
+            border: 1px solid var(--border-hi);
+            border-radius: var(--r-sm);
+            color: var(--dim);
+            background: var(--faint);
+        }
+
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bullet-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            font-size: 13px;
+            color: var(--dim);
+            line-height: 1.5;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            min-width: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-top: 6px;
+        }
+
+        /* Metrics */
+        .metrics {
+            display: flex;
+            margin-top: 16px;
+            padding-top: 14px;
             border-top: 1px solid var(--border);
         }
 
         .metric {
-            text-align: center;
             flex: 1;
+            text-align: center;
+            border-right: 1px solid var(--border);
         }
 
-        .metric-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 16px;
+        .metric:last-child { border-right: none; }
+
+        .metric-val {
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .metric-val.pos { color: var(--green); }
+        .metric-val.neg { color: var(--red-m); }
+
+        .metric-lbl {
+            font-size: 9.5px;
             font-weight: 600;
-            color: var(--success);
-        }
-
-        .metric-label {
-            font-size: 10px;
-            color: var(--text-muted);
+            color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        /* ── FAQ ───────────────────────────────────────── */
-        .faq-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 8px;
-            overflow: hidden;
-        }
-
-        .faq-question {
+        /* ── SERVICE CARD ────────────────────────────── */
+        .svc-list {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: var(--transition);
+            flex-direction: column;
+            gap: 1px;
         }
 
-        .faq-question:active {
-            background: var(--bg-card-hover);
-        }
-
-        .faq-arrow {
-            font-size: 18px;
-            color: var(--text-muted);
-            transition: transform 0.3s ease;
-            flex-shrink: 0;
-            margin-left: 12px;
-        }
-
-        .faq-item.open .faq-arrow {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 200px;
-        }
-
-        .faq-answer-inner {
-            padding: 0 16px 16px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* ── ABOUT ─────────────────────────────────────── */
-        .about-block {
-            background: var(--bg-card);
+        .svc-card {
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--r);
             padding: 20px;
-            margin-bottom: 12px;
-        }
-
-        .about-block h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .about-block p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .process-steps {
-            counter-reset: step;
-        }
-
-        .process-step {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 16px;
             align-items: flex-start;
+            transition: border-color var(--ease);
+            margin-bottom: 8px;
         }
 
-        .process-step:last-child { margin-bottom: 0; }
+        .svc-card:active { border-color: var(--border-hi); }
 
-        .step-num {
-            counter-increment: step;
-            width: 32px;
-            height: 32px;
+        .svc-icon-wrap {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-s);
+            border: 1px solid rgba(212,42,42,0.15);
+            border-radius: var(--r-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--accent-glow);
-            border-radius: 50%;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--accent-light);
+            color: var(--accent);
             flex-shrink: 0;
         }
 
-        .step-content h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
+        .svc-body {}
 
-        .step-content p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* ── CONTACT SECTION ───────────────────────────── */
-        .contact-section {
-            padding: 0 20px;
-            margin-top: 24px;
-        }
-
-        .contact-card {
-            background: linear-gradient(135deg, var(--accent-glow), var(--bg-card));
-            border: 1px solid var(--accent);
-            border-radius: var(--radius);
-            padding: 24px;
-            text-align: center;
-        }
-
-        .contact-card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .contact-card p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-            text-align: left;
-        }
-
-        .form-label {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-muted);
+        .svc-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            display: block;
+            color: var(--accent);
+            margin-bottom: 3px;
         }
 
-        .form-input, .form-select {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-family: 'Outfit', sans-serif;
-            font-size: 14px;
-            color: var(--text-primary);
-            transition: var(--transition);
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .form-input:focus, .form-select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .form-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .form-select {
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235c5a6a'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 36px;
-        }
-
-        .form-select option {
-            background: var(--bg);
-            color: var(--text-primary);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--accent);
-            border: none;
-            border-radius: var(--radius-sm);
-            font-family: 'Outfit', sans-serif;
+        .svc-name {
             font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .svc-desc {
+            font-size: 12.5px;
+            color: var(--dim);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .svc-num {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--muted);
+            position: absolute;
+            top: 18px;
+            right: 18px;
+        }
+
+        /* ── ABOUT ───────────────────────────────────── */
+        .about-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 20px;
+            margin-bottom: 10px;
+        }
+
+        .about-card p {
+            font-size: 13.5px;
+            color: var(--dim);
+            line-height: 1.7;
+        }
+
+        .about-card h3 {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+            margin-bottom: 14px;
+        }
+
+        /* Process steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step:first-child { padding-top: 0; }
+        .step:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .step-num {
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
+            background: var(--accent-s);
+            border: 1px solid rgba(212,42,42,0.20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-top: 1px;
+        }
+
+        .step-content {}
+
+        .step-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: var(--text);
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--dim);
+            line-height: 1.55;
+        }
+
+        /* Contacts grid */
+        .contacts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .contact-key {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .contact-val {
+            font-size: 13px;
             font-weight: 600;
-            color: #fff;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 8px;
+            color: var(--text);
         }
 
-        .submit-btn:active {
-            transform: scale(0.97);
-            background: var(--accent-light);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .submit-btn.success {
-            background: var(--success);
-        }
-
-        /* ── BOTTOM CTA (FIXED) ────────────────────────── */
-        .bottom-cta {
+        /* ── BOTTOM BAR ──────────────────────────────── */
+        .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             padding: 12px 20px;
             padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-            background: linear-gradient(to top, var(--bg) 80%, transparent);
+            background: linear-gradient(to top, var(--bg) 65%, rgba(7,16,28,0) 100%);
             z-index: 100;
         }
 
         .cta-btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px 24px;
             background: var(--accent);
             border: none;
-            border-radius: var(--radius-sm);
-            font-family: 'Outfit', sans-serif;
-            font-size: 15px;
-            font-weight: 600;
+            border-radius: var(--r);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
             color: #fff;
             cursor: pointer;
-            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 9px;
+            transition: opacity var(--ease), transform var(--ease);
         }
 
         .cta-btn:active {
             transform: scale(0.97);
+            opacity: 0.88;
         }
 
-        /* ── LANG TOGGLE ───────────────────────────────── */
-        .lang-toggle {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            display: flex;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            overflow: hidden;
-            z-index: 10;
-        }
-
-        .lang-btn {
-            padding: 6px 12px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .lang-btn.active {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        /* ── UTILITY ───────────────────────────────────── */
         .hidden { display: none !important; }
 
-        @media (prefers-color-scheme: light) {
-            :root {
-                --bg: #f5f5f7;
-                --bg-card: #ffffff;
-                --bg-card-hover: #f0f0f3;
-                --surface: #e8e8ed;
-                --border: rgba(0, 0, 0, 0.06);
-                --border-active: rgba(0, 0, 0, 0.15);
-                --text-primary: #1a1a2e;
-                --text-secondary: #6b6b80;
-                --text-muted: #9a9aad;
-                --accent-glow: rgba(108, 92, 231, 0.08);
-            }
+        /* ── DIVIDER ─────────────────────────────────── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 20px 24px;
         }
     </style>
 </head>
 <body>
 
-    <!-- ── HERO ──────────────────────────────────────── -->
-    <section class="hero">
-        <div class="lang-toggle">
-            <button class="lang-btn active" data-lang="uz" onclick="setLang('uz')">UZ</button>
-            <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
-        </div>
-
-        <div class="hero-badge">
-            <span data-t="badge">Biz onlaynmiz</span>
-        </div>
-
-        <h1>
-            <span data-t="hero_title_1">Marketing</span><br>
-            <span data-t="hero_title_2" style="-webkit-text-fill-color: var(--text-primary); background: none;">strategiyangiz</span>
-        </h1>
-        <p data-t="hero_desc">Professional SMM, targetlangan reklama va brending xizmatlari Toshkentda</p>
-    </section>
-
-    <!-- ── STATS ─────────────────────────────────────── -->
-    <div class="stats-bar">
-        <div class="stat">
-            <div class="stat-value">[X]+</div>
-            <div class="stat-label" data-t="stat_projects">Loyihalar</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value">[X]+</div>
-            <div class="stat-label" data-t="stat_clients">Mijozlar</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value">[X]</div>
-            <div class="stat-label" data-t="stat_years">Yil tajriba</div>
-        </div>
+<!-- ── HEADER ──────────────────────────────────────── -->
+<header class="header">
+    <div class="logo">
+        <svg height="26" viewBox="0 0 1024 338" xmlns="http://www.w3.org/2000/svg" style="display:block;width:auto;fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+            <g transform="matrix(1,0,0,1,0,-4125)"><g transform="matrix(1,0,0,0.330078,0,2877.231914)"><rect x="0" y="3780.22" width="1024" height="1024" style="fill:none;"/><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M212.155,369.081L226.311,369.081L243.097,453.619L270.724,369.081L286.721,369.081L274.092,565.614L257.147,565.614L265.093,442.058L242.202,512.724L237.993,512.724L224.416,441.625L216.47,565.614L199.526,565.614L212.155,369.081Z" style="fill:#002347;fill-rule:nonzero;"/></g><g transform="matrix(1,0,0,3.029586,0,2735.013372)"><path d="M498.568,602.141C490.444,607.149 481.363,611.18 471.326,614.235C460.564,617.511 448.678,619.148 435.67,619.148C421.538,619.148 408.646,616.856 396.995,612.27C385.343,607.684 375.353,601.343 367.023,593.248C358.694,585.153 352.26,575.537 347.721,564.4C343.182,553.263 340.913,541.143 340.913,528.041C340.913,520.367 341.965,512.365 344.071,504.036C346.177,495.707 349.359,487.518 353.617,479.469C357.875,471.421 363.21,463.747 369.62,456.447C376.031,449.147 383.518,442.736 392.081,437.215C400.645,431.693 410.331,427.295 421.14,424.019C431.95,420.743 443.859,419.106 456.867,419.106C471.092,419.106 484.007,421.375 495.612,425.914C507.217,430.453 517.184,436.77 525.513,444.866C533.843,452.961 540.277,462.577 544.816,473.714C549.355,484.851 551.624,496.97 551.624,510.073C551.624,517.747 550.571,525.748 548.466,534.078C546.36,542.407 543.155,550.619 538.85,558.714C536.28,563.546 534.048,567.49 531.303,571.436L547.595,588.958L514.726,619.519L498.568,602.141ZM501.175,538.365C501.385,537.875 501.589,537.382 501.789,536.885C505.065,528.743 506.702,520.18 506.702,511.196C506.702,503.896 505.369,497.134 502.702,490.911C500.034,484.687 496.314,479.259 491.541,474.626C486.768,469.994 481.036,466.367 474.345,463.747C467.653,461.126 460.283,459.816 452.235,459.816C442.408,459.816 433.424,461.618 425.281,465.221C417.139,468.824 410.144,473.714 404.295,479.891C398.445,486.067 393.906,493.227 390.678,501.369C387.449,509.511 385.834,518.074 385.834,527.059C385.834,534.265 387.168,541.003 389.835,547.273C392.503,553.544 396.223,558.995 400.996,563.628C405.769,568.26 411.501,571.887 418.192,574.507C424.884,577.128 432.254,578.438 440.302,578.438C450.035,578.438 458.973,576.636 467.115,573.033L467.525,572.85L462.191,533.13L501.175,538.365Z" style="fill:#002347;"/><g transform="matrix(0.933333,0,0,0.933333,94.266667,225)"><circle cx="379" cy="315" r="15" style="fill:rgb(191,26,26);"/></g></g><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M398.964,570.528C394.544,570.528 390.781,569.323 387.677,566.915C384.572,564.506 381.985,561.399 379.915,557.594C377.845,553.788 376.231,549.453 375.074,544.588C373.916,539.723 373.074,534.858 372.548,529.993C372.021,525.127 371.741,520.479 371.706,516.047C371.671,511.616 371.758,507.858 371.969,504.776L388.597,504.776C388.422,507.377 388.413,510.243 388.571,513.374C388.729,516.505 389.211,519.467 390.018,522.261C390.825,525.055 392.053,527.391 393.702,529.27C395.351,531.149 397.596,532.088 400.437,532.088C403.49,532.088 405.954,531.245 407.831,529.559C409.708,527.873 411.155,525.802 412.172,523.345C413.19,520.888 413.874,518.239 414.224,515.397C414.575,512.555 414.751,509.93 414.751,507.521C414.751,504.631 414.461,502.03 413.882,499.718C413.304,497.406 412.47,495.31 411.383,493.432C410.295,491.553 408.953,489.819 407.357,488.229C405.761,486.64 403.946,485.074 401.911,483.533C399.28,481.51 396.587,479.197 393.833,476.596C391.079,473.995 388.589,470.623 386.361,466.481C384.133,462.338 382.3,457.232 380.862,451.162C379.424,445.093 378.704,437.579 378.704,428.619C378.704,425.247 378.862,421.297 379.178,416.769C379.494,412.241 380.064,407.593 380.888,402.824C381.713,398.055 382.844,393.359 384.282,388.734C385.721,384.11 387.58,379.967 389.86,376.306C392.141,372.646 394.877,369.707 398.069,367.491C401.262,365.276 405.033,364.168 409.383,364.168C414.821,364.168 419.267,365.854 422.723,369.225C426.178,372.597 428.845,377.149 430.722,382.882C432.598,388.614 433.782,395.213 434.274,402.679C434.765,410.146 434.747,417.925 434.221,426.018L417.803,426.018C417.908,424.284 417.917,422.164 417.829,419.659C417.741,417.155 417.373,414.746 416.724,412.434C416.075,410.122 415.031,408.147 413.593,406.509C412.155,404.871 410.12,404.052 407.489,404.052C404.682,404.052 402.49,404.847 400.911,406.437C399.332,408.026 398.148,409.929 397.359,412.145C396.57,414.361 396.079,416.576 395.886,418.792C395.693,421.008 395.596,422.79 395.596,424.139C395.596,426.837 395.886,429.269 396.464,431.437C397.043,433.605 397.929,435.58 399.122,437.362C400.315,439.144 401.823,440.806 403.647,442.347C405.472,443.889 407.647,445.478 410.173,447.116C413.26,449.043 416.136,451.452 418.803,454.342C421.469,457.232 423.775,460.845 425.722,465.18C427.669,469.515 429.195,474.693 430.301,480.715C431.406,486.736 431.958,493.841 431.958,502.03C431.958,506.751 431.739,511.712 431.3,516.914C430.862,522.117 430.125,527.271 429.09,532.377C428.055,537.483 426.705,542.324 425.038,546.9C423.372,551.476 421.32,555.523 418.882,559.039C416.443,562.555 413.575,565.349 410.278,567.421C406.98,569.492 403.209,570.528 398.964,570.528Z" style="fill:#002347;fill-rule:nonzero;"/></g><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M450.902,369.081L479.897,369.081C484.984,369.081 489.544,370.936 493.579,374.645C497.613,378.354 501.042,383.604 503.866,390.396C506.69,397.188 508.848,405.401 510.339,415.035C511.83,424.669 512.575,435.459 512.575,447.405C512.575,455.401 512.225,463.903 511.523,472.911C510.821,481.919 509.707,490.782 508.181,499.501C506.655,508.22 504.708,516.577 502.34,524.573C499.972,532.57 497.113,539.602 493.763,545.672C490.413,551.741 486.554,556.582 482.186,560.195C477.818,563.808 472.898,565.614 467.425,565.614L438.273,565.614L450.902,369.081ZM468.478,525.007C472.933,525.007 476.854,523.032 480.239,519.082C483.624,515.132 486.448,509.882 488.711,503.33C490.974,496.779 492.675,489.241 493.816,480.715C494.956,472.189 495.526,463.349 495.526,454.197C495.526,447.357 495.184,441.191 494.5,435.7C493.816,430.209 492.754,425.536 491.316,421.683C489.878,417.829 488.036,414.866 485.791,412.795C483.545,410.724 480.862,409.688 477.739,409.688L464.952,409.688L457.585,525.007L468.478,525.007Z" style="fill:#002347;fill-rule:nonzero;"/></g></g></g>
+        </svg>
     </div>
 
-    <!-- ── NAVIGATION ────────────────────────────────── -->
-    <div class="nav-tabs">
-        <button class="nav-tab active" data-section="services" data-t="tab_services">Xizmatlar</button>
-        <button class="nav-tab" data-section="projects" data-t="tab_projects">Loyihalar</button>
-        <button class="nav-tab" data-section="faq" data-t="tab_faq">FAQ</button>
-        <button class="nav-tab" data-section="about" data-t="tab_about">Biz haqimizda</button>
+    <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="uz" onclick="setLang('uz')">UZ</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
     </div>
+</header>
 
-    <!-- ── SERVICES SECTION ──────────────────────────── -->
-    <div id="services" class="section active">
-
-        <div class="service-card" onclick="trackService('smm')">
-            <div class="service-header">
-                <div class="service-icon">📱</div>
-                <div class="service-price" data-t="price_from">dan / oy</div>
-            </div>
-            <div class="service-name" data-t="svc_smm_name">SMM boshqaruvi</div>
-            <div class="service-desc" data-t="svc_smm_desc">Instagram, Telegram, Facebook — kontent yaratish, posting jadvali, community boshqaruvi</div>
-            <div class="service-tags">
-                <span class="service-tag">Instagram</span>
-                <span class="service-tag">Telegram</span>
-                <span class="service-tag">Facebook</span>
-            </div>
-        </div>
-
-        <div class="service-card" onclick="trackService('targeting')">
-            <div class="service-header">
-                <div class="service-icon">🎯</div>
-                <div class="service-price" data-t="price_from">dan / oy</div>
-            </div>
-            <div class="service-name" data-t="svc_target_name">Targetlangan reklama</div>
-            <div class="service-desc" data-t="svc_target_desc">Meta Ads, Telegram Ads, Google Ads — kampaniya sozlash, auditoriya tadqiqoti, optimallashtirish</div>
-            <div class="service-tags">
-                <span class="service-tag">Meta Ads</span>
-                <span class="service-tag">Google Ads</span>
-                <span class="service-tag">Telegram Ads</span>
-            </div>
-        </div>
-
-        <div class="service-card" onclick="trackService('branding')">
-            <div class="service-header">
-                <div class="service-icon">🎨</div>
-                <div class="service-price" data-t="price_from_once">dan</div>
-            </div>
-            <div class="service-name" data-t="svc_brand_name">Brending va dizayn</div>
-            <div class="service-desc" data-t="svc_brand_desc">Logo, brand book, vizual identifikatsiya — brendingizni professional darajaga ko'taramiz</div>
-            <div class="service-tags">
-                <span class="service-tag">Logo</span>
-                <span class="service-tag">Brand Book</span>
-                <span class="service-tag">Identity</span>
-            </div>
-        </div>
-
-        <div class="service-card" onclick="trackService('content')">
-            <div class="service-header">
-                <div class="service-icon">🎬</div>
-                <div class="service-price" data-t="price_from_session">dan / sessiya</div>
-            </div>
-            <div class="service-name" data-t="svc_content_name">Kontent ishlab chiqarish</div>
-            <div class="service-desc" data-t="svc_content_desc">Foto suratga olish, video ishlab chiqarish, Reels va Shorts yaratish</div>
-            <div class="service-tags">
-                <span class="service-tag">Photo</span>
-                <span class="service-tag">Video</span>
-                <span class="service-tag">Reels</span>
-            </div>
-        </div>
-
-        <div class="service-card" onclick="trackService('web')">
-            <div class="service-header">
-                <div class="service-icon">🌐</div>
-                <div class="service-price" data-t="price_from_once">dan</div>
-            </div>
-            <div class="service-name" data-t="svc_web_name">Veb-sayt yaratish</div>
-            <div class="service-desc" data-t="svc_web_desc">Landing page, korporativ sayt, e-commerce — zamonaviy va tez ishlaydigan saytlar</div>
-            <div class="service-tags">
-                <span class="service-tag">Landing</span>
-                <span class="service-tag">Corporate</span>
-                <span class="service-tag">E-commerce</span>
-            </div>
-        </div>
-
-        <div class="service-card" onclick="trackService('strategy')">
-            <div class="service-header">
-                <div class="service-icon">📊</div>
-                <div class="service-price" data-t="price_from_session">dan / sessiya</div>
-            </div>
-            <div class="service-name" data-t="svc_strategy_name">Strategiya va konsalting</div>
-            <div class="service-desc" data-t="svc_strategy_desc">Marketing audit, strategiya ishlab chiqish, raqobatchi tahlili</div>
-            <div class="service-tags">
-                <span class="service-tag">Audit</span>
-                <span class="service-tag">Strategy</span>
-                <span class="service-tag">Analytics</span>
-            </div>
-        </div>
+<!-- ── HERO ────────────────────────────────────────── -->
+<section class="hero">
+    <div class="overline">
+        <span class="overline-dot"></span>
+        <span data-t="hero_label">Marketing agentlik</span>
     </div>
+    <h1>
+        <span class="brand" data-t-html="hero_h1">MQSD &mdash;<br><span class="tagline">maqsad yetakchi</span></span>
+    </h1>
+    <p class="hero-desc" data-t="hero_p">Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM</p>
+</section>
 
-    <!-- ── PROJECTS SECTION ──────────────────────────── -->
-    <div id="projects" class="section">
+<!-- ── STATS ────────────────────────────────────────── -->
+<div class="stats">
+    <div class="stat">
+        <div class="stat-val">50<sup>+</sup></div>
+        <div class="stat-lbl" data-t="s1">Loyiha</div>
+    </div>
+    <div class="stat">
+        <div class="stat-val">$0</div>
+        <div class="stat-lbl" data-t="s2">Foto</div>
+    </div>
+    <div class="stat">
+        <div class="stat-val">24/7</div>
+        <div class="stat-lbl" data-t="s3">AI bot</div>
+    </div>
+    <div class="stat">
+        <div class="stat-val">48ч</div>
+        <div class="stat-lbl" data-t="s4">Natija</div>
+    </div>
+</div>
 
-        <div class="project-card">
-            <div class="project-image">
-                📱
-                <span class="placeholder-text" data-t="img_placeholder">rasm qo'shing</span>
-            </div>
-            <div class="project-info">
-                <div class="project-client" data-t="proj1_client">[Mijoz nomi]</div>
-                <div class="project-name" data-t="proj1_name">[Loyiha nomi]</div>
-                <div class="project-result" data-t="proj1_desc">[Qisqa tavsif: nima qildik va qanday natijaga erishdik]</div>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <div class="metric-value">+[X]%</div>
-                        <div class="metric-label" data-t="metric_reach">Qamrov</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">+[X]%</div>
-                        <div class="metric-label" data-t="metric_sales">Sotuvlar</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">[X] oy</div>
-                        <div class="metric-label" data-t="metric_period">Muddat</div>
-                    </div>
+<!-- ── TABS ─────────────────────────────────────────── -->
+<div class="tabs-wrap">
+    <div class="tabs">
+        <button class="tab active" data-section="works" data-t="tab_works">Ishlarimiz</button>
+        <button class="tab" data-section="services" data-t="tab_svc">Xizmatlar</button>
+        <button class="tab" data-section="about" data-t="tab_about">Haqimizda</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- WORKS                                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="works" class="section active">
+
+    <!-- Project 1 -->
+    <div class="project-card">
+        <div class="project-ph">
+            <span class="ph-index">01</span>
+            <span class="ph-type-badge" data-t="p1_type">SMM • AI-kontent</span>
+            <!--
+                To add a real image, replace the project-ph div with:
+                <img class="project-thumb" src="project1.jpg" alt="Project name">
+            -->
+        </div>
+        <div class="project-body">
+            <div class="project-type" data-t="p1_type">SMM • AI-kontent</div>
+            <div class="project-name" data-t="p1_name">[Loyiha nomi]</div>
+            <div class="project-client" data-t="p1_client">[Mijoz nomi]</div>
+
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_tools">Instrumentlar</div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Midjourney</span>
+                    <span class="tool-tag">Stable Diffusion</span>
+                    <span class="tool-tag">Runway</span>
                 </div>
             </div>
-        </div>
 
-        <div class="project-card">
-            <div class="project-image">
-                🎯
-                <span class="placeholder-text" data-t="img_placeholder">rasm qo'shing</span>
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_task">Vazifa</div>
+                <div class="proj-block-text" data-t="p1_task">[Loyiha maqsadi va boshlang'ich muammo]</div>
             </div>
-            <div class="project-info">
-                <div class="project-client" data-t="proj2_client">[Mijoz nomi]</div>
-                <div class="project-name" data-t="proj2_name">[Loyiha nomi]</div>
-                <div class="project-result" data-t="proj2_desc">[Qisqa tavsif: nima qildik va qanday natijaga erishdik]</div>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <div class="metric-value">+[X]%</div>
-                        <div class="metric-label" data-t="metric_followers">Obunachilar</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">-[X]%</div>
-                        <div class="metric-label" data-t="metric_cpl">CPL</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">[X] oy</div>
-                        <div class="metric-label" data-t="metric_period">Muddat</div>
-                    </div>
+
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_solution">Yechim</div>
+                <ul class="bullet-list">
+                    <li data-t="p1_s1">[AI-vizuallar va foto mahsulot]</li>
+                    <li data-t="p1_s2">[Reels / Shorts seriyasi]</li>
+                    <li data-t="p1_s3">[SMM boshqaruv va strategiya]</li>
+                </ul>
+            </div>
+
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-val pos" data-t="p1_m1">+47%</div>
+                    <div class="metric-lbl" data-t="p1_m1l">Qamrov</div>
                 </div>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-image">
-                🎨
-                <span class="placeholder-text" data-t="img_placeholder">rasm qo'shing</span>
-            </div>
-            <div class="project-info">
-                <div class="project-client" data-t="proj3_client">[Mijoz nomi]</div>
-                <div class="project-name" data-t="proj3_name">[Loyiha nomi]</div>
-                <div class="project-result" data-t="proj3_desc">[Qisqa tavsif: nima qildik va qanday natijaga erishdik]</div>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <div class="metric-value">+[X]%</div>
-                        <div class="metric-label" data-t="metric_engagement">Engagement</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">+[X]%</div>
-                        <div class="metric-label" data-t="metric_brand">Brand</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value">[X] oy</div>
-                        <div class="metric-label" data-t="metric_period">Muddat</div>
-                    </div>
+                <div class="metric">
+                    <div class="metric-val" data-t="p1_m2">8.3%</div>
+                    <div class="metric-lbl" data-t="p1_m2l">Engagement</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val neg" data-t="p1_m3">−30%</div>
+                    <div class="metric-lbl" data-t="p1_m3l">Lid narxi</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ── FAQ SECTION ───────────────────────────────── -->
-    <div id="faq" class="section">
-
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span data-t="faq1_q">Xizmatlar qancha turadi?</span>
-                <span class="faq-arrow">▾</span>
-            </div>
-            <div class="faq-answer">
-                <div class="faq-answer-inner" data-t="faq1_a">Narxlar loyihaga qarab farq qiladi. Bepul konsultatsiya orqali aniq narx va taklifni aytamiz. Bog'laning — hisob-kitob qilamiz!</div>
-            </div>
+    <!-- Project 2 -->
+    <div class="project-card">
+        <div class="project-ph">
+            <span class="ph-index">02</span>
+            <span class="ph-type-badge" data-t="p2_type">Avtomatizatsiya • Bot</span>
         </div>
+        <div class="project-body">
+            <div class="project-type" data-t="p2_type">Avtomatizatsiya • Bot</div>
+            <div class="project-name" data-t="p2_name">[Loyiha nomi]</div>
+            <div class="project-client" data-t="p2_client">[Mijoz nomi]</div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span data-t="faq2_q">Qancha vaqtda natija beradi?</span>
-                <span class="faq-arrow">▾</span>
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_tools">Instrumentlar</div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Telegram API</span>
+                    <span class="tool-tag">GPT-4o</span>
+                    <span class="tool-tag">n8n</span>
+                </div>
             </div>
-            <div class="faq-answer">
-                <div class="faq-answer-inner" data-t="faq2_a">Odatda 2-4 hafta ichida birinchi natijalar ko'rinadi. SMM va reklama bo'yicha 1-2 oy ichida barqaror o'sish kuzatiladi.</div>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span data-t="faq3_q">Shartnoma tuzasizlarmi?</span>
-                <span class="faq-arrow">▾</span>
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_task">Vazifa</div>
+                <div class="proj-block-text" data-t="p2_task">[Loyiha maqsadi — mijozlarni 24/7 qabul qilish va avtomatik ishlov berish]</div>
             </div>
-            <div class="faq-answer">
-                <div class="faq-answer-inner" data-t="faq3_a">Ha, albatta. Barcha loyihalar rasmiy shartnoma asosida amalga oshiriladi. Shaffof va ishonchli hamkorlik.</div>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span data-t="faq4_q">Qaysi sohalarda ishlaysizlar?</span>
-                <span class="faq-arrow">▾</span>
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_solution">Yechim</div>
+                <ul class="bullet-list">
+                    <li data-t="p2_s1">[AI-bot savdo 24/7]</li>
+                    <li data-t="p2_s2">[Telegram / Instagram botlar]</li>
+                    <li data-t="p2_s3">[CRM va savdo voronkalari]</li>
+                </ul>
             </div>
-            <div class="faq-answer">
-                <div class="faq-answer-inner" data-t="faq4_a">Biz barcha sohalarda ishlaymiz: restoran, klinika, ta'lim, IT, e-commerce, go'zallik va boshqalar. Har bir sohaga individual yondashamiz.</div>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
-                <span data-t="faq5_q">Hisobot berasizlarmi?</span>
-                <span class="faq-arrow">▾</span>
-            </div>
-            <div class="faq-answer">
-                <div class="faq-answer-inner" data-t="faq5_a">Ha, har oy batafsil hisobot taqdim etamiz: qamrov, o'sish, reklama natijalari va keyingi oy uchun reja.</div>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-val pos" data-t="p2_m1">70%</div>
+                    <div class="metric-lbl" data-t="p2_m1l">Avtomatik</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val pos" data-t="p2_m2">200+</div>
+                    <div class="metric-lbl" data-t="p2_m2l">Lid/oy</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val neg" data-t="p2_m3">−40%</div>
+                    <div class="metric-lbl" data-t="p2_m3l">Xarajat</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ── ABOUT SECTION ─────────────────────────────── -->
-    <div id="about" class="section">
-
-        <div class="about-block">
-            <h3 data-t="about_who_title">Biz kimlamiz?</h3>
-            <p data-t="about_who_desc">[Agentlik haqida 2-3 jumla: qachon tashkil etilgan, missiya, tajriba. Bu yerni o'z matnigiz bilan to'ldiring.]</p>
+    <!-- Project 3 -->
+    <div class="project-card">
+        <div class="project-ph">
+            <span class="ph-index">03</span>
+            <span class="ph-type-badge" data-t="p3_type">Prodakshn • Brending</span>
         </div>
+        <div class="project-body">
+            <div class="project-type" data-t="p3_type">Prodakshn • Brending</div>
+            <div class="project-name" data-t="p3_name">[Loyiha nomi]</div>
+            <div class="project-client" data-t="p3_client">[Mijoz nomi]</div>
 
-        <div class="about-block">
-            <h3 data-t="about_process_title">Qanday ishlaymiz?</h3>
-            <div class="process-steps">
-                <div class="process-step">
-                    <div class="step-num">1</div>
-                    <div class="step-content">
-                        <h4 data-t="step1_title">Bepul konsultatsiya</h4>
-                        <p data-t="step1_desc">Maqsadlaringiz va ehtiyojlaringizni muhokama qilamiz</p>
-                    </div>
-                </div>
-                <div class="process-step">
-                    <div class="step-num">2</div>
-                    <div class="step-content">
-                        <h4 data-t="step2_title">Taklif tayyorlash</h4>
-                        <p data-t="step2_desc">Individual strategiya va narx tayyorlaymiz</p>
-                    </div>
-                </div>
-                <div class="process-step">
-                    <div class="step-num">3</div>
-                    <div class="step-content">
-                        <h4 data-t="step3_title">Shartnoma va boshlash</h4>
-                        <p data-t="step3_desc">Rasmiy shartnoma tuzamiz va ishni boshlaymiz</p>
-                    </div>
-                </div>
-                <div class="process-step">
-                    <div class="step-num">4</div>
-                    <div class="step-content">
-                        <h4 data-t="step4_title">Oylik hisobot</h4>
-                        <p data-t="step4_desc">Shaffof natijalar va keyingi rejalar</p>
-                    </div>
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_tools">Instrumentlar</div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Runway Gen-3</span>
+                    <span class="tool-tag">Topaz AI</span>
+                    <span class="tool-tag">Sora</span>
                 </div>
             </div>
-        </div>
 
-        <div class="about-block">
-            <h3 data-t="about_contact_title">Aloqa</h3>
-            <p>
-                📍 <span data-t="about_location">Toshkent, O'zbekiston</span><br>
-                🕐 <span data-t="about_hours">Du-Ju: 9:00 — 18:00</span><br>
-                📞 <span data-t="about_phone">[Telefon raqam]</span><br>
-                📧 <span data-t="about_email">[Email manzil]</span>
-            </p>
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_task">Vazifa</div>
+                <div class="proj-block-text" data-t="p3_task">[Fotosessiyasiz, modellar va chiqishsiz yangi kolleksiya uchun vizual kontent]</div>
+            </div>
+
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_solution">Yechim</div>
+                <ul class="bullet-list">
+                    <li data-t="p3_s1">[Hero-rolik 30–60 sek]</li>
+                    <li data-t="p3_s2">[Ad-seriya 15–30 sek]</li>
+                    <li data-t="p3_s3">[Raqamli avatarlar va Lip-Sync]</li>
+                </ul>
+            </div>
+
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-val pos" data-t="p3_m1">10x</div>
+                    <div class="metric-lbl" data-t="p3_m1l">Tezlik</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val" data-t="p3_m2">100%</div>
+                    <div class="metric-lbl" data-t="p3_m2l">Litsenziya</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val neg" data-t="p3_m3">−80%</div>
+                    <div class="metric-lbl" data-t="p3_m3l">Prodakshn</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ── CONTACT FORM ──────────────────────────────── -->
-    <div class="contact-section">
-        <div class="contact-card">
-            <h3 data-t="form_title">Bepul konsultatsiya</h3>
-            <p data-t="form_desc">Ma'lumotlaringizni qoldiring — 30 daqiqa ichida bog'lanamiz</p>
+</div>
 
-            <div class="form-group">
-                <label class="form-label" data-t="form_name">Ismingiz</label>
-                <input type="text" class="form-input" id="form-name" data-tp="form_name_ph" placeholder="Ismingizni kiriting">
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SERVICES                                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="services" class="section">
+    <div class="sec-head">
+        <span class="sec-label" data-t="svc_label">Yo'nalishlar</span>
+        <div class="sec-title" data-t="svc_title">Nima qilamiz</div>
+    </div>
+
+    <div class="svc-list">
+
+        <!-- Content -->
+        <div class="svc-card">
+            <div class="svc-icon-wrap">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                    <polyline points="2 17 12 22 22 17"/>
+                    <polyline points="2 12 12 17 22 12"/>
+                </svg>
             </div>
-
-            <div class="form-group">
-                <label class="form-label" data-t="form_phone">Telefon raqam</label>
-                <input type="tel" class="form-input" id="form-phone" placeholder="+998" data-tp="form_phone_ph">
+            <div class="svc-body">
+                <div class="svc-label" data-t="svc1_label">AI-Ishlab chiqarish</div>
+                <div class="svc-name" data-t="svc1_name">Kontent</div>
+                <div class="svc-desc" data-t="svc1_desc">Vizuallar, video va SMM — fotosessiyasiz, jamoaning o'lchovida. Brend tilingizda gaplashuvchi AI.</div>
+                <ul class="bullet-list">
+                    <li data-t="svc1_b1">AI-vizuallar va foto mahsulot</li>
+                    <li data-t="svc1_b2">Reels / Shorts video</li>
+                    <li data-t="svc1_b3">SMM boshqaruv va strategiya</li>
+                    <li data-t="svc1_b4">Key Visuals va brending</li>
+                </ul>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label class="form-label" data-t="form_interest">Qiziqtirgan xizmat</label>
-                <select class="form-select" id="form-interest">
-                    <option value="" data-t="form_select_default">Tanlang...</option>
-                    <option value="smm" data-t="form_opt_smm">SMM boshqaruvi</option>
-                    <option value="targeting" data-t="form_opt_target">Targetlangan reklama</option>
-                    <option value="branding" data-t="form_opt_brand">Brending va dizayn</option>
-                    <option value="content" data-t="form_opt_content">Kontent ishlab chiqarish</option>
-                    <option value="web" data-t="form_opt_web">Veb-sayt yaratish</option>
-                    <option value="strategy" data-t="form_opt_strategy">Strategiya va konsalting</option>
-                    <option value="other" data-t="form_opt_other">Boshqa</option>
-                </select>
+        <!-- Automation -->
+        <div class="svc-card">
+            <div class="svc-icon-wrap">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="4" width="16" height="16" rx="2"/>
+                    <rect x="9" y="9" width="6" height="6"/>
+                    <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
+                    <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
+                    <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/>
+                    <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
+                </svg>
             </div>
+            <div class="svc-body">
+                <div class="svc-label" data-t="svc2_label">AI-Tizimlar</div>
+                <div class="svc-name" data-t="svc2_name">Avtomatizatsiya</div>
+                <div class="svc-desc" data-t="svc2_desc">Aqlli voronkalar va botlar — 24/7 sotadi, mijozlarga xizmat qiladi.</div>
+                <ul class="bullet-list">
+                    <li data-t="svc2_b1">AI-bot savdo 24/7</li>
+                    <li data-t="svc2_b2">Telegram / Instagram botlar</li>
+                    <li data-t="svc2_b3">CRM va savdo voronkalari</li>
+                    <li data-t="svc2_b4">Biznes jarayonlari avtomati</li>
+                </ul>
+            </div>
+        </div>
 
-            <button class="submit-btn" id="submit-btn" onclick="submitForm()" data-t="form_submit">Yuborish</button>
+        <!-- Production -->
+        <div class="svc-card">
+            <div class="svc-icon-wrap">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="23 7 16 12 23 17 23 7"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+            </div>
+            <div class="svc-body">
+                <div class="svc-label" data-t="svc3_label">Kinematografik</div>
+                <div class="svc-name" data-t="svc3_name">Prodakshn</div>
+                <div class="svc-desc" data-t="svc3_desc">Gollivud darajasi, chiqishsiz — Sora, Runway Gen-3 va Midjourney. Haqiqat yoki AI — hech kim farqlolmaydi.</div>
+                <ul class="bullet-list">
+                    <li data-t="svc3_b1">Hero-rolik 30–60 sek</li>
+                    <li data-t="svc3_b2">Ad-seriya 15–30 sek</li>
+                    <li data-t="svc3_b3">Raqamli avatarlar va Lip-Sync</li>
+                    <li data-t="svc3_b4">4K + rangga ishlov berish</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Advertising -->
+        <div class="svc-card">
+            <div class="svc-icon-wrap">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="6"/>
+                    <circle cx="12" cy="12" r="2"/>
+                </svg>
+            </div>
+            <div class="svc-body">
+                <div class="svc-label" data-t="svc4_label">Reklama</div>
+                <div class="svc-name" data-t="svc4_name">Targetlangan reklama</div>
+                <div class="svc-desc" data-t="svc4_desc">Meta Ads, Google, Telegram — kampaniya sozlash va optimallashtirish.</div>
+                <ul class="bullet-list">
+                    <li data-t="svc4_b1">Meta Ads va Google</li>
+                    <li data-t="svc4_b2">Telegram Ads</li>
+                    <li data-t="svc4_b3">A/B test va analitika</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ABOUT                                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="about" class="section">
+    <div class="sec-head">
+        <span class="sec-label" data-t="about_label">O'zimiz haqimizda</span>
+        <div class="sec-title" data-t="about_title">MQSD kim?</div>
+    </div>
+
+    <div class="about-card">
+        <p data-t="about_desc">Biz — AI-kontent, avtomatizatsiya va kinematografik prodakshnni birlashtirib, yagona tizimga aylantiramiz. Shunday qilib har bir element sinergiyada ishlaydi va natijani maksimallashtiradi.</p>
+    </div>
+
+    <div class="about-card">
+        <h3 data-t="about_process">Qanday ishlaymiz?</h3>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-title" data-t="st1_t">Bepul tahlil</div>
+                    <div class="step-desc" data-t="st1_d">Biznesingiz, maqsad va raqobatchilarni o'rganamiz</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-title" data-t="st2_t">Taklif va narx</div>
+                    <div class="step-desc" data-t="st2_d">Individual strategiya va aniq byudjet</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-title" data-t="st3_t">Shartnoma va start</div>
+                    <div class="step-desc" data-t="st3_d">Rasmiy shartnoma — 48 soat ichida birinchi natija</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <div class="step-title" data-t="st4_t">Oylik hisobot</div>
+                    <div class="step-desc" data-t="st4_d">Natijalar, tahlil va keyingi o'sish rejasi</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ── BOTTOM CTA ────────────────────────────────── -->
-    <div class="bottom-cta">
-        <button class="cta-btn" onclick="requestCallback()">
-            <span>📞</span>
-            <span data-t="cta_callback">Qo'ng'iroq so'rash</span>
-        </button>
+    <div class="about-card">
+        <h3 data-t="about_contacts">Aloqa</h3>
+        <div class="contacts">
+            <div class="contact-row">
+                <span class="contact-key" data-t="c_site">Sayt</span>
+                <span class="contact-val">mqsd.uz</span>
+            </div>
+            <div class="contact-row">
+                <span class="contact-key" data-t="c_tg">Telegram</span>
+                <span class="contact-val">@mqsd_agency</span>
+            </div>
+            <div class="contact-row">
+                <span class="contact-key" data-t="c_loc">Shahar</span>
+                <span class="contact-val" data-t="c_loc_v">Toshkent</span>
+            </div>
+            <div class="contact-row">
+                <span class="contact-key" data-t="c_hrs">Ish vaqti</span>
+                <span class="contact-val" data-t="c_hrs_v">Du–Ju 9–18</span>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
-        // ── TELEGRAM WEB APP INIT ───────────────────────
-        const tg = window.Telegram?.WebApp;
-        let currentLang = 'uz';
-        let userData = {};
+<!-- ── BOTTOM CTA ─────────────────────────────────── -->
+<div class="bottom-bar">
+    <button class="cta-btn" onclick="openChat()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span data-t="cta">Boshlash — botda suhbat</span>
+    </button>
+</div>
 
-        if (tg) {
-            tg.ready();
-            tg.expand();
+<script>
+    // ── TELEGRAM ──────────────────────────────────────
+    const tg = window.Telegram?.WebApp;
+    let lang = 'uz';
 
-            // Get user data
-            const user = tg.initDataUnsafe?.user;
-            if (user) {
-                userData = {
-                    id: user.id,
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    username: user.username,
-                    language_code: user.language_code,
-                };
+    if (tg) {
+        tg.ready();
+        tg.expand();
+        const user = tg.initDataUnsafe?.user;
+        if (user?.language_code?.startsWith('ru')) lang = 'ru';
+    }
 
-                // Pre-fill name in form
-                const nameField = document.getElementById('form-name');
-                if (nameField && user.first_name) {
-                    nameField.value = [user.first_name, user.last_name].filter(Boolean).join(' ');
-                }
-
-                // Auto-detect language
-                if (user.language_code && user.language_code.startsWith('ru')) {
-                    setLang('ru');
-                }
-            }
-
-            // Apply Telegram theme
-            if (tg.themeParams) {
-                const tp = tg.themeParams;
-                if (tp.bg_color) document.documentElement.style.setProperty('--bg', tp.bg_color);
-                if (tp.secondary_bg_color) document.documentElement.style.setProperty('--bg-card', tp.secondary_bg_color);
-                if (tp.text_color) document.documentElement.style.setProperty('--text-primary', tp.text_color);
-                if (tp.hint_color) document.documentElement.style.setProperty('--text-secondary', tp.hint_color);
-                if (tp.button_color) document.documentElement.style.setProperty('--accent', tp.button_color);
-                if (tp.button_text_color) {
-                    document.querySelectorAll('.submit-btn, .cta-btn').forEach(btn => {
-                        btn.style.color = tp.button_text_color;
-                    });
-                }
-            }
-
-            // Notify bot that TWA was opened
-            try {
-                tg.sendData(JSON.stringify({ action: 'twa_opened' }));
-            } catch(e) {}
+    // ── TRANSLATIONS ──────────────────────────────────
+    const T = {
+        uz: {
+            hero_label: "Marketing agentlik",
+            hero_h1: "MQSD &mdash;<br><span class=\"tagline\">maqsad yetakchi</span>",
+            hero_p: "Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM",
+            s1:"Loyiha", s2:"Foto", s3:"AI bot", s4:"Natija",
+            tab_works:"Ishlarimiz", tab_svc:"Xizmatlar", tab_about:"Haqimizda",
+            lbl_tools:"Instrumentlar", lbl_task:"Vazifa", lbl_solution:"Yechim",
+            p1_type:"SMM • AI-kontent", p1_name:"[Loyiha nomi]", p1_client:"[Mijoz nomi]",
+            p1_task:"[Yangi kolleksiya uchun vizual kontent — fotosessiyasiz, modellar va chiqishsiz]",
+            p1_s1:"AI-vizuallar va foto mahsulot", p1_s2:"Reels / Shorts seriyasi", p1_s3:"SMM boshqaruv va strategiya",
+            p1_m1:"+47%", p1_m1l:"Qamrov", p1_m2:"8.3%", p1_m2l:"Engagement", p1_m3:"−30%", p1_m3l:"Lid narxi",
+            p2_type:"Avtomatizatsiya • Bot", p2_name:"[Loyiha nomi]", p2_client:"[Mijoz nomi]",
+            p2_task:"[Mijozlarni 24/7 qabul qilish va avtomatik ishlov berish tizimi]",
+            p2_s1:"AI-bot savdo 24/7", p2_s2:"Telegram / Instagram botlar", p2_s3:"CRM va savdo voronkalari",
+            p2_m1:"70%", p2_m1l:"Avtomatik", p2_m2:"200+", p2_m2l:"Lid/oy", p2_m3:"−40%", p2_m3l:"Xarajat",
+            p3_type:"Prodakshn • Brending", p3_name:"[Loyiha nomi]", p3_client:"[Mijoz nomi]",
+            p3_task:"[Fotosessiyasiz, modellar va chiqishsiz yangi kolleksiya uchun vizual kontent]",
+            p3_s1:"Hero-rolik 30–60 sek", p3_s2:"Ad-seriya 15–30 sek", p3_s3:"Raqamli avatarlar va Lip-Sync",
+            p3_m1:"10x", p3_m1l:"Tezlik", p3_m2:"100%", p3_m2l:"Litsenziya", p3_m3:"−80%", p3_m3l:"Prodakshn",
+            svc_label:"Yo'nalishlar", svc_title:"Nima qilamiz",
+            svc1_label:"AI-Ishlab chiqarish", svc1_name:"Kontent",
+            svc1_desc:"Vizuallar, video va SMM — fotosessiyasiz, jamoaning o'lchovida.",
+            svc1_b1:"AI-vizuallar va foto mahsulot", svc1_b2:"Reels / Shorts video", svc1_b3:"SMM boshqaruv va strategiya", svc1_b4:"Key Visuals va brending",
+            svc2_label:"AI-Tizimlar", svc2_name:"Avtomatizatsiya",
+            svc2_desc:"Aqlli voronkalar va botlar — 24/7 sotadi, mijozlarga xizmat qiladi.",
+            svc2_b1:"AI-bot savdo 24/7", svc2_b2:"Telegram / Instagram botlar", svc2_b3:"CRM va savdo voronkalari", svc2_b4:"Biznes jarayonlari avtomati",
+            svc3_label:"Kinematografik", svc3_name:"Prodakshn",
+            svc3_desc:"Gollivud darajasi, chiqishsiz — Sora, Runway Gen-3 va Midjourney.",
+            svc3_b1:"Hero-rolik 30–60 sek", svc3_b2:"Ad-seriya 15–30 sek", svc3_b3:"Raqamli avatarlar va Lip-Sync", svc3_b4:"4K + rangga ishlov berish",
+            svc4_label:"Reklama", svc4_name:"Targetlangan reklama",
+            svc4_desc:"Meta Ads, Google, Telegram — kampaniya sozlash va optimallashtirish.",
+            svc4_b1:"Meta Ads va Google", svc4_b2:"Telegram Ads", svc4_b3:"A/B test va analitika",
+            about_label:"O'zimiz haqimizda", about_title:"MQSD kim?",
+            about_desc:"Biz — AI-kontent, avtomatizatsiya va kinematografik prodakshnni birlashtirib, yagona tizimga aylantiramiz. Shunday qilib har bir element sinergiyada ishlaydi va natijani maksimallashtiradi.",
+            about_process:"Qanday ishlaymiz?",
+            st1_t:"Bepul tahlil", st1_d:"Biznesingiz, maqsad va raqobatchilarni o'rganamiz",
+            st2_t:"Taklif va narx", st2_d:"Individual strategiya va aniq byudjet",
+            st3_t:"Shartnoma va start", st3_d:"Rasmiy shartnoma — 48 soat ichida birinchi natija",
+            st4_t:"Oylik hisobot", st4_d:"Natijalar, tahlil va keyingi o'sish rejasi",
+            about_contacts:"Aloqa",
+            c_site:"Sayt", c_tg:"Telegram", c_loc:"Shahar", c_loc_v:"Toshkent", c_hrs:"Ish vaqti", c_hrs_v:"Du–Ju 9–18",
+            cta:"Boshlash — botda suhbat",
+        },
+        ru: {
+            hero_label: "Маркетинговое агентство",
+            hero_h1: "MQSD &mdash;<br><span class=\"tagline\">цель превыше всего</span>",
+            hero_p: "Маркетинг, где каждое действие ведёт к результату · ИИ · Автоматизация · Продакшн · SMM",
+            s1:"Проектов", s2:"Фото", s3:"AI бот", s4:"Результат",
+            tab_works:"Работы", tab_svc:"Услуги", tab_about:"О нас",
+            lbl_tools:"Инструменты", lbl_task:"Задача", lbl_solution:"Решение",
+            p1_type:"SMM • AI-контент", p1_name:"[Название проекта]", p1_client:"[Название клиента]",
+            p1_task:"[Быстрый запуск визуального контента при отсутствии готовых образцов — без фотосессий]",
+            p1_s1:"AI-визуалы и фото продукта", p1_s2:"Серия Reels / Shorts", p1_s3:"SMM-ведение и стратегия",
+            p1_m1:"+47%", p1_m1l:"Охват", p1_m2:"8.3%", p1_m2l:"Engagement", p1_m3:"−30%", p1_m3l:"Стоимость лида",
+            p2_type:"Автоматизация • Бот", p2_name:"[Название проекта]", p2_client:"[Название клиента]",
+            p2_task:"[Приём клиентов 24/7 и автоматическая обработка заявок]",
+            p2_s1:"AI-бот продаж 24/7", p2_s2:"Telegram / Instagram боты", p2_s3:"CRM и воронки продаж",
+            p2_m1:"70%", p2_m1l:"Авто", p2_m2:"200+", p2_m2l:"Лидов/мес", p2_m3:"−40%", p2_m3l:"Расходы",
+            p3_type:"Продакшн • Брендинг", p3_name:"[Название проекта]", p3_client:"[Название клиента]",
+            p3_task:"[Визуальный контент для новой коллекции — без фотосессий, без моделей, без выезда]",
+            p3_s1:"Hero-ролик 30–60 сек", p3_s2:"Ad-серия 15–30 сек", p3_s3:"Цифровые аватары и Lip-Sync",
+            p3_m1:"10x", p3_m1l:"Скорость", p3_m2:"100%", p3_m2l:"Лицензия", p3_m3:"−80%", p3_m3l:"Стоимость",
+            svc_label:"Направления", svc_title:"Чем занимаемся",
+            svc1_label:"AI-Производство", svc1_name:"Контент",
+            svc1_desc:"Визуалы, видео и SMM — без фотосессий, масштабируем без команды.",
+            svc1_b1:"AI-визуалы и фото продукта", svc1_b2:"Reels / Shorts видео", svc1_b3:"SMM-ведение и стратегия", svc1_b4:"Key Visuals и брендинг",
+            svc2_label:"AI-Системы", svc2_name:"Автоматизация",
+            svc2_desc:"Умные воронки и боты — продают и обслуживают клиентов круглосуточно.",
+            svc2_b1:"AI-бот продаж 24/7", svc2_b2:"Telegram / Instagram боты", svc2_b3:"CRM и воронки продаж", svc2_b4:"Автоматизация бизнес-процессов",
+            svc3_label:"Кинематографический", svc3_name:"Продакшн",
+            svc3_desc:"Голливудский уровень без съёмок — Sora, Runway Gen-3 и Midjourney.",
+            svc3_b1:"Hero-ролик 30–60 сек", svc3_b2:"Ad-серия 15–30 сек", svc3_b3:"Цифровые аватары и Lip-Sync", svc3_b4:"4K + цветокоррекция",
+            svc4_label:"Реклама", svc4_name:"Таргетированная реклама",
+            svc4_desc:"Meta Ads, Google, Telegram — настройка и оптимизация кампаний.",
+            svc4_b1:"Meta Ads и Google", svc4_b2:"Telegram Ads", svc4_b3:"A/B тест и аналитика",
+            about_label:"О нас", about_title:"Кто такие MQSD?",
+            about_desc:"Мы объединяем AI-контент, автоматизацию и кинематографический продакшн в единую систему — чтобы каждый элемент работал синергично и максимизировал ваши результаты.",
+            about_process:"Как мы работаем?",
+            st1_t:"Бесплатный анализ", st1_d:"Изучаем ваш бизнес, цели и конкурентов",
+            st2_t:"Предложение и цена", st2_d:"Индивидуальная стратегия и точный бюджет",
+            st3_t:"Договор и старт", st3_d:"Официальный договор — первый результат за 48ч",
+            st4_t:"Ежемесячный отчёт", st4_d:"Результаты, анализ и план следующего роста",
+            about_contacts:"Контакты",
+            c_site:"Сайт", c_tg:"Telegram", c_loc:"Город", c_loc_v:"Ташкент", c_hrs:"Часы работы", c_hrs_v:"Пн–Пт 9–18",
+            cta:"Начать разговор в боте",
         }
+    };
 
-        // ── TRANSLATIONS ────────────────────────────────
-        const translations = {
-            uz: {
-                badge: "Biz onlaynmiz",
-                hero_title_1: "Marketing",
-                hero_title_2: "strategiyangiz",
-                hero_desc: "Professional SMM, targetlangan reklama va brending xizmatlari Toshkentda",
-                stat_projects: "Loyihalar",
-                stat_clients: "Mijozlar",
-                stat_years: "Yil tajriba",
-                tab_services: "Xizmatlar",
-                tab_projects: "Loyihalar",
-                tab_faq: "FAQ",
-                tab_about: "Biz haqimizda",
-                price_from: "[PRICE] dan / oy",
-                price_from_once: "[PRICE] dan",
-                price_from_session: "[PRICE] dan / sessiya",
-                svc_smm_name: "SMM boshqaruvi",
-                svc_smm_desc: "Instagram, Telegram, Facebook — kontent yaratish, posting jadvali, community boshqaruvi",
-                svc_target_name: "Targetlangan reklama",
-                svc_target_desc: "Meta Ads, Telegram Ads, Google Ads — kampaniya sozlash, auditoriya tadqiqoti, optimallashtirish",
-                svc_brand_name: "Brending va dizayn",
-                svc_brand_desc: "Logo, brand book, vizual identifikatsiya — brendingizni professional darajaga ko'taramiz",
-                svc_content_name: "Kontent ishlab chiqarish",
-                svc_content_desc: "Foto suratga olish, video ishlab chiqarish, Reels va Shorts yaratish",
-                svc_web_name: "Veb-sayt yaratish",
-                svc_web_desc: "Landing page, korporativ sayt, e-commerce — zamonaviy va tez ishlaydigan saytlar",
-                svc_strategy_name: "Strategiya va konsalting",
-                svc_strategy_desc: "Marketing audit, strategiya ishlab chiqish, raqobatchi tahlili",
-                img_placeholder: "rasm qo'shing",
-                proj1_client: "[Mijoz nomi]", proj1_name: "[Loyiha nomi]", proj1_desc: "[Qisqa tavsif: nima qildik va qanday natijaga erishdik]",
-                proj2_client: "[Mijoz nomi]", proj2_name: "[Loyiha nomi]", proj2_desc: "[Qisqa tavsif: nima qildik va qanday natijaga erishdik]",
-                proj3_client: "[Mijoz nomi]", proj3_name: "[Loyiha nomi]", proj3_desc: "[Qisqa tavsif: nima qildik va qanday natijaga erishdik]",
-                metric_reach: "Qamrov", metric_sales: "Sotuvlar", metric_period: "Muddat",
-                metric_followers: "Obunachilar", metric_cpl: "CPL", metric_engagement: "Engagement", metric_brand: "Brand",
-                faq1_q: "Xizmatlar qancha turadi?", faq1_a: "Narxlar loyihaga qarab farq qiladi. Bepul konsultatsiya orqali aniq narx va taklifni aytamiz. Bog'laning — hisob-kitob qilamiz!",
-                faq2_q: "Qancha vaqtda natija beradi?", faq2_a: "Odatda 2-4 hafta ichida birinchi natijalar ko'rinadi. SMM va reklama bo'yicha 1-2 oy ichida barqaror o'sish kuzatiladi.",
-                faq3_q: "Shartnoma tuzasizlarmi?", faq3_a: "Ha, albatta. Barcha loyihalar rasmiy shartnoma asosida amalga oshiriladi. Shaffof va ishonchli hamkorlik.",
-                faq4_q: "Qaysi sohalarda ishlaysizlar?", faq4_a: "Biz barcha sohalarda ishlaymiz: restoran, klinika, ta'lim, IT, e-commerce, go'zallik va boshqalar. Har bir sohaga individual yondashamiz.",
-                faq5_q: "Hisobot berasizlarmi?", faq5_a: "Ha, har oy batafsil hisobot taqdim etamiz: qamrov, o'sish, reklama natijalari va keyingi oy uchun reja.",
-                about_who_title: "Biz kimlamiz?",
-                about_who_desc: "[Agentlik haqida 2-3 jumla: qachon tashkil etilgan, missiya, tajriba. Bu yerni o'z matnigiz bilan to'ldiring.]",
-                about_process_title: "Qanday ishlaymiz?",
-                step1_title: "Bepul konsultatsiya", step1_desc: "Maqsadlaringiz va ehtiyojlaringizni muhokama qilamiz",
-                step2_title: "Taklif tayyorlash", step2_desc: "Individual strategiya va narx tayyorlaymiz",
-                step3_title: "Shartnoma va boshlash", step3_desc: "Rasmiy shartnoma tuzamiz va ishni boshlaymiz",
-                step4_title: "Oylik hisobot", step4_desc: "Shaffof natijalar va keyingi rejalar",
-                about_contact_title: "Aloqa",
-                about_location: "Toshkent, O'zbekiston",
-                about_hours: "Du-Ju: 9:00 — 18:00",
-                about_phone: "[Telefon raqam]",
-                about_email: "[Email manzil]",
-                form_title: "Bepul konsultatsiya",
-                form_desc: "Ma'lumotlaringizni qoldiring — 30 daqiqa ichida bog'lanamiz",
-                form_name: "Ismingiz",
-                form_phone: "Telefon raqam",
-                form_interest: "Qiziqtirgan xizmat",
-                form_select_default: "Tanlang...",
-                form_opt_smm: "SMM boshqaruvi",
-                form_opt_target: "Targetlangan reklama",
-                form_opt_brand: "Brending va dizayn",
-                form_opt_content: "Kontent ishlab chiqarish",
-                form_opt_web: "Veb-sayt yaratish",
-                form_opt_strategy: "Strategiya va konsalting",
-                form_opt_other: "Boshqa",
-                form_submit: "Yuborish",
-                form_success: "Yuborildi!",
-                cta_callback: "Qo'ng'iroq so'rash",
-                form_name_ph: "Ismingizni kiriting",
-                form_phone_ph: "+998",
-            },
-            ru: {
-                badge: "Мы онлайн",
-                hero_title_1: "Маркетинг",
-                hero_title_2: "стратегия",
-                hero_desc: "Профессиональный SMM, таргетированная реклама и брендинг в Ташкенте",
-                stat_projects: "Проектов",
-                stat_clients: "Клиентов",
-                stat_years: "Лет опыта",
-                tab_services: "Услуги",
-                tab_projects: "Проекты",
-                tab_faq: "FAQ",
-                tab_about: "О нас",
-                price_from: "от [PRICE] / мес",
-                price_from_once: "от [PRICE]",
-                price_from_session: "от [PRICE] / сессия",
-                svc_smm_name: "Ведение SMM",
-                svc_smm_desc: "Instagram, Telegram, Facebook — контент, постинг, управление комьюнити",
-                svc_target_name: "Таргетированная реклама",
-                svc_target_desc: "Meta Ads, Telegram Ads, Google Ads — настройка кампаний, исследование аудитории, оптимизация",
-                svc_brand_name: "Брендинг и дизайн",
-                svc_brand_desc: "Логотип, брендбук, визуальная айдентика — выведем ваш бренд на профессиональный уровень",
-                svc_content_name: "Производство контента",
-                svc_content_desc: "Фотосъёмка, видеопроизводство, создание Reels и Shorts",
-                svc_web_name: "Разработка сайтов",
-                svc_web_desc: "Лендинги, корпоративные сайты, e-commerce — современные и быстрые сайты",
-                svc_strategy_name: "Стратегия и консалтинг",
-                svc_strategy_desc: "Маркетинговый аудит, разработка стратегии, анализ конкурентов",
-                img_placeholder: "добавьте фото",
-                proj1_client: "[Название клиента]", proj1_name: "[Название проекта]", proj1_desc: "[Краткое описание: что сделали и какого результата достигли]",
-                proj2_client: "[Название клиента]", proj2_name: "[Название проекта]", proj2_desc: "[Краткое описание: что сделали и какого результата достигли]",
-                proj3_client: "[Название клиента]", proj3_name: "[Название проекта]", proj3_desc: "[Краткое описание: что сделали и какого результата достигли]",
-                metric_reach: "Охват", metric_sales: "Продажи", metric_period: "Период",
-                metric_followers: "Подписчики", metric_cpl: "CPL", metric_engagement: "Вовлечённость", metric_brand: "Бренд",
-                faq1_q: "Сколько стоят услуги?", faq1_a: "Цены зависят от проекта. На бесплатной консультации озвучим точную стоимость и предложение. Свяжитесь — рассчитаем!",
-                faq2_q: "Когда будут результаты?", faq2_a: "Обычно первые результаты видны через 2-4 недели. По SMM и рекламе стабильный рост наблюдается через 1-2 месяца.",
-                faq3_q: "Заключаете ли договор?", faq3_a: "Да, обязательно. Все проекты ведутся на основе официального договора. Прозрачное и надёжное сотрудничество.",
-                faq4_q: "С какими нишами работаете?", faq4_a: "Работаем со всеми нишами: рестораны, клиники, образование, IT, e-commerce, бьюти и другие. К каждой нише подходим индивидуально.",
-                faq5_q: "Предоставляете ли отчёты?", faq5_a: "Да, ежемесячно предоставляем детальный отчёт: охваты, рост, результаты рекламы и план на следующий месяц.",
-                about_who_title: "Кто мы?",
-                about_who_desc: "[2-3 предложения об агентстве: когда основано, миссия, опыт. Заполните этот раздел своим текстом.]",
-                about_process_title: "Как мы работаем?",
-                step1_title: "Бесплатная консультация", step1_desc: "Обсуждаем ваши цели и потребности",
-                step2_title: "Подготовка предложения", step2_desc: "Готовим индивидуальную стратегию и расчёт",
-                step3_title: "Договор и старт", step3_desc: "Заключаем договор и начинаем работу",
-                step4_title: "Ежемесячный отчёт", step4_desc: "Прозрачные результаты и планы",
-                about_contact_title: "Контакты",
-                about_location: "Ташкент, Узбекистан",
-                about_hours: "Пн-Пт: 9:00 — 18:00",
-                about_phone: "[Номер телефона]",
-                about_email: "[Email адрес]",
-                form_title: "Бесплатная консультация",
-                form_desc: "Оставьте данные — свяжемся в течение 30 минут",
-                form_name: "Ваше имя",
-                form_phone: "Номер телефона",
-                form_interest: "Интересующая услуга",
-                form_select_default: "Выберите...",
-                form_opt_smm: "Ведение SMM",
-                form_opt_target: "Таргетированная реклама",
-                form_opt_brand: "Брендинг и дизайн",
-                form_opt_content: "Производство контента",
-                form_opt_web: "Разработка сайтов",
-                form_opt_strategy: "Стратегия и консалтинг",
-                form_opt_other: "Другое",
-                form_submit: "Отправить",
-                form_success: "Отправлено!",
-                cta_callback: "Заказать звонок",
-                form_name_ph: "Введите ваше имя",
-                form_phone_ph: "+998",
-            }
-        };
+    // ── LANG SWITCHER ──────────────────────────────────
+    function setLang(l) {
+        lang = l;
+        document.querySelectorAll('.lang-btn').forEach(b =>
+            b.classList.toggle('active', b.dataset.lang === l));
 
-        // ── LANGUAGE SWITCHER ───────────────────────────
-        function setLang(lang) {
-            currentLang = lang;
+        const t = T[l];
 
-            // Update toggle buttons
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.lang === lang);
-            });
-
-            // Update all translatable elements
-            const t = translations[lang];
-            document.querySelectorAll('[data-t]').forEach(el => {
-                const key = el.dataset.t;
-                if (t[key]) el.textContent = t[key];
-            });
-
-            // Update placeholders
-            document.querySelectorAll('[data-tp]').forEach(el => {
-                const key = el.dataset.tp;
-                if (t[key]) el.placeholder = t[key];
-            });
-        }
-
-        // ── TAB NAVIGATION ──────────────────────────────
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Update active tab
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                // Show corresponding section
-                const sectionId = tab.dataset.section;
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById(sectionId).classList.add('active');
-
-                // Track
-                if (tg) {
-                    try {
-                        tg.sendData(JSON.stringify({
-                            action: 'section_viewed',
-                            section: sectionId
-                        }));
-                    } catch(e) {}
-                }
-            });
+        document.querySelectorAll('[data-t]').forEach(el => {
+            const k = el.dataset.t;
+            if (t[k] !== undefined) el.textContent = t[k];
         });
 
-        // ── FAQ ACCORDION ───────────────────────────────
-        function toggleFaq(el) {
-            const item = el.closest('.faq-item');
-            const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('[data-t-html]').forEach(el => {
+            const k = el.dataset.tHtml;
+            if (t[k] !== undefined) el.innerHTML = t[k];
+        });
+    }
 
-            // Close all
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    // ── TAB SWITCHING ──────────────────────────────────
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.section).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
 
-            // Toggle clicked
-            if (!wasOpen) {
-                item.classList.add('open');
-            }
-        }
+    // ── CTA ────────────────────────────────────────────
+    function openChat() {
+        try { tg?.openTelegramLink('https://t.me/mqsd_agency_bot'); } catch(e) {}
+        try { tg?.sendData(JSON.stringify({ action: 'open_chat' })); } catch(e) {}
+    }
 
-        // ── SERVICE TRACKING ────────────────────────────
-        function trackService(service) {
-            if (tg) {
-                try {
-                    tg.sendData(JSON.stringify({
-                        action: 'service_clicked',
-                        service: service
-                    }));
-                } catch(e) {}
-            }
-        }
-
-        // ── FORM SUBMISSION ─────────────────────────────
-        function submitForm() {
-            const name = document.getElementById('form-name').value.trim();
-            const phone = document.getElementById('form-phone').value.trim();
-            const interest = document.getElementById('form-interest').value;
-            const btn = document.getElementById('submit-btn');
-
-            if (!phone) {
-                document.getElementById('form-phone').focus();
-                document.getElementById('form-phone').style.borderColor = '#ff4757';
-                setTimeout(() => {
-                    document.getElementById('form-phone').style.borderColor = '';
-                }, 2000);
-                return;
-            }
-
-            btn.disabled = true;
-            btn.classList.add('success');
-            btn.textContent = translations[currentLang].form_success;
-
-            if (tg) {
-                try {
-                    tg.sendData(JSON.stringify({
-                        action: 'contact_form',
-                        name: name,
-                        phone: phone,
-                        interest: interest,
-                    }));
-                } catch(e) {}
-
-                // Close TWA after a brief delay
-                setTimeout(() => {
-                    tg.close();
-                }, 1500);
-            }
-        }
-
-        // ── CALLBACK REQUEST ────────────────────────────
-        function requestCallback() {
-            // Scroll to form
-            document.querySelector('.contact-section').scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-            document.getElementById('form-phone').focus();
-        }
-    </script>
+    // Init
+    setLang(lang);
+</script>
 </body>
 </html>
