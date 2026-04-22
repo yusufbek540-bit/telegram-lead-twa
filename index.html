@@ -960,6 +960,63 @@
     max-width: 280px;
     margin: 0 auto;
 }
+
+        /* ── SERVICE CTA BUTTON ────────────────────────── */
+        .service-cta {
+            display: block;
+            width: 100%;
+            margin-top: 14px;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid var(--border-hi, rgba(255,255,255,.18));
+            border-radius: var(--radius-sm, 8px);
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dim, rgba(255,255,255,.55));
+            cursor: pointer;
+            transition: var(--transition, .2s ease);
+            text-align: center;
+        }
+
+        .service-cta:active {
+            background: rgba(139,94,255,.12);
+            border-color: var(--accent, #8b5eff);
+            color: var(--accent, #8b5eff);
+        }
+
+        /* ── PROJECT FILTER CHIPS ──────────────────────── */
+        .filter-chips {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-chips::-webkit-scrollbar { display: none; }
+
+        .filter-chip {
+            padding: 6px 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border, rgba(255,255,255,.1));
+            background: var(--card, rgba(255,255,255,.04));
+            color: var(--dim, rgba(255,255,255,.55));
+            border-radius: 100px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: var(--transition, .2s ease);
+            flex-shrink: 0;
+        }
+
+        .filter-chip.active {
+            background: rgba(255,255,255,.9);
+            color: #0a0a0f;
+            border-color: rgba(255,255,255,.9);
+        }
     </style>
 </head>
 <body>
@@ -1245,8 +1302,16 @@
 <!-- ═══════════════════════════════════════════════ -->
 <div id="works" class="section active">
 
+    <!-- ── PROJECT FILTERS ──────────────────────────── -->
+    <div class="filter-chips" id="projFilters">
+        <button class="filter-chip active" data-filter="all" onclick="filterProjects('all')" data-t="filter_all">Barchasi</button>
+        <button class="filter-chip" data-filter="smm" onclick="filterProjects('smm')">SMM</button>
+        <button class="filter-chip" data-filter="automation" onclick="filterProjects('automation')" data-t="filter_auto">Avtomatizatsiya</button>
+        <button class="filter-chip" data-filter="production" onclick="filterProjects('production')" data-t="filter_prod">Prodakshn</button>
+    </div>
+
     <!-- Project 1 -->
-    <div class="project-card">
+    <div class="project-card" data-category="smm">
         <div class="project-ph">
             <span class="ph-index">01</span>
             <span class="ph-type-badge" data-t="p1_type">SMM • AI-kontent</span>
@@ -1301,7 +1366,7 @@
     </div>
 
     <!-- Project 2 -->
-    <div class="project-card">
+    <div class="project-card" data-category="automation">
         <div class="project-ph">
             <span class="ph-index">02</span>
             <span class="ph-type-badge" data-t="p2_type">Avtomatizatsiya • Bot</span>
@@ -1352,7 +1417,7 @@
     </div>
 
     <!-- Project 3 -->
-    <div class="project-card">
+    <div class="project-card" data-category="production">
         <div class="project-ph">
             <span class="ph-index">03</span>
             <span class="ph-type-badge" data-t="p3_type">Prodakshn • Brending</span>
@@ -1434,6 +1499,7 @@
                     <li data-t="svc1_b3">SMM boshqaruv va strategiya</li>
                     <li data-t="svc1_b4">Key Visuals va brending</li>
                 </ul>
+                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
@@ -1459,6 +1525,7 @@
                     <li data-t="svc2_b3">CRM va savdo voronkalari</li>
                     <li data-t="svc2_b4">Biznes jarayonlari avtomati</li>
                 </ul>
+                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
@@ -1480,6 +1547,7 @@
                     <li data-t="svc3_b3">Raqamli avatarlar va Lip-Sync</li>
                     <li data-t="svc3_b4">4K + rangga ishlov berish</li>
                 </ul>
+                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
@@ -1501,6 +1569,7 @@
                     <li data-t="svc4_b2">Telegram Ads</li>
                     <li data-t="svc4_b3">A/B test va analitika</li>
                 </ul>
+                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
@@ -1643,6 +1712,10 @@
             about_contacts:"Aloqa",
             c_site:"Sayt", c_tg:"Telegram", c_loc:"Shahar", c_loc_v:"Toshkent", c_hrs:"Ish vaqti", c_hrs_v:"Du–Ju 9–18",
             cta:"Boshlash — botda suhbat",
+            svc_discuss:"Muhokama qilish →",
+            filter_all:"Barchasi",
+            filter_auto:"Avtomatizatsiya",
+            filter_prod:"Prodakshn",
         },
         ru: {
             hero_label: "Маркетинговое агентство",
@@ -1686,6 +1759,10 @@
             about_contacts:"Контакты",
             c_site:"Сайт", c_tg:"Telegram", c_loc:"Город", c_loc_v:"Ташкент", c_hrs:"Часы работы", c_hrs_v:"Пн–Пт 9–18",
             cta:"Начать разговор в боте",
+            svc_discuss:"Обсудить →",
+            filter_all:"Все",
+            filter_auto:"Автоматизация",
+            filter_prod:"Продакшн",
         }
     };
 
@@ -1718,6 +1795,27 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
+
+    // ── PROJECT FILTER ──────────────────────────────
+    function filterProjects(category) {
+        document.querySelectorAll('#projFilters .filter-chip').forEach(chip => {
+            chip.classList.toggle('active', chip.dataset.filter === category);
+        });
+        document.querySelectorAll('#works .project-card').forEach(card => {
+            const match = category === 'all' || card.dataset.category === category;
+            card.style.display = match ? '' : 'none';
+        });
+    }
+
+    // ── SCROLL TO CONTACT (About tab) ─────────────
+    function scrollToContact() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const aboutTab = document.querySelector('.tab[data-section="about"]');
+        if (aboutTab) aboutTab.classList.add('active');
+        document.getElementById('about').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     // ── CTA ────────────────────────────────────────────
     function openChat() {
