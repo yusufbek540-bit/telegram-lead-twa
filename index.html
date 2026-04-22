@@ -968,21 +968,21 @@
             margin-top: 14px;
             padding: 10px;
             background: transparent;
-            border: 1px solid var(--border-hi, rgba(255,255,255,.18));
-            border-radius: var(--radius-sm, 8px);
-            font-family: 'Outfit', sans-serif;
+            border: 1px solid var(--border-hi);
+            border-radius: var(--r-sm);
+            font-family: 'Inter', sans-serif;
             font-size: 12px;
             font-weight: 600;
-            color: var(--dim, rgba(255,255,255,.55));
+            color: var(--dim);
             cursor: pointer;
-            transition: var(--transition, .2s ease);
+            transition: var(--ease);
             text-align: center;
         }
 
         .service-cta:active {
-            background: rgba(139,94,255,.12);
-            border-color: var(--accent, #8b5eff);
-            color: var(--accent, #8b5eff);
+            background: var(--accent-s);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         /* ── PROJECT FILTER CHIPS ──────────────────────── */
@@ -999,23 +999,23 @@
 
         .filter-chip {
             padding: 6px 14px;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 12px;
             font-weight: 600;
-            border: 1px solid var(--border, rgba(255,255,255,.1));
-            background: var(--card, rgba(255,255,255,.04));
-            color: var(--dim, rgba(255,255,255,.55));
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--dim);
             border-radius: 100px;
             white-space: nowrap;
             cursor: pointer;
-            transition: var(--transition, .2s ease);
+            transition: var(--ease);
             flex-shrink: 0;
         }
 
         .filter-chip.active {
-            background: rgba(255,255,255,.9);
-            color: #0a0a0f;
-            border-color: rgba(255,255,255,.9);
+            background: var(--text);
+            color: var(--surface);
+            border-color: var(--text);
         }
 
         /* ── LIVE CHAT PANEL ───────────────────────────── */
@@ -1023,12 +1023,12 @@
             display: none;
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            background: #14141e;
-            border-top: 1px solid rgba(255,255,255,.1);
+            background: var(--surface);
+            border-top: 1px solid var(--border);
             border-radius: 16px 16px 0 0;
             padding: 20px 16px 32px;
             z-index: 1000;
-            box-shadow: 0 -4px 24px rgba(0,0,0,.4);
+            box-shadow: 0 -4px 24px rgba(0,35,71,0.08);
         }
 
         #chatPanel.open { display: block; }
@@ -1041,8 +1041,9 @@
         }
 
         .chat-panel-title {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 15px;
+            color: var(--text);
         }
 
         .chat-panel-close {
@@ -1050,7 +1051,7 @@
             border: none;
             font-size: 20px;
             cursor: pointer;
-            color: rgba(255,255,255,.55);
+            color: var(--muted);
             line-height: 1;
         }
 
@@ -1058,19 +1059,19 @@
             width: 100%;
             box-sizing: border-box;
             padding: 10px 12px;
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
             font-size: 14px;
-            font-family: 'Outfit', sans-serif;
-            background: rgba(255,255,255,.05);
-            color: #fff;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             resize: none;
             min-height: 80px;
         }
 
         .chat-panel-note {
             font-size: 11px;
-            color: rgba(255,255,255,.45);
+            color: var(--muted);
             margin: 6px 0 12px;
         }
     </style>
@@ -1919,7 +1920,17 @@
         const msg = document.getElementById('chatInput').value.trim();
         if (!msg) return;
         if (tg) {
-            tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg }));
+            try {
+                tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg }));
+            } catch(e) {
+                tg.showAlert('Xatolik yuz berdi: ' + e.message);
+            }
+        } else {
+            // Outside Telegram — show inline feedback
+            const btn = document.querySelector('#chatPanel .cta-btn');
+            const orig = btn.textContent;
+            btn.textContent = '✓ (faqat Telegram ichida ishlaydi)';
+            setTimeout(() => { btn.textContent = orig; }, 2500);
         }
     }
 
