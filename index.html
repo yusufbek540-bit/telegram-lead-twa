@@ -1735,8 +1735,11 @@
 const tgUser = tg?.initDataUnsafe?.user;
 const OB_KEY = 'mqsd_ob_' + (tgUser?.id || 'guest');
 
+const _urlLang = new URLSearchParams(location.search).get('lang');
 const obState = {
-    lang: (tgUser?.language_code || '').startsWith('ru') ? 'ru' : 'uz',
+    lang: (_urlLang === 'ru' || _urlLang === 'uz')
+        ? _urlLang
+        : ((tgUser?.language_code || '').startsWith('ru') ? 'ru' : 'uz'),
     slide: 0,
     answers: {
         business_type: null,
@@ -1804,7 +1807,7 @@ const OB_T = {
 function obSetLang(l) {
     obState.lang = l;
     const t = OB_T[l];
-    document.querySelectorAll('[data-lang]').forEach(b =>
+    document.querySelectorAll('#onboarding [data-lang]').forEach(b =>
         b.classList.toggle('active', b.dataset.lang === l));
     document.getElementById('ob-tagline').textContent = t.ob_tagline;
     document.getElementById('ob-lang-prompt').textContent = t.ob_lang_prompt;
@@ -1827,6 +1830,7 @@ function obSetLang(l) {
         const key = el.dataset.ob;
         if (t[key] !== undefined) el.textContent = t[key];
     });
+    setLang(l);
     obUpdateFooter();
 }
 
@@ -1941,10 +1945,10 @@ function obSendData(withPhone) {
         phone: withPhone ? obState.answers.phone : '',
         name: obState.answers.name || '',
     };
-    try {
+    if (tg) {
         tg.sendData(JSON.stringify(payload));
-    } catch(e) {
-        console.warn('sendData unavailable (non-Telegram context):', e);
+    } else {
+        console.warn('sendData unavailable (non-Telegram context) — data not sent');
     }
 }
 
