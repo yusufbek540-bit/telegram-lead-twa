@@ -1920,12 +1920,17 @@
         }
         if (!tg) { closeChatPanel(); return; }
 
-        // Try sendData — it closes the app instantly if it works.
-        // If we're still running after 300ms it silently failed (inline keyboard context).
+        // sendData closes the app instantly when it works (opened via menu/keyboard button).
+        // If we're still running after 300ms, it silently failed (inline keyboard context).
         try { tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg })); } catch(e) {}
         setTimeout(() => {
-            // Still alive → sendData didn't work. Fall back: open bot chat.
-            tg.openTelegramLink('https://t.me/mqsd_agency_bot');
+            // Still alive → sendData failed. Instruct user to open via menu button.
+            closeChatPanel();
+            tg.showAlert(
+                lang === 'ru'
+                    ? '💬 Чтобы написать менеджеру, откройте мини-приложение через кнопку «🌐 TWA» в нижней части чата.'
+                    : '💬 Menejerga yozish uchun chat pastidagi «🌐 TWA» tugmasi orqali mini-ilovani oching.'
+            );
         }, 300);
     }
 
