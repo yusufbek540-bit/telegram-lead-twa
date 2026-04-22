@@ -651,9 +651,539 @@
             background: var(--border);
             margin: 0 20px 24px;
         }
+
+/* ── ONBOARDING ──────────────────────────────── */
+.ob-brand-sm {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+#onboarding {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.ob-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 0;
+    flex-shrink: 0;
+}
+
+.ob-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.ob-slides {
+    height: 100%;
+    position: relative;
+}
+
+.ob-slide {
+    position: absolute;
+    inset: 0;
+    padding: 24px 20px 0;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+    pointer-events: none;
+}
+
+.ob-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.ob-slide.exit-left {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.ob-footer {
+    padding: 16px 20px max(16px, env(safe-area-inset-bottom));
+    flex-shrink: 0;
+}
+
+.ob-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.ob-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--faint);
+    border: 1px solid var(--border);
+    transition: var(--ease);
+}
+
+.ob-dot.active {
+    width: 20px;
+    border-radius: 100px;
+    background: var(--text);
+    border-color: var(--text);
+}
+
+.ob-next {
+    width: 100%;
+    padding: 16px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--r);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--ease);
+    margin-bottom: 8px;
+}
+
+.ob-next:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.ob-next:active:not(:disabled) { opacity: 0.8; }
+
+.ob-skip {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    text-align: center;
+}
+
+.ob-q-title {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.6px;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    color: var(--text);
+}
+
+.ob-q-sub {
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: 20px;
+    line-height: 1.55;
+}
+
+.ob-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 16px;
+}
+
+.ob-opt {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    cursor: pointer;
+    transition: var(--ease);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ob-opt:active { opacity: 0.8; }
+
+.ob-opt.selected {
+    border-color: var(--text);
+    background: var(--faint);
+}
+
+.ob-opt-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 32px;
+    text-align: center;
+}
+
+.ob-opt-text { flex: 1; }
+
+.ob-opt-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.ob-opt-desc {
+    font-size: 11.5px;
+    color: var(--dim);
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.ob-opt-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    transition: var(--ease);
+    position: relative;
+}
+
+.ob-opt.selected .ob-opt-check {
+    background: var(--text);
+    border-color: var(--text);
+}
+
+.ob-opt.selected .ob-opt-check::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: var(--bg);
+    border-radius: 50%;
+}
+
+.ob-opt-multi .ob-opt-check {
+    border-radius: var(--r-sm);
+}
+
+.ob-opt-multi.selected .ob-opt-check {
+    background: var(--text);
+}
+
+.ob-welcome {
+    text-align: center;
+    padding-top: 32px;
+}
+
+.ob-brand {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.ob-brand .dot { color: var(--accent); }
+
+.ob-tagline {
+    font-size: 15px;
+    color: var(--dim);
+    line-height: 1.6;
+    max-width: 280px;
+    margin: 0 auto 32px;
+}
+
+.ob-lang-prompt {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.ob-field { margin-bottom: 14px; }
+
+.ob-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.ob-field input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface);
+    outline: none;
+    transition: border-color var(--ease);
+    -webkit-appearance: none;
+}
+
+.ob-field input:focus { border-color: var(--text); }
+.ob-field input::placeholder { color: var(--muted); }
+
+.ob-done {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.ob-done-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.ob-done-title {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.8px;
+    margin-bottom: 8px;
+}
+
+.ob-done-sub {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.6;
+    max-width: 280px;
+    margin: 0 auto;
+}
     </style>
 </head>
 <body>
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ONBOARDING (new users only)                     -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="onboarding" style="display:none">
+
+  <div class="ob-header">
+    <div class="ob-brand-sm">MQSD<span class="dot">.</span></div>
+    <div class="lang-toggle">
+      <button class="lang-btn ob-lang-btn active" data-lang="uz" onclick="obSetLang('uz')">UZ</button>
+      <button class="lang-btn ob-lang-btn" data-lang="ru" onclick="obSetLang('ru')">RU</button>
+    </div>
+  </div>
+
+  <div class="ob-body">
+    <div class="ob-slides" id="obSlides">
+
+      <!-- SLIDE 0: Welcome + Language -->
+      <div class="ob-slide active" id="ob-slide-0">
+        <div class="ob-welcome">
+          <div class="ob-brand">MQSD<span class="dot">.</span></div>
+          <div class="ob-tagline" id="ob-tagline">
+            AI-kontent, avtomatizatsiya va prodakshn — bitta tizimda.
+          </div>
+          <div class="ob-lang-prompt" id="ob-lang-prompt">Tilni tanlang / Выберите язык</div>
+          <div class="lang-toggle" style="justify-content:center; display:inline-flex; margin-bottom:32px">
+            <button class="lang-btn active" data-lang="uz" onclick="obSetLang('uz')">O'zbekcha</button>
+            <button class="lang-btn" data-lang="ru" onclick="obSetLang('ru')">Русский</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 1: Business Type (Q1) -->
+      <div class="ob-slide" id="ob-slide-1">
+        <div class="ob-q-title" id="ob-q1-title">Biznesingiz soha?</div>
+        <div class="ob-q-sub" id="ob-q1-sub">To'g'ri yechim tavsiya qilishimiz uchun</div>
+        <div class="ob-options" id="ob-q1-opts">
+          <div class="ob-opt" data-val="restaurant" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">🍽</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_restaurant">Restoran / Cafe</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="retail" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">🛍</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_retail">Do'kon / Retail</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="service" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">🔧</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_service">Xizmat / B2B</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="education" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">📚</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_education">Ta'lim / Kurslar</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="beauty" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">💄</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_beauty">Go'zallik / Saloon</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="other" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">⚡</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_other">Boshqa</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Services (Q2, multi-select) -->
+      <div class="ob-slide" id="ob-slide-2">
+        <div class="ob-q-title" id="ob-q2-title">Nimaga kerak?</div>
+        <div class="ob-q-sub" id="ob-q2-sub">Bir nechta tanlash mumkin</div>
+        <div class="ob-options" id="ob-q2-opts">
+          <div class="ob-opt ob-opt-multi" data-val="smm" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">📱</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="svc_smm">SMM / Kontent</div>
+              <div class="ob-opt-desc" data-ob="svc_smm_d">AI-vizuallar, Reels, SMM boshqaruv</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt ob-opt-multi" data-val="targeting" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">🎯</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="svc_targeting">Targetlangan reklama</div>
+              <div class="ob-opt-desc" data-ob="svc_targeting_d">Meta Ads, Google, Telegram Ads</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt ob-opt-multi" data-val="bot" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">🤖</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="svc_bot">Bot / Avtomatizatsiya</div>
+              <div class="ob-opt-desc" data-ob="svc_bot_d">Telegram bot, CRM, savdo voronkasi</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt ob-opt-multi" data-val="production" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">🎬</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="svc_prod">Prodakshn / Video</div>
+              <div class="ob-opt-desc" data-ob="svc_prod_d">Hero-roliklar, reklama kliplari</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt ob-opt-multi" data-val="branding" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">✨</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="svc_brand">Brending / Dizayn</div>
+              <div class="ob-opt-desc" data-ob="svc_brand_d">Logo, firmalik uslub, Key Visual</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Current Marketing (Q3) -->
+      <div class="ob-slide" id="ob-slide-3">
+        <div class="ob-q-title" id="ob-q3-title">Marketing holati?</div>
+        <div class="ob-q-sub" id="ob-q3-sub">Hozir qanday ahvolda</div>
+        <div class="ob-options" id="ob-q3-opts">
+          <div class="ob-opt" data-val="no_marketing" onclick="obSelectSingle(this,'current_marketing',3,4)">
+            <div class="ob-opt-icon">🌱</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="mkt_none">Marketing yo'q, noldan</div>
+              <div class="ob-opt-desc" data-ob="mkt_none_d">Hali hech narsa sinalmagan</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="has_no_results" onclick="obSelectSingle(this,'current_marketing',3,4)">
+            <div class="ob-opt-icon">📉</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="mkt_poor">Bor, lekin natija yo'q</div>
+              <div class="ob-opt-desc" data-ob="mkt_poor_d">Pul sarflanmoqda, daromad yo'q</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="has_wants_scale" onclick="obSelectSingle(this,'current_marketing',3,4)">
+            <div class="ob-opt-icon">🚀</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="mkt_scale">Bor, ko'paytirmoqchi</div>
+              <div class="ob-opt-desc" data-ob="mkt_scale_d">Ishlayapti, yanada kengaytirish kerak</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Budget (Q4) -->
+      <div class="ob-slide" id="ob-slide-4">
+        <div class="ob-q-title" id="ob-q4-title">Oylik byudjet?</div>
+        <div class="ob-q-sub" id="ob-q4-sub">Taxminiy marketing xarajat</div>
+        <div class="ob-options" id="ob-q4-opts">
+          <div class="ob-opt" data-val="under_500" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">💰</div>
+            <div class="ob-opt-text"><div class="ob-opt-label">$500 gacha</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="500_1000" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">💰</div>
+            <div class="ob-opt-text"><div class="ob-opt-label">$500 – $1,000</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="1000_3000" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">💰</div>
+            <div class="ob-opt-text"><div class="ob-opt-label">$1,000 – $3,000</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="3000_plus" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">💎</div>
+            <div class="ob-opt-text"><div class="ob-opt-label">$3,000+</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="unknown" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">🤷</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="budget_unknown">Hali aniq emas</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Contact Info -->
+      <div class="ob-slide" id="ob-slide-5">
+        <div class="ob-q-title" id="ob-q5-title">Aloqa ma'lumotlari</div>
+        <div class="ob-q-sub" id="ob-q5-sub">Tez orada bog'lanamiz</div>
+        <div class="ob-field">
+          <label id="ob-name-label">Ismingiz</label>
+          <input type="text" id="ob-name-input" placeholder="Ism" autocomplete="given-name">
+        </div>
+        <div class="ob-field">
+          <label id="ob-phone-label">Telefon raqam</label>
+          <input type="tel" id="ob-phone-input" placeholder="+998 90 123 45 67" autocomplete="tel">
+        </div>
+        <div style="margin-top:8px; font-size:11px; color:var(--muted); line-height:1.5" id="ob-privacy-note">
+          Raqamingiz faqat taklif yuborish uchun ishlatiladi
+        </div>
+      </div>
+
+      <!-- SLIDE 6: Done -->
+      <div class="ob-slide" id="ob-slide-6">
+        <div class="ob-done">
+          <div class="ob-done-icon">✅</div>
+          <div class="ob-done-title" id="ob-done-title">Rahmat!</div>
+          <div class="ob-done-sub" id="ob-done-sub">
+            Ma'lumotlaringiz qabul qilindi. Tez orada mutaxassisimiz bog'lanadi.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ob-slides -->
+  </div><!-- /ob-body -->
+
+  <div class="ob-footer">
+    <div class="ob-dots" id="obDots"></div>
+    <button class="ob-next" id="obNextBtn" onclick="obNext()">Davom etish</button>
+    <button class="ob-skip" id="obSkipBtn" onclick="obSkip()">Keyinroq</button>
+  </div>
+
+</div><!-- /onboarding -->
+<div id="main-app" style="display:none">
 
 <!-- ── HEADER ──────────────────────────────────────── -->
 <header class="header">
@@ -1197,6 +1727,258 @@
 
     // Init
     setLang(lang);
+
+// ══════════════════════════════════════════════════
+// ONBOARDING — state + routing
+// ══════════════════════════════════════════════════
+
+const tgUser = tg?.initDataUnsafe?.user;
+const OB_KEY = 'mqsd_ob_' + (tgUser?.id || 'guest');
+
+const obState = {
+    lang: (tgUser?.language_code || '').startsWith('ru') ? 'ru' : 'uz',
+    slide: 0,
+    answers: {
+        business_type: null,
+        service_interest: [],
+        current_marketing: null,
+        budget_range: null,
+        phone: '',
+        name: tgUser?.first_name || '',
+    }
+};
+
+const OB_T = {
+    uz: {
+        next: 'Davom etish', skip: 'Keyinroq', submit: 'Yuborish', explore: 'Xizmatlarni ko\'rish',
+        ob_tagline: 'AI-kontent, avtomatizatsiya va prodakshn — bitta tizimda.',
+        ob_lang_prompt: 'Tilni tanlang / Выберите язык',
+        q1_title: 'Biznesingiz soha?', q1_sub: 'To\'g\'ri yechim tavsiya qilishimiz uchun',
+        q2_title: 'Nimaga kerak?', q2_sub: 'Bir nechta tanlash mumkin',
+        q3_title: 'Marketing holati?', q3_sub: 'Hozir qanday ahvolda',
+        q4_title: 'Oylik byudjet?', q4_sub: 'Taxminiy marketing xarajat',
+        q5_title: 'Aloqa ma\'lumotlari', q5_sub: 'Tez orada bog\'lanamiz',
+        name_label: 'Ismingiz', phone_label: 'Telefon raqam',
+        privacy: 'Raqamingiz faqat taklif yuborish uchun ishlatiladi',
+        done_title: 'Rahmat!', done_sub: 'Ma\'lumotlaringiz qabul qilindi. Tez orada mutaxassisimiz bog\'lanadi.',
+        biz_restaurant: 'Restoran / Cafe', biz_retail: 'Do\'kon / Retail',
+        biz_service: 'Xizmat / B2B', biz_education: 'Ta\'lim / Kurslar',
+        biz_beauty: 'Go\'zallik / Saloon', biz_other: 'Boshqa',
+        svc_smm: 'SMM / Kontent', svc_smm_d: 'AI-vizuallar, Reels, SMM boshqaruv',
+        svc_targeting: 'Targetlangan reklama', svc_targeting_d: 'Meta Ads, Google, Telegram Ads',
+        svc_bot: 'Bot / Avtomatizatsiya', svc_bot_d: 'Telegram bot, CRM, savdo voronkasi',
+        svc_prod: 'Prodakshn / Video', svc_prod_d: 'Hero-roliklar, reklama kliplari',
+        svc_brand: 'Brending / Dizayn', svc_brand_d: 'Logo, firmalik uslub, Key Visual',
+        mkt_none: 'Marketing yo\'q, noldan', mkt_none_d: 'Hali hech narsa sinalmagan',
+        mkt_poor: 'Bor, lekin natija yo\'q', mkt_poor_d: 'Pul sarflanmoqda, daromad yo\'q',
+        mkt_scale: 'Bor, ko\'paytirmoqchi', mkt_scale_d: 'Ishlayapti, yanada kengaytirish kerak',
+        budget_unknown: 'Hali aniq emas',
+    },
+    ru: {
+        next: 'Продолжить', skip: 'Позже', submit: 'Отправить', explore: 'Смотреть услуги',
+        ob_tagline: 'AI-контент, автоматизация и продакшн — в одной системе.',
+        ob_lang_prompt: 'Tilni tanlang / Выберите язык',
+        q1_title: 'Сфера бизнеса?', q1_sub: 'Чтобы предложить правильное решение',
+        q2_title: 'Что нужно?', q2_sub: 'Можно выбрать несколько',
+        q3_title: 'Состояние маркетинга?', q3_sub: 'Как дела сейчас',
+        q4_title: 'Месячный бюджет?', q4_sub: 'Примерные расходы на маркетинг',
+        q5_title: 'Контактные данные', q5_sub: 'Свяжемся в ближайшее время',
+        name_label: 'Ваше имя', phone_label: 'Номер телефона',
+        privacy: 'Номер используется только для отправки предложения',
+        done_title: 'Спасибо!', done_sub: 'Данные получены. Наш специалист свяжется с вами.',
+        biz_restaurant: 'Ресторан / Кафе', biz_retail: 'Магазин / Retail',
+        biz_service: 'Услуги / B2B', biz_education: 'Образование / Курсы',
+        biz_beauty: 'Красота / Салон', biz_other: 'Другое',
+        svc_smm: 'SMM / Контент', svc_smm_d: 'AI-визуалы, Reels, SMM-ведение',
+        svc_targeting: 'Таргетированная реклама', svc_targeting_d: 'Meta Ads, Google, Telegram Ads',
+        svc_bot: 'Бот / Автоматизация', svc_bot_d: 'Telegram бот, CRM, воронка продаж',
+        svc_prod: 'Продакшн / Видео', svc_prod_d: 'Hero-ролики, рекламные ролики',
+        svc_brand: 'Брендинг / Дизайн', svc_brand_d: 'Логотип, фирстиль, Key Visual',
+        mkt_none: 'Нет маркетинга, с нуля', mkt_none_d: 'Ещё ничего не пробовали',
+        mkt_poor: 'Есть, но нет результата', mkt_poor_d: 'Тратим деньги, нет дохода',
+        mkt_scale: 'Есть, хотим масштабировать', mkt_scale_d: 'Работает, нужно больше',
+        budget_unknown: 'Пока не определились',
+    }
+};
+
+function obSetLang(l) {
+    obState.lang = l;
+    const t = OB_T[l];
+    document.querySelectorAll('[data-lang]').forEach(b =>
+        b.classList.toggle('active', b.dataset.lang === l));
+    document.getElementById('ob-tagline').textContent = t.ob_tagline;
+    document.getElementById('ob-lang-prompt').textContent = t.ob_lang_prompt;
+    document.getElementById('ob-q1-title').textContent = t.q1_title;
+    document.getElementById('ob-q1-sub').textContent = t.q1_sub;
+    document.getElementById('ob-q2-title').textContent = t.q2_title;
+    document.getElementById('ob-q2-sub').textContent = t.q2_sub;
+    document.getElementById('ob-q3-title').textContent = t.q3_title;
+    document.getElementById('ob-q3-sub').textContent = t.q3_sub;
+    document.getElementById('ob-q4-title').textContent = t.q4_title;
+    document.getElementById('ob-q4-sub').textContent = t.q4_sub;
+    document.getElementById('ob-q5-title').textContent = t.q5_title;
+    document.getElementById('ob-q5-sub').textContent = t.q5_sub;
+    document.getElementById('ob-name-label').textContent = t.name_label;
+    document.getElementById('ob-phone-label').textContent = t.phone_label;
+    document.getElementById('ob-privacy-note').textContent = t.privacy;
+    document.getElementById('ob-done-title').textContent = t.done_title;
+    document.getElementById('ob-done-sub').textContent = t.done_sub;
+    document.querySelectorAll('[data-ob]').forEach(el => {
+        const key = el.dataset.ob;
+        if (t[key] !== undefined) el.textContent = t[key];
+    });
+    obUpdateFooter();
+}
+
+function obGoToSlide(n) {
+    const slides = document.querySelectorAll('.ob-slide');
+    const prev = obState.slide;
+    slides[prev].classList.remove('active');
+    slides[prev].classList.add('exit-left');
+    setTimeout(() => slides[prev].classList.remove('exit-left'), 300);
+    obState.slide = n;
+    slides[n].classList.add('active');
+    obUpdateFooter();
+}
+
+function obUpdateFooter() {
+    const slide = obState.slide;
+    const t = OB_T[obState.lang];
+    const nextBtn = document.getElementById('obNextBtn');
+    const skipBtn = document.getElementById('obSkipBtn');
+    const dotsEl = document.getElementById('obDots');
+    dotsEl.innerHTML = '';
+    if (slide > 0 && slide < 6) {
+        for (let i = 1; i <= 5; i++) {
+            const d = document.createElement('div');
+            d.className = 'ob-dot' + (i === slide ? ' active' : '');
+            dotsEl.appendChild(d);
+        }
+    }
+    if (slide === 0) {
+        nextBtn.textContent = t.next;
+        nextBtn.disabled = false;
+        skipBtn.style.display = 'none';
+    } else if (slide === 6) {
+        nextBtn.textContent = t.explore;
+        nextBtn.disabled = false;
+        skipBtn.style.display = 'none';
+    } else if (slide === 5) {
+        nextBtn.textContent = t.submit;
+        const phone = document.getElementById('ob-phone-input').value.trim();
+        nextBtn.disabled = phone.length < 8;
+        skipBtn.style.display = 'block';
+        skipBtn.textContent = t.skip;
+    } else if (slide === 2) {
+        nextBtn.textContent = t.next;
+        nextBtn.disabled = obState.answers.service_interest.length === 0;
+        skipBtn.style.display = 'block';
+        skipBtn.textContent = t.skip;
+    } else {
+        nextBtn.textContent = t.next;
+        nextBtn.disabled = false;
+        skipBtn.style.display = 'block';
+        skipBtn.textContent = t.skip;
+    }
+}
+
+function obSelectSingle(el, field, currentSlide, nextSlide) {
+    el.closest('.ob-options').querySelectorAll('.ob-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    obState.answers[field] = el.dataset.val;
+    setTimeout(() => obGoToSlide(nextSlide), 280);
+}
+
+function obToggleMulti(el, field) {
+    el.classList.toggle('selected');
+    const val = el.dataset.val;
+    const arr = obState.answers[field];
+    const idx = arr.indexOf(val);
+    if (idx === -1) arr.push(val);
+    else arr.splice(idx, 1);
+    obUpdateFooter();
+}
+
+function obNext() {
+    const slide = obState.slide;
+    if (slide === 5) {
+        obSubmit();
+    } else if (slide === 6) {
+        obFinish();
+    } else {
+        obGoToSlide(slide + 1);
+    }
+}
+
+function obSkip() {
+    if (obState.slide === 5) {
+        obState.answers.phone = '';
+        obSendData(false);
+        obGoToSlide(6);
+    } else {
+        obGoToSlide(Math.min(obState.slide + 1, 6));
+    }
+}
+
+function obSubmit() {
+    const nameVal = document.getElementById('ob-name-input').value.trim();
+    const phoneVal = document.getElementById('ob-phone-input').value.trim();
+    if (nameVal) obState.answers.name = nameVal;
+    obState.answers.phone = phoneVal;
+    obSendData(true);
+    obGoToSlide(6);
+}
+
+function obSendData(withPhone) {
+    localStorage.setItem(OB_KEY, '1');
+    const payload = {
+        action: 'questionnaire_complete',
+        lang: obState.lang,
+        business_type: obState.answers.business_type || '',
+        service_interest: obState.answers.service_interest,
+        current_marketing: obState.answers.current_marketing || '',
+        budget_range: obState.answers.budget_range || '',
+        phone: withPhone ? obState.answers.phone : '',
+        name: obState.answers.name || '',
+    };
+    try {
+        tg.sendData(JSON.stringify(payload));
+    } catch(e) {
+        console.warn('sendData unavailable (non-Telegram context):', e);
+    }
+}
+
+function obFinish() {
+    try { tg.close(); } catch(e) {}
+}
+
+function showOnboarding() {
+    document.getElementById('onboarding').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
+    if (tgUser?.first_name) {
+        document.getElementById('ob-name-input').value = tgUser.first_name;
+    }
+    document.getElementById('ob-phone-input').addEventListener('input', () => {
+        if (obState.slide === 5) obUpdateFooter();
+    });
+    obSetLang(obState.lang);
+    obUpdateFooter();
+}
+
+function showMainApp() {
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+}
+
+(function initApp() {
+    const alreadyDone = localStorage.getItem(OB_KEY) === '1';
+    if (alreadyDone) {
+        showMainApp();
+    } else {
+        showOnboarding();
+    }
+})();
 </script>
+</div><!-- /main-app -->
 </body>
 </html>
