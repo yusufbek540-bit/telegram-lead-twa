@@ -1017,6 +1017,62 @@
             color: #0a0a0f;
             border-color: rgba(255,255,255,.9);
         }
+
+        /* ── LIVE CHAT PANEL ───────────────────────────── */
+        #chatPanel {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #14141e;
+            border-top: 1px solid rgba(255,255,255,.1);
+            border-radius: 16px 16px 0 0;
+            padding: 20px 16px 32px;
+            z-index: 1000;
+            box-shadow: 0 -4px 24px rgba(0,0,0,.4);
+        }
+
+        #chatPanel.open { display: block; }
+
+        .chat-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .chat-panel-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .chat-panel-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: rgba(255,255,255,.55);
+            line-height: 1;
+        }
+
+        #chatInput {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Outfit', sans-serif;
+            background: rgba(255,255,255,.05);
+            color: #fff;
+            resize: none;
+            min-height: 80px;
+        }
+
+        .chat-panel-note {
+            font-size: 11px;
+            color: rgba(255,255,255,.45);
+            margin: 6px 0 12px;
+        }
     </style>
 </head>
 <body>
@@ -1644,6 +1700,23 @@
             </div>
         </div>
     </div>
+
+    <div class="about-card" style="margin-top:16px;">
+        <button class="cta-btn" id="chatManagerBtn" onclick="openChatPanel()" data-t="chat_btn">
+            💬 Menejer bilan gaplashing
+        </button>
+    </div>
+</div>
+
+<!-- ── LIVE CHAT PANEL ──────────────────────────── -->
+<div id="chatPanel">
+    <div class="chat-panel-header">
+        <span class="chat-panel-title" data-t="chat_title">Menejerga xabar</span>
+        <button class="chat-panel-close" onclick="closeChatPanel()">✕</button>
+    </div>
+    <textarea id="chatInput" rows="3" data-t-placeholder="chat_placeholder" placeholder="Xabaringizni yozing..."></textarea>
+    <p class="chat-panel-note" data-t="chat_note">Tez orada Telegram orqali javob beramiz</p>
+    <button class="cta-btn" onclick="sendLiveChat()" style="width:100%;" data-t="chat_send">Yuborish</button>
 </div>
 
 <!-- ── BOTTOM CTA ─────────────────────────────────── -->
@@ -1712,6 +1785,11 @@
             about_contacts:"Aloqa",
             c_site:"Sayt", c_tg:"Telegram", c_loc:"Shahar", c_loc_v:"Toshkent", c_hrs:"Ish vaqti", c_hrs_v:"Du–Ju 9–18",
             cta:"Boshlash — botda suhbat",
+            chat_btn:"💬 Menejer bilan gaplashing",
+            chat_title:"Menejerga xabar",
+            chat_placeholder:"Xabaringizni yozing...",
+            chat_send:"Yuborish",
+            chat_note:"Tez orada Telegram orqali javob beramiz",
             svc_discuss:"Muhokama qilish →",
             filter_all:"Barchasi",
             filter_auto:"Avtomatizatsiya",
@@ -1759,6 +1837,11 @@
             about_contacts:"Контакты",
             c_site:"Сайт", c_tg:"Telegram", c_loc:"Город", c_loc_v:"Ташкент", c_hrs:"Часы работы", c_hrs_v:"Пн–Пт 9–18",
             cta:"Начать разговор в боте",
+            chat_btn:"💬 Написать менеджеру",
+            chat_title:"Сообщение менеджеру",
+            chat_placeholder:"Напишите ваш вопрос...",
+            chat_send:"Отправить",
+            chat_note:"Ответим в Telegram в ближайшее время",
             svc_discuss:"Обсудить →",
             filter_all:"Все",
             filter_auto:"Автоматизация",
@@ -1782,6 +1865,11 @@
         document.querySelectorAll('[data-t-html]').forEach(el => {
             const k = el.dataset.tHtml;
             if (t[k] !== undefined) el.innerHTML = t[k];
+        });
+
+        document.querySelectorAll('[data-t-placeholder]').forEach(el => {
+            const k = el.dataset.tPlaceholder;
+            if (t[k] !== undefined) el.placeholder = t[k];
         });
     }
 
@@ -1815,6 +1903,24 @@
         if (aboutTab) aboutTab.classList.add('active');
         document.getElementById('about').classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── LIVE CHAT PANEL ──────────────────────────────
+    function openChatPanel() {
+        document.getElementById('chatPanel').classList.add('open');
+    }
+
+    function closeChatPanel() {
+        document.getElementById('chatPanel').classList.remove('open');
+        document.getElementById('chatInput').value = '';
+    }
+
+    function sendLiveChat() {
+        const msg = document.getElementById('chatInput').value.trim();
+        if (!msg) return;
+        if (tg) {
+            tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg }));
+        }
     }
 
     // ── CTA ────────────────────────────────────────────
