@@ -1702,11 +1702,6 @@
         </div>
     </div>
 
-    <div class="about-card" style="margin-top:16px;">
-        <button class="cta-btn" id="chatManagerBtn" onclick="openChatPanel()" data-t="chat_btn">
-            💬 Menejer bilan gaplashing
-        </button>
-    </div>
 </div>
 
 <!-- ── LIVE CHAT PANEL ──────────────────────────── -->
@@ -1722,11 +1717,11 @@
 
 <!-- ── BOTTOM CTA ─────────────────────────────────── -->
 <div class="bottom-bar">
-    <button class="cta-btn" onclick="openChat()">
+    <button class="cta-btn" onclick="openChatPanel()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
-        <span data-t="cta">Boshlash — botda suhbat</span>
+        <span data-t="chat_btn">💬 Menejer bilan gaplashing</span>
     </button>
 </div>
 
@@ -1917,21 +1912,21 @@
     }
 
     function sendLiveChat() {
-        const msg = document.getElementById('chatInput').value.trim();
-        if (!msg) return;
-        if (tg) {
-            try {
-                tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg }));
-            } catch(e) {
-                tg.showAlert('Xatolik yuz berdi: ' + e.message);
-            }
-        } else {
-            // Outside Telegram — show inline feedback
-            const btn = document.querySelector('#chatPanel .cta-btn');
-            const orig = btn.textContent;
-            btn.textContent = '✓ (faqat Telegram ichida ishlaydi)';
-            setTimeout(() => { btn.textContent = orig; }, 2500);
+        const chatInput = document.getElementById('chatInput');
+        const msg = chatInput ? chatInput.value.trim() : '';
+        if (!msg) {
+            if (tg) tg.showAlert(lang === 'ru' ? 'Напишите сообщение' : 'Xabar yozing');
+            return;
         }
+        if (!tg) { closeChatPanel(); return; }
+
+        // Try sendData — it closes the app instantly if it works.
+        // If we're still running after 300ms it silently failed (inline keyboard context).
+        try { tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg })); } catch(e) {}
+        setTimeout(() => {
+            // Still alive → sendData didn't work. Fall back: open bot chat.
+            tg.openTelegramLink('https://t.me/mqsd_agency_bot');
+        }, 300);
     }
 
     // ── CTA ────────────────────────────────────────────
