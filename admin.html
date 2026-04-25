@@ -1050,16 +1050,40 @@
       SUPABASE_URL: 'https://yrgxbcgfthzkuenfewkx.supabase.co',
       SUPABASE_KEY: 'sb_publishable_K-ppEmyY-WBtxTDy1fp9Nw_0jXGphgF',
       ADMIN_IDS: [733400880, 58591930, 567389304],
-      BOT_TOKEN: '8696591670:AAEKQTuKKNZZm5w8mtq5DmfGzPrOAzvYLAQ',
     };
+
+    // Server-side proxy for Telegram Bot API. Verifies admin via initData
+    // HMAC + ADMIN_IDS allowlist. Keeps BOT_TOKEN out of the browser.
+    async function tgApi(payload) {
+      const initData = (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) || '';
+      const res = await fetch('/api/admin-tg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData, ...payload }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.ok) {
+        throw new Error(json.detail || json.error || `tg_proxy_${res.status}`);
+      }
+      return json;
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => {
+          const result = r.result;
+          const b64 = typeof result === 'string' ? result.split(',')[1] : '';
+          resolve(b64 || '');
+        };
+        r.onerror = () => reject(new Error('file_read_failed'));
+        r.readAsDataURL(file);
+      });
+    }
 
     async function notifyTelegram(chatId, text) {
       try {
-        await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
-        });
+        await tgApi({ action: 'sendMessage', chat_id: chatId, text, parse_mode: 'HTML' });
       } catch (e) { /* best-effort */ }
     }
 
@@ -1860,11 +1884,7 @@
           ? '✅ Чат завершён менеджером. Если появятся вопросы — пишите 😊'
           : '✅ Chat menejer tomonidan yakunlandi. Boshqa savollar bo\'lsa, yozing 😊';
 
-        await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: lead.telegram_id, text: endMsg }),
-        });
+        await tgApi({ action: 'sendMessage', chat_id: lead.telegram_id, text: endMsg });
 
         showToast('✅ Live chat ended');
         try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
@@ -1939,36 +1959,21 @@
         let endpoint, body;
 
         if (file) {
-          // Determine method by MIME type
+          if (file.size > 3 * 1024 * 1024) {
+            throw new Error('File too large (max 3MB via admin proxy)');
+          }
           const isImage = file.type.startsWith('image/');
           const isVideo = file.type.startsWith('video/');
-          const fieldName = isImage ? 'photo' : isVideo ? 'video' : 'document';
-          endpoint = isImage ? 'sendPhoto' : isVideo ? 'sendVideo' : 'sendDocument';
-
-          const form = new FormData();
-          form.append('chat_id', chatId);
-          form.append(fieldName, file, file.name);
-          if (text) form.append('caption', text);
-
-          body = form;
-          const resp = await fetch(
-            `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/${endpoint}`,
-            { method: 'POST', body: form }
-          );
-          const json = await resp.json();
-          if (!json.ok) throw new Error(json.description || 'Bot API error');
+          const action = isImage ? 'sendPhoto' : isVideo ? 'sendVideo' : 'sendDocument';
+          const data = await fileToBase64(file);
+          await tgApi({
+            action,
+            chat_id: chatId,
+            text: text || undefined,
+            file: { name: file.name, mimeType: file.type, data },
+          });
         } else {
-          // Text only
-          const resp = await fetch(
-            `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ chat_id: chatId, text }),
-            }
-          );
-          const json = await resp.json();
-          if (!json.ok) throw new Error(json.description || 'Bot API error');
+          await tgApi({ action: 'sendMessage', chat_id: chatId, text });
         }
 
         closeMessageModal();
