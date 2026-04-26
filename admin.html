@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>CRM Admin</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <style>
+    :root {
+      --bg: var(--tg-theme-bg-color, #0f172a);
+      --surface: var(--tg-theme-secondary-bg-color, #1e293b);
+      --text: var(--tg-theme-text-color, #f1f5f9);
+      --hint: var(--tg-theme-hint-color, #94a3b8);
+      --link: var(--tg-theme-link-color, #38bdf8);
+      --btn: var(--tg-theme-button-color, #3b82f6);
+      --btn-text: var(--tg-theme-button-text-color, #ffffff);
+      --border: rgba(148, 163, 184, 0.12);
+      --radius: 12px;
+      --ease: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: -apple-system, 'Inter', BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── LAYOUT ─────────────────────────────── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .screen-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 12px;
+    }
+
+    /* ── ACCESS DENIED ──────────────────────── */
+    #denied {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      padding: 40px;
+      text-align: center;
+      z-index: 999;
+    }
+
+    #denied.visible {
+      display: flex;
+    }
+
+    #denied .icon {
+      font-size: 56px;
+    }
+
+    #denied h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    #denied p {
+      color: var(--hint);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: none;
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .badge.blue {
+      background: var(--btn);
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: none;
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── STAT CARDS ─────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 14px 14px 6px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px 14px 12px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--hint);
+      font-weight: 500;
+    }
+
+    /* ── FILTER TABS ────────────────────────── */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--hint);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--ease);
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      background: var(--btn);
+      border-color: var(--btn);
+      color: var(--btn-text);
+    }
+
+    /* ── LEAD LIST ──────────────────────────── */
+    .leads-list {
+      padding: 0 14px;
+    }
+
+    .lead-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: opacity var(--ease);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .lead-item:last-child {
+      border-bottom: none;
+    }
+
+    .lead-item:active {
+      opacity: 0.6;
+    }
+
+    .lead-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .lead-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .lead-name {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lead-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .lead-status-text {
+      font-size: 11px;
+      color: var(--hint);
+    }
+
+    .lead-source {
+      font-size: 11px;
+      color: var(--hint);
+    }
+
+    .lead-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .lead-score {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .lead-time {
+      font-size: 11px;
+      color: var(--hint);
+    }
+
+    /* ── SECTION ────────────────────────────── */
+    .section {
+      padding: 14px 14px 0;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--hint);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 10px;
+    }
+
+    /* ── CONTACT CARD ───────────────────────── */
+    .contact-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin: 14px 14px 0;
+    }
+
+    .contact-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 12px;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-row:last-child {
+      border-bottom: none;
+    }
+
+    .contact-icon {
+      font-size: 16px;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .contact-val {
+      font-size: 14px;
+    }
+
+    .contact-val a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      color: var(--hint);
+      margin-top: 1px;
+    }
+
+    /* ── ACTION BUTTONS ─────────────────────── */
+    .action-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 12px 14px;
+    }
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 4px;
+      min-height: 60px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity var(--ease);
+    }
+
+    .action-btn:active {
+      opacity: 0.6;
+    }
+
+    .action-btn.disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .action-btn .ab-icon {
+      font-size: 20px;
+    }
+
+    /* ── MESSAGES / COMMENTS ────────────────── */
+    .msg-item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .msg-item:last-child {
+      border-bottom: none;
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .msg-role {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--hint);
+    }
+
+    .msg-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .msg-time {
+      font-size: 11px;
+      color: var(--hint);
+      margin-top: 2px;
+    }
+
+    /* ── BOTTOM NAV ─────────────────────────── */
+    .bottom-nav {
+      display: flex;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      flex-shrink: 0;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 10px 4px 8px;
+      border: none;
+      background: transparent;
+      color: var(--hint);
+      font-size: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color var(--ease);
+    }
+
+    .nav-btn.active {
+      color: var(--btn);
+    }
+
+    .nav-btn .nav-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    /* ── SEARCH ─────────────────────────────── */
+    .search-bar-wrap {
+      padding: 12px 14px;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 10px 14px 10px 38px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      position: relative;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--hint);
+      pointer-events: none;
+    }
+
+    .search-bar::placeholder {
+      color: var(--hint);
+    }
+
+    /* ── PROFILE ────────────────────────────── */
+    .profile-section {
+      padding: 16px 14px;
+    }
+
+    .profile-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .profile-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .profile-id {
+      font-size: 12px;
+      color: var(--hint);
+      margin-bottom: 16px;
+      word-break: break-all;
+      max-width: 100%;
+    }
+
+    .profile-field {
+      margin-bottom: 12px;
+    }
+
+    .profile-field label {
+      display: block;
+      font-size: 12px;
+      color: var(--hint);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .profile-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .profile-input:focus {
+      border-color: var(--btn);
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: var(--btn);
+      border: none;
+      color: var(--btn-text);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity var(--ease);
+    }
+
+    .save-btn:active {
+      opacity: 0.8;
+    }
+
+    /* ── MODAL ──────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg);
+      border-radius: 20px 20px 0 0;
+      padding: 0 0 env(safe-area-inset-bottom, 16px);
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 12px auto 0;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: none;
+      color: var(--hint);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 0 16px 16px;
+    }
+
+    /* Status list */
+    .status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .status-opt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color var(--ease);
+    }
+
+    .status-opt.selected {
+      border-color: var(--btn);
+    }
+
+    .status-opt .s-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-opt .s-label {
+      font-size: 14px;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .status-opt .s-check {
+      font-size: 16px;
+      color: var(--btn);
+      display: none;
+    }
+
+    .status-opt.selected .s-check {
+      display: block;
+    }
+
+    /* Comment */
+    .comment-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 14px;
+      resize: none;
+      outline: none;
+      font-family: inherit;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .comment-textarea:focus {
+      border-color: var(--btn);
+    }
+
+    .confirm-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: var(--radius);
+      background: var(--btn);
+      border: none;
+      color: var(--btn-text);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity var(--ease);
+    }
+
+    .confirm-btn:active {
+      opacity: 0.8;
+    }
+
+    .confirm-btn:disabled {
+      opacity: 0.4;
+    }
+
+    /* ── HELPERS ────────────────────────────── */
+    .loading {
+      text-align: center;
+      color: var(--hint);
+      padding: 32px 0;
+      font-size: 14px;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--hint);
+      padding: 40px 0;
+      font-size: 14px;
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 13px;
+      padding: 8px 14px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ACCESS DENIED -->
+  <div id="denied">
+    <div class="icon">🔒</div>
+    <h2>Access Denied</h2>
+    <p>You don't have permission to access this CRM panel.<br>Contact your administrator.</p>
+  </div>
+
+  <!-- APP SHELL -->
+  <div id="app" style="display:none;">
+
+    <!-- ── SCREEN: HOME ─────────────────────── -->
+    <div id="screen-home" class="screen active">
+      <div class="header">
+        <div class="header-left">
+          <span class="header-title">CRM Admin</span>
+          <span id="home-badge" class="badge" style="display:none">0</span>
+        </div>
+        <button class="icon-btn" id="refresh-btn" title="Refresh">↻</button>
+      </div>
+
+      <div class="screen-body">
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-label">Total Leads</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-today" style="color:#3b82f6">—</div>
+            <div class="stat-label">New Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-phone" style="color:#22c55e">—</div>
+            <div class="stat-label" id="stat-label-phone">With Phone</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-hot" style="color:#f97316">—</div>
+            <div class="stat-label">🔥 Hot (Score&gt;50)</div>
+          </div>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-tabs" id="filter-tabs">
+          <button class="tab active" data-filter="all">All</button>
+          <button class="tab" data-filter="new">New</button>
+          <button class="tab" data-filter="hot">🔥 Hot</button>
+          <button class="tab" data-filter="mine">My Leads</button>
+        </div>
+
+        <!-- Leads list -->
+        <div class="leads-list" id="leads-list">
+          <div class="loading">Loading leads…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN: LEAD DETAIL ──────────────── -->
+    <div id="screen-detail" class="screen">
+      <div class="header">
+        <div class="header-left">
+          <button class="back-btn" id="detail-back">←</button>
+          <div>
+            <div class="header-title" id="detail-title">Lead</div>
+            <div id="detail-status-chip" style="margin-top:2px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen-body" id="detail-body">
+        <div class="loading">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN: SEARCH ───────────────────── -->
+    <div id="screen-search" class="screen">
+      <div class="header">
+        <span class="header-title">Search</span>
+      </div>
+      <div class="search-bar-wrap">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="search-bar" id="search-input" type="search" placeholder="Name, username, or phone…"
+            autocomplete="off" />
+        </div>
+      </div>
+      <div class="screen-body">
+        <div class="leads-list" id="search-list">
+          <div class="empty">Start typing to search</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN: PROFILE ──────────────────── -->
+    <div id="screen-profile" class="screen">
+      <div class="header">
+        <span class="header-title">Profile</span>
+      </div>
+      <div class="screen-body">
+        <div class="profile-section">
+          <div class="profile-card">
+            <div class="profile-avatar" id="profile-avatar">A</div>
+            <div class="profile-name" id="profile-name">Admin</div>
+            <div class="profile-id" id="profile-id">ID: —</div>
+            <div class="profile-field">
+              <label>Display name (used in comments)</label>
+              <input class="profile-input" id="admin-name-input" type="text" placeholder="Your name" maxlength="40" />
+            </div>
+            <button class="save-btn" id="save-name-btn">Save Name</button>
+            <div id="profile-msg" style="margin-top:10px;font-size:13px;color:#22c55e;text-align:center;display:none;"></div>
+          </div>
+
+          <div class="profile-card" style="margin-top:16px;">
+            <div style="font-weight:600;font-size:15px;margin-bottom:12px;">Team Members</div>
+            <div style="font-size:12px;color:var(--hint);margin-bottom:12px;">Used for assignment. Add name + Telegram ID of each team member.</div>
+            <div id="twa-members-list"></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+              <input id="twa-member-name" type="text" placeholder="Name" maxlength="40"
+                style="width:100%;box-sizing:border-box;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;background:rgba(255,255,255,0.07);color:inherit;font-size:14px;" />
+              <input id="twa-member-tgid" type="number" placeholder="Telegram ID"
+                style="width:100%;box-sizing:border-box;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:8px;background:rgba(255,255,255,0.07);color:inherit;font-size:14px;" />
+            </div>
+            <button class="save-btn" id="twa-add-member-btn" style="margin-top:8px;">Add Member</button>
+            <div id="twa-members-msg" style="margin-top:8px;font-size:12px;color:#22c55e;display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BOTTOM NAV ───────────────────────── -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-screen="home">
+        <span class="nav-icon">🏠</span>Home
+      </button>
+      <button class="nav-btn" data-screen="search">
+        <span class="nav-icon">🔍</span>Search
+      </button>
+      <button class="nav-btn" data-screen="profile">
+        <span class="nav-icon">👤</span>Profile
+      </button>
+    </nav>
+  </div>
+
+  <!-- ── MODAL: STATUS CHANGE ──────────────────── -->
+  <div class="modal-overlay" id="modal-status">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <span class="modal-title">Change Status</span>
+        <button class="modal-close" id="status-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="status-list" id="status-list"></div>
+        <button class="confirm-btn" id="status-confirm-btn">Confirm</button>
+        <div id="status-error" class="error-msg" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: ASSIGN ───────────────────────────── -->
+  <div class="modal-overlay" id="modal-assign">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <span class="modal-title">Assign Lead</span>
+        <button class="modal-close" id="assign-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="status-list" id="assign-list"></div>
+        <button class="confirm-btn" id="assign-confirm-btn">Assign</button>
+        <div id="assign-error" class="error-msg" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: ADD COMMENT ────────────────────── -->
+  <div class="modal-overlay" id="modal-comment">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <span class="modal-title">Add Comment</span>
+        <button class="modal-close" id="comment-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <textarea class="comment-textarea" id="comment-textarea" placeholder="Write a comment…"
+          maxlength="1000"></textarea>
+        <button class="confirm-btn" id="comment-confirm-btn">Post Comment</button>
+        <div id="comment-error" class="error-msg" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-message">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <span class="modal-title">Send Message</span>
+        <button class="modal-close" id="message-modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="message-recipient" style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;"></div>
+
+        <!-- File attach area -->
+        <label id="message-attach-label" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;cursor:pointer;margin-bottom:10px;font-size:13px;color:var(--text-secondary);">
+          <span style="font-size:20px;">📎</span>
+          <span id="message-attach-name">Attach photo, video or file (optional)</span>
+          <input type="file" id="message-file-input" accept="image/*,video/*,*/*" style="display:none;">
+        </label>
+        <div id="message-preview" style="display:none;margin-bottom:10px;position:relative;">
+          <img id="message-preview-img" style="max-width:100%;max-height:160px;border-radius:8px;display:none;">
+          <video id="message-preview-vid" style="max-width:100%;max-height:160px;border-radius:8px;display:none;" muted playsinline></video>
+          <button onclick="clearMessageAttachment()" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;line-height:1;">×</button>
+        </div>
+
+        <textarea class="comment-textarea" id="message-textarea" placeholder="Text or caption…" maxlength="1024"></textarea>
+        <button class="confirm-btn" id="message-confirm-btn">Send</button>
+        <div id="message-error" class="error-msg" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ════════════════════════════════════════════
+       CONFIG — fill these before use
+       ════════════════════════════════════════════ */
+    const CONFIG = {
+      SUPABASE_URL: 'https://yrgxbcgfthzkuenfewkx.supabase.co',
+      SUPABASE_KEY: 'sb_publishable_K-ppEmyY-WBtxTDy1fp9Nw_0jXGphgF',
+      ADMIN_IDS: [733400880, 58591930, 567389304],
+    };
+
+    // Server-side proxy for Telegram Bot API. Verifies admin via initData
+    // HMAC + ADMIN_IDS allowlist. Keeps BOT_TOKEN out of the browser.
+    async function tgApi(payload) {
+      const initData = (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) || '';
+      const res = await fetch('/api/admin-tg', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData, ...payload }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.ok) {
+        throw new Error(json.detail || json.error || `tg_proxy_${res.status}`);
+      }
+      return json;
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => {
+          const result = r.result;
+          const b64 = typeof result === 'string' ? result.split(',')[1] : '';
+          resolve(b64 || '');
+        };
+        r.onerror = () => reject(new Error('file_read_failed'));
+        r.readAsDataURL(file);
+      });
+    }
+
+    async function notifyTelegram(chatId, text) {
+      try {
+        await tgApi({ action: 'sendMessage', chat_id: chatId, text, parse_mode: 'HTML' });
+      } catch (e) { /* best-effort */ }
+    }
+
+    async function notifyAdmins(text) {
+      for (const id of CONFIG.ADMIN_IDS) {
+        await notifyTelegram(id, text);
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       CONSTANTS
+       ════════════════════════════════════════════ */
+    const STATUS_COLORS = {
+      new: '#3b82f6',
+      contacted: '#8b5cf6',
+      qualified: '#f97316',
+      proposal_sent: '#6366f1',
+      negotiation: '#eab308',
+      converted: '#22c55e',
+      lost: '#ef4444',
+    };
+    const STATUS_LABELS = {
+      new: 'New',
+      contacted: 'Contacted',
+      qualified: 'Qualified',
+      proposal_sent: 'Proposal Sent',
+      negotiation: 'Negotiation',
+      converted: 'Converted',
+      lost: 'Lost',
+    };
+    const AVATAR_COLORS = ['#3b82f6', '#8b5cf6', '#f97316', '#22c55e', '#ec4899', '#06b6d4', '#f59e0b'];
+
+    const BIZ_ICONS = {
+      "Sotuv/Marketing": "📈",
+      "Ishlab chiqarish": "🏭",
+      "Xizmat ko'rsatish": "🛠️",
+      "IT/SaaS": "💻",
+      "Boshqa": "🌐"
+    };
+    const BUDGET_LABELS = {
+      "< $500": "< $500",
+      "$500 - $1500": "$500 - $1.5k",
+      "$1500 - $5000": "$1.5k - $5k",
+      "$5000+": "$5k+",
+      "Aniqlanmagan": "Any"
+    };
+    const BUDGET_COLORS = {
+      "< $500": "#94a3b8",
+      "$500 - $1500": "#3b82f6",
+      "$1500 - $5000": "#8b5cf6",
+      "$5000+": "#16a34a",
+      "Aniqlanmagan": "#cbd5e1"
+    };
+
+    /* ════════════════════════════════════════════
+       GLOBALS
+       ════════════════════════════════════════════ */
+    let tg, tgUser, db;
+    let currentFilter = 'all';
+    let currentLead = null;
+    let selectedStatus = null;
+    let allLeads = [];
+    let searchTimer = null;
+
+    /* ════════════════════════════════════════════
+       INIT
+       ════════════════════════════════════════════ */
+    window.addEventListener('DOMContentLoaded', () => {
+      tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+
+      // Auth check
+      tgUser = tg.initDataUnsafe?.user;
+      const userId = tgUser?.id;
+
+      if (!userId || !CONFIG.ADMIN_IDS.includes(userId)) {
+        document.getElementById('denied').classList.add('visible');
+        return;
+      }
+
+      // Init Supabase
+      db = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+
+      // Show app
+      document.getElementById('app').style.display = 'flex';
+
+      // Setup UI
+      setupNav();
+      setupFilters();
+      setupRefresh();
+      setupDetailBack();
+      setupModals();
+      setupSearch();
+      setupProfile();
+
+      // Load home
+      loadStats();
+      loadLeads();
+    });
+
+    /* ════════════════════════════════════════════
+       NAVIGATION
+       ════════════════════════════════════════════ */
+    function setupNav() {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.screen));
+      });
+    }
+
+    function switchTab(name) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('screen-' + name).classList.add('active');
+      document.querySelector(`.nav-btn[data-screen="${name}"]`).classList.add('active');
+
+      if (name === 'search') {
+        setTimeout(() => document.getElementById('search-input').focus(), 100);
+      }
+    }
+
+    function showDetail(lead) {
+      currentLead = lead;
+      document.getElementById('screen-home').classList.remove('active');
+      document.getElementById('screen-search').classList.remove('active');
+      document.getElementById('screen-detail').classList.add('active');
+      renderDetail(lead);
+    }
+
+    function setupDetailBack() {
+      document.getElementById('detail-back').addEventListener('click', () => {
+        document.getElementById('screen-detail').classList.remove('active');
+        // return to whichever nav was active
+        const active = document.querySelector('.nav-btn.active');
+        const name = active ? active.dataset.screen : 'home';
+        document.getElementById('screen-' + name).classList.add('active');
+      });
+    }
+
+    /* ════════════════════════════════════════════
+       FILTERS
+       ════════════════════════════════════════════ */
+    function setupFilters() {
+      document.querySelectorAll('#filter-tabs .tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('#filter-tabs .tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentFilter = tab.dataset.filter;
+          renderLeadsList(filteredLeads());
+        });
+      });
+    }
+
+    function filteredLeads() {
+      const adminName = localStorage.getItem('crm_admin_name') || '';
+      switch (currentFilter) {
+        case 'new': return allLeads.filter(l => l.status === 'new');
+        case 'hot': return allLeads.filter(l => (l.lead_score || 0) > 50);
+        case 'mine': return allLeads.filter(l => l.assigned_to && adminName && l.assigned_to.toLowerCase() === adminName.toLowerCase());
+        default: return allLeads;
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       REFRESH
+       ════════════════════════════════════════════ */
+    function setupRefresh() {
+      document.getElementById('refresh-btn').addEventListener('click', () => {
+        loadStats();
+        loadLeads();
+      });
+    }
+
+    /* ════════════════════════════════════════════
+       LOAD STATS
+       ════════════════════════════════════════════ */
+    async function loadStats() {
+      try {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        const [{ count: total }, { count: today }, { count: completed }, { count: hot }] = await Promise.all([
+          db.from('leads').select('*', { count: 'exact', head: true }),
+          db.from('leads').select('*', { count: 'exact', head: true }).gte('created_at', todayStart.toISOString()),
+          db.from('leads').select('*', { count: 'exact', head: true }).eq('questionnaire_completed', true),
+          db.from('leads').select('*', { count: 'exact', head: true }).gt('lead_score', 50),
+        ]);
+
+        const qualRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        document.getElementById('stat-total').textContent = total ?? '—';
+        document.getElementById('stat-today').textContent = today ?? '—';
+        document.getElementById('stat-phone').textContent = qualRate + '%' ?? '—';
+        document.getElementById('stat-label-phone').textContent = 'Qual. Rate';
+        document.getElementById('stat-hot').textContent = hot ?? '—';
+
+        // Badge
+        if (today > 0) {
+          const badge = document.getElementById('home-badge');
+          badge.textContent = today;
+          badge.style.display = 'inline-block';
+        }
+      } catch (e) {
+        console.error('Stats error:', e);
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       LOAD LEADS
+       ════════════════════════════════════════════ */
+    async function loadLeads() {
+      const container = document.getElementById('leads-list');
+      container.innerHTML = '<div class="loading">Loading leads…</div>';
+
+      try {
+        const { data, error } = await db
+          .from('leads')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(200);
+
+        if (error) throw error;
+
+        allLeads = data || [];
+        renderLeadsList(filteredLeads());
+      } catch (e) {
+        container.innerHTML = `<div class="error-msg">Failed to load: ${e.message}</div>`;
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       RENDER LEADS LIST
+       ════════════════════════════════════════════ */
+    function renderLeadsList(leads, container) {
+      container = container || document.getElementById('leads-list');
+      if (!leads || leads.length === 0) {
+        container.innerHTML = '<div class="empty">No leads found</div>';
+        return;
+      }
+
+      const shown = leads.slice(0, 20);
+      container.innerHTML = shown.map(lead => leadItemHTML(lead)).join('');
+
+      container.querySelectorAll('.lead-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = parseInt(el.dataset.id);
+          const lead = allLeads.find(l => l.id === id) || leads.find(l => l.id === id);
+          if (lead) showDetail(lead);
+        });
+      });
+    }
+
+    function leadItemHTML(lead) {
+      const name = fullName(lead);
+      const initial = name.charAt(0).toUpperCase() || '?';
+      const avatarColor = AVATAR_COLORS[Math.abs(hashStr(name)) % AVATAR_COLORS.length];
+      const score = lead.lead_score ?? 0;
+      const scoreColor = score > 70 ? '#22c55e' : score > 40 ? '#f97316' : score > 0 ? '#3b82f6' : 'var(--hint)';
+      const statusColor = STATUS_COLORS[lead.status] || '#94a3b8';
+      const statusLabel = STATUS_LABELS[lead.status] || lead.status || '—';
+      const bizIcon = BIZ_ICONS[lead.business_type] || '';
+      const source = lead.source ? `· ${lead.source}` : '';
+      const timeAgo = relTime(lead.created_at);
+
+      return `
+    <div class="lead-item" data-id="${lead.id}">
+      <div class="lead-avatar" style="background:${avatarColor}">${initial}</div>
+      <div class="lead-info">
+        <div class="lead-name">${bizIcon ? bizIcon + ' ' : ''}${escHtml(name)}</div>
+        <div class="lead-meta">
+          <span class="status-dot" style="background:${statusColor}"></span>
+          <span class="lead-status-text">${escHtml(statusLabel)}</span>
+          <span class="lead-source">${escHtml(source)}</span>
+        </div>
+      </div>
+      <div class="lead-right">
+        <div class="lead-score" style="color:${scoreColor}">${score}</div>
+        <div class="lead-time">${timeAgo}</div>
+      </div>
+    </div>`;
+    }
+
+    /* ════════════════════════════════════════════
+       TOAST
+       ════════════════════════════════════════════ */
+    let _toastTimer;
+    function showToast(msg) {
+      let el = document.getElementById('_toast');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = '_toast';
+        el.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;z-index:9999;pointer-events:none;transition:opacity .3s;white-space:nowrap;max-width:90vw;text-align:center';
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      el.style.opacity = '1';
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 3000);
+    }
+
+    /* ════════════════════════════════════════════
+       CALL VIA BOT (global so onclick="" works)
+       ════════════════════════════════════════════ */
+    function sendCallButton(raw) {
+      let phone = (raw || '').replace(/[^\d+]/g, '');
+      if (!phone) { showToast('❌ No phone number'); return; }
+      if (!phone.startsWith('+') && !phone.startsWith('00')) phone = '+' + phone;
+
+      const done = () => {
+        showToast('📋 ' + phone + ' copied!');
+        try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(phone).then(done).catch(() => { _fallbackCopy(phone); done(); });
+      } else {
+        _fallbackCopy(phone); done();
+      }
+    }
+
+    function _fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+
+    /* ════════════════════════════════════════════
+       LEAD DETAIL
+       ════════════════════════════════════════════ */
+    async function renderDetail(lead) {
+      const body = document.getElementById('detail-body');
+      const name = fullName(lead);
+
+      document.getElementById('detail-title').textContent = name;
+
+      // Status chip
+      const chipEl = document.getElementById('detail-status-chip');
+      const sColor = STATUS_COLORS[lead.status] || '#94a3b8';
+      chipEl.innerHTML = `<span class="chip" style="background:${sColor}">${escHtml(STATUS_LABELS[lead.status] || lead.status || 'Unknown')}</span>`;
+
+      // Render skeleton
+      body.innerHTML = `
+    <div class="contact-card">
+      <div class="contact-name">${escHtml(name)}</div>
+      ${lead.phone ? `
+        <div class="contact-row">
+          <span class="contact-icon">📞</span>
+          <div><div class="contact-val" style="cursor:pointer" onclick="sendCallButton('${lead.phone}')">${escHtml(lead.phone)} <span style="font-size:11px;opacity:.6;">tap to call</span></div><div class="contact-label">Phone</div></div>
+        </div>` : ''}
+      ${lead.username ? `
+        <div class="contact-row">
+          <span class="contact-icon">✈️</span>
+          <div><a class="contact-val" href="https://t.me/${escHtml(lead.username)}" target="_blank">@${escHtml(lead.username)}</a><div class="contact-label">Telegram</div></div>
+        </div>` : ''}
+      ${lead.source ? `
+        <div class="contact-row">
+          <span class="contact-icon">📌</span>
+          <div><div class="contact-val">${escHtml(lead.source)}</div><div class="contact-label">Source</div></div>
+        </div>` : ''}
+      <div class="contact-row">
+        <span class="contact-icon">📅</span>
+        <div><div class="contact-val">${fmtDate(lead.created_at)}</div><div class="contact-label">Created</div></div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">⭐</span>
+        <div><div class="contact-val">${lead.lead_score ?? 0}</div><div class="contact-label">Lead Score</div></div>
+      </div>
+      ${lead.assigned_to ? `
+        <div class="contact-row">
+          <span class="contact-icon">👤</span>
+          <div><div class="contact-val">${escHtml(lead.assigned_to)}</div><div class="contact-label">Assigned To</div></div>
+        </div>` : ''}
+    </div>
+
+    <div class="section-title">Qualification</div>
+    <div class="contact-card" style="margin-top:0;">
+      <div class="contact-row">
+        <span class="contact-icon">💼</span>
+        <div><div class="contact-val">${lead.business_type ? (BIZ_ICONS[lead.business_type] || '') + ' ' + escHtml(lead.business_type) : '—'}</div><div class="contact-label">Business Type</div></div>
+      </div>
+      ${lead.business_type === 'Boshqa' && lead.business_type_other ? `
+      <div class="contact-row">
+        <span class="contact-icon">💡</span>
+        <div><div class="contact-val">${escHtml(lead.business_type_other)}</div><div class="contact-label">Other Type</div></div>
+      </div>` : ''}
+      <div class="contact-row">
+        <span class="contact-icon">🛠️</span>
+        <div>
+          <div class="contact-val" style="display:flex;flex-wrap:wrap;gap:4px;">
+            ${(Array.isArray(lead.service_interest) ? lead.service_interest : []).length > 0 
+              ? lead.service_interest.map(s => `<span style="background:var(--btn);color:var(--btn-text);padding:2px 6px;border-radius:4px;font-size:11px;">${escHtml(s)}</span>`).join('') 
+              : '—'}
+          </div>
+          <div class="contact-label">Services</div>
+        </div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">📊</span>
+        <div><div class="contact-val">${escHtml(lead.current_marketing || '—')}</div><div class="contact-label">Marketing</div></div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">💰</span>
+        <div><div class="contact-val" style="color:${BUDGET_COLORS[lead.budget_range] || 'inherit'};font-weight:700;">${escHtml(lead.budget_range || '—')}</div><div class="contact-label">Budget Range</div></div>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">📝</span>
+        <div><div class="contact-val">${lead.questionnaire_completed ? '✅ Completed' : `⏳ Step ${lead.questionnaire_step || 0}/5`}</div><div class="contact-label">Progress</div></div>
+      </div>
+    </div>
+
+    ${lead.live_chat ? `
+    <div style="background:#22c55e18;border:1.5px solid #22c55e;border-radius:10px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">💬</span>
+      <div style="flex:1;font-size:13px;font-weight:600;color:#22c55e;">Live chat faol</div>
+    </div>` : ''}
+
+    <!-- Action buttons -->
+    <div class="action-row">
+      <button class="action-btn${!lead.phone ? ' disabled' : ''}" id="act-call" ${!lead.phone ? 'disabled' : ''} onclick="sendCallButton('${lead.phone || ''}')">
+        <span class="ab-icon">📞</span>Call
+      </button>
+      <button class="action-btn${!lead.username ? ' disabled' : ''}" id="act-tg">
+        <span class="ab-icon">✈️</span>Telegram
+      </button>
+      <button class="action-btn" id="act-status">
+        <span class="ab-icon">✏️</span>Status
+      </button>
+      <button class="action-btn" id="act-assign">
+        <span class="ab-icon">👤</span>Assign
+      </button>
+      <button class="action-btn" id="act-comment">
+        <span class="ab-icon">💬</span>Comment
+      </button>
+      <button class="action-btn" id="act-message">
+        <span class="ab-icon">✉️</span>Message
+      </button>
+      ${lead.live_chat ? `
+      <button class="action-btn" id="act-endchat" style="color:#ef4444;">
+        <span class="ab-icon">🔴</span>End Chat
+      </button>` : ''}
+    </div>
+
+    <!-- Messages -->
+    <div class="section">
+      <div class="section-title">Last Messages</div>
+      <div id="detail-messages"><div class="loading">Loading…</div></div>
+    </div>
+
+    <!-- Comments -->
+    <div class="section" style="margin-top:14px;">
+      <div class="section-title">Comments</div>
+      <div id="detail-comments"><div class="loading">Loading…</div></div>
+    </div>
+    <div style="height:20px;"></div>
+  `;
+
+      // Call button wired via inline onclick in template
+      if (lead.username) {
+        document.getElementById('act-tg').addEventListener('click', () => {
+          window.open('https://t.me/' + lead.username, '_blank');
+        });
+      }
+      document.getElementById('act-status').addEventListener('click', () => openStatusModal(lead));
+      document.getElementById('act-assign').addEventListener('click', () => openAssignModal(lead));
+      document.getElementById('act-comment').addEventListener('click', () => openCommentModal(lead));
+      document.getElementById('act-message').addEventListener('click', () => openMessageModal(lead));
+      if (lead.live_chat) {
+        document.getElementById('act-endchat').addEventListener('click', () => endLiveChat(lead));
+      }
+
+      // Load async data
+      loadMessages(lead.telegram_id);
+      loadComments(lead.telegram_id);
+    }
+
+    async function loadMessages(telegramId) {
+      const el = document.getElementById('detail-messages');
+      if (!el) return;
+      try {
+        const { data, error } = await db
+          .from('conversations')
+          .select('role, message, created_at')
+          .eq('telegram_id', telegramId)
+          .order('created_at', { ascending: false })
+          .limit(5);
+
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          el.innerHTML = '<div class="empty" style="padding:16px 0;">No messages yet</div>';
+          return;
+        }
+        el.innerHTML = data.map(m => `
+      <div class="msg-item">
+        <div class="msg-header">
+          <span>${m.role === 'user' ? '👤' : '🤖'}</span>
+          <span class="msg-role">${m.role === 'user' ? 'User' : 'AI'}</span>
+        </div>
+        <div class="msg-text">${escHtml(truncate(m.message, 100))}</div>
+        <div class="msg-time">${relTime(m.created_at)}</div>
+      </div>`).join('');
+      } catch (e) {
+        el.innerHTML = `<div class="error-msg">Failed: ${e.message}</div>`;
+      }
+    }
+
+    async function loadComments(telegramId) {
+      const el = document.getElementById('detail-comments');
+      if (!el) return;
+      try {
+        const { data, error } = await db
+          .from('comments')
+          .select('author, content, is_pinned, created_at')
+          .eq('telegram_id', telegramId)
+          .order('created_at', { ascending: false })
+          .limit(3);
+
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          el.innerHTML = '<div class="empty" style="padding:16px 0;">No comments yet</div>';
+          return;
+        }
+        el.innerHTML = data.map(c => `
+      <div class="msg-item">
+        <div class="msg-header">
+          <span>${c.is_pinned ? '📌' : '💬'}</span>
+          <span class="msg-role">${escHtml(c.author || 'Admin')}</span>
+        </div>
+        <div class="msg-text">${escHtml(c.content)}</div>
+        <div class="msg-time">${relTime(c.created_at)}</div>
+      </div>`).join('');
+      } catch (e) {
+        el.innerHTML = `<div class="error-msg">Failed: ${e.message}</div>`;
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       MODALS
+       ════════════════════════════════════════════ */
+    function setupModals() {
+      // Close on overlay click
+      document.getElementById('modal-status').addEventListener('click', e => {
+        if (e.target === document.getElementById('modal-status')) closeStatusModal();
+      });
+      document.getElementById('modal-comment').addEventListener('click', e => {
+        if (e.target === document.getElementById('modal-comment')) closeCommentModal();
+      });
+      document.getElementById('status-modal-close').addEventListener('click', closeStatusModal);
+      document.getElementById('comment-modal-close').addEventListener('click', closeCommentModal);
+      document.getElementById('message-modal-close').addEventListener('click', closeMessageModal);
+      document.getElementById('assign-modal-close').addEventListener('click', closeAssignModal);
+      document.getElementById('status-confirm-btn').addEventListener('click', confirmStatusChange);
+      document.getElementById('comment-confirm-btn').addEventListener('click', confirmComment);
+      document.getElementById('message-confirm-btn').addEventListener('click', confirmSendMessage);
+      document.getElementById('assign-confirm-btn').addEventListener('click', confirmAssign);
+      document.getElementById('modal-assign').addEventListener('click', e => {
+        if (e.target === document.getElementById('modal-assign')) closeAssignModal();
+      });
+    }
+
+    /* STATUS MODAL */
+    function openStatusModal(lead) {
+      selectedStatus = lead.status;
+      const listEl = document.getElementById('status-list');
+      listEl.innerHTML = Object.entries(STATUS_LABELS).map(([val, label]) => `
+    <div class="status-opt${lead.status === val ? ' selected' : ''}" data-val="${val}">
+      <span class="s-dot" style="background:${STATUS_COLORS[val]}"></span>
+      <span class="s-label">${label}</span>
+      <span class="s-check">✓</span>
+    </div>`).join('');
+
+      listEl.querySelectorAll('.status-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+          listEl.querySelectorAll('.status-opt').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedStatus = opt.dataset.val;
+        });
+      });
+
+      document.getElementById('status-error').style.display = 'none';
+      document.getElementById('modal-status').classList.add('open');
+    }
+
+    function closeStatusModal() {
+      document.getElementById('modal-status').classList.remove('open');
+    }
+
+    async function confirmStatusChange() {
+      if (!currentLead || !selectedStatus) return;
+      const btn = document.getElementById('status-confirm-btn');
+      const errEl = document.getElementById('status-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Saving…';
+
+      const adminName = localStorage.getItem('crm_admin_name') || 'Admin';
+      const oldStatus = currentLead.status;
+
+      try {
+        const { error: updateErr } = await db
+          .from('leads')
+          .update({ status: selectedStatus, updated_at: new Date().toISOString() })
+          .eq('id', currentLead.id);
+
+        if (updateErr) throw updateErr;
+
+        // Insert status_history (table may not exist — silently ignore)
+        await db.from('status_history').insert({
+          telegram_id: currentLead.telegram_id,
+          old_status: oldStatus,
+          new_status: selectedStatus,
+          changed_by: adminName,
+          created_at: new Date().toISOString(),
+        }).then(() => { }).catch(() => { });
+
+        // Update local state
+        currentLead.status = selectedStatus;
+        const idx = allLeads.findIndex(l => l.id === currentLead.id);
+        if (idx !== -1) allLeads[idx].status = selectedStatus;
+
+        // Refresh chip
+        const chipEl = document.getElementById('detail-status-chip');
+        if (chipEl) {
+          const sColor = STATUS_COLORS[selectedStatus] || '#94a3b8';
+          chipEl.innerHTML = `<span class="chip" style="background:${sColor}">${escHtml(STATUS_LABELS[selectedStatus] || selectedStatus)}</span>`;
+        }
+
+        // Notify admins
+        const leadName = `${currentLead.first_name || ''} ${currentLead.last_name || ''}`.trim() || 'Unknown';
+        const changerName = adminName;
+        await notifyAdmins(`🔄 Статус изменён\n\nЛид: <b>${leadName}</b>\nСтарый статус: ${oldStatus}\nНовый статус: <b>${selectedStatus}</b>\nИзменил: ${changerName}`);
+
+        closeStatusModal();
+        tg.HapticFeedback?.notificationOccurred('success');
+      } catch (e) {
+        errEl.textContent = 'Error: ' + e.message;
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm';
+      }
+    }
+
+    /* COMMENT MODAL */
+    function openCommentModal(lead) {
+      document.getElementById('comment-textarea').value = '';
+      document.getElementById('comment-error').style.display = 'none';
+      document.getElementById('modal-comment').classList.add('open');
+      setTimeout(() => document.getElementById('comment-textarea').focus(), 150);
+    }
+
+    function closeCommentModal() {
+      document.getElementById('modal-comment').classList.remove('open');
+    }
+
+    /* ASSIGN MODAL */
+    let assignLead = null;
+    let selectedAssignee = null;
+
+    async function openAssignModal(lead) {
+      assignLead = lead;
+      selectedAssignee = lead.assigned_to || null;
+      const list = document.getElementById('assign-list');
+      list.innerHTML = '<div style="padding:12px;color:#94a3b8;font-size:13px;">Loading…</div>';
+      document.getElementById('assign-error').style.display = 'none';
+      document.getElementById('modal-assign').classList.add('open');
+
+      const { data: members } = await db.from('team_members').select('*').order('name');
+
+      if (!members || members.length === 0) {
+        list.innerHTML = '<div style="padding:12px;color:#94a3b8;font-size:13px;">No team members yet. Go to Profile tab → Team Members to add them.</div>';
+      } else {
+        const makeOpt = (name, label, isSelected) =>
+          `<div class="status-opt${isSelected ? ' selected' : ''}" data-name="${escHtml(name)}" style="margin-bottom:8px;">
+            <span class="s-dot" style="background:${name ? 'var(--btn)' : '#94a3b8'};"></span>
+            <span class="s-label">${escHtml(label)}</span>
+            <span class="s-check">✓</span>
+          </div>`;
+
+        list.innerHTML = [
+          makeOpt('', '— Unassigned —', !lead.assigned_to),
+          ...members.map(m => makeOpt(m.name, m.name, lead.assigned_to === m.name)),
+        ].join('');
+
+        list.querySelectorAll('.status-opt').forEach(el => {
+          el.addEventListener('click', () => {
+            list.querySelectorAll('.status-opt').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedAssignee = el.dataset.name || null;
+          });
+        });
+      }
+    }
+
+    function closeAssignModal() {
+      document.getElementById('modal-assign').classList.remove('open');
+    }
+
+    async function confirmAssign() {
+      if (!assignLead) return;
+      const btn = document.getElementById('assign-confirm-btn');
+      const errEl = document.getElementById('assign-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Saving…';
+
+      const adminName = localStorage.getItem('crm_admin_name') || 'Admin';
+      const newAssignee = selectedAssignee || null;
+
+      try {
+        const { error } = await db.from('leads')
+          .update({ assigned_to: newAssignee, updated_at: new Date().toISOString() })
+          .eq('id', assignLead.id);
+        if (error) throw error;
+
+        // Notify the assigned person
+        if (newAssignee) {
+          const { data: members } = await db.from('team_members').select('*');
+          const member = (members || []).find(m => m.name === newAssignee);
+          const leadName = `${assignLead.first_name || ''} ${assignLead.last_name || ''}`.trim() || 'Unknown';
+          if (member && member.telegram_id) {
+            await notifyTelegram(member.telegram_id,
+              `📋 Вам назначен лид!\n\nИмя: <b>${leadName}</b>\nТелефон: ${assignLead.phone || '—'}\nИсточник: ${assignLead.source || '—'}\nБаллы: ${assignLead.lead_score || 0}\n\nНазначил: ${adminName}`
+            );
+          }
+          await notifyAdmins(`👤 Лид назначен\n\nЛид: <b>${leadName}</b>\nНазначен: ${newAssignee}\nНазначил: ${adminName}`);
+        }
+
+        // Update local state
+        assignLead.assigned_to = newAssignee;
+        const idx = allLeads.findIndex(l => l.id === assignLead.id);
+        if (idx !== -1) allLeads[idx].assigned_to = newAssignee;
+
+        closeAssignModal();
+        tg.HapticFeedback?.notificationOccurred('success');
+      } catch (e) {
+        errEl.textContent = 'Error: ' + e.message;
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Assign';
+      }
+    }
+
+    async function confirmComment() {
+      const text = document.getElementById('comment-textarea').value.trim();
+      if (!text) return;
+      const btn = document.getElementById('comment-confirm-btn');
+      const errEl = document.getElementById('comment-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Posting…';
+
+      const adminName = localStorage.getItem('crm_admin_name') || 'Admin';
+
+      try {
+        const { error } = await db.from('comments').insert({
+          telegram_id: currentLead.telegram_id,
+          author: adminName,
+          content: text,
+          is_pinned: false,
+          created_at: new Date().toISOString(),
+        });
+        if (error) throw error;
+
+        // Notify admins
+        const leadName = `${currentLead.first_name || ''} ${currentLead.last_name || ''}`.trim() || 'Unknown';
+        await notifyAdmins(`💬 Новый комментарий\n\nЛид: <b>${leadName}</b>\nАвтор: ${adminName}\nКомментарий: ${text}`);
+
+        closeCommentModal();
+        tg.HapticFeedback?.notificationOccurred('success');
+        // Refresh comments in detail view
+        loadComments(currentLead.telegram_id);
+      } catch (e) {
+        errEl.textContent = 'Error: ' + e.message;
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Post Comment';
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       END LIVE CHAT
+       ════════════════════════════════════════════ */
+    async function endLiveChat(lead) {
+      try {
+        // Clear flag in DB
+        const { error } = await db.from('leads')
+          .update({ live_chat: false })
+          .eq('telegram_id', lead.telegram_id);
+        if (error) throw error;
+
+        // Notify the user via bot
+        const lang = lead.preferred_lang || 'uz';
+        const endMsg = lang === 'ru'
+          ? '✅ Чат завершён менеджером. Если появятся вопросы — пишите 😊'
+          : '✅ Chat menejer tomonidan yakunlandi. Boshqa savollar bo\'lsa, yozing 😊';
+
+        await tgApi({ action: 'sendMessage', chat_id: lead.telegram_id, text: endMsg });
+
+        showToast('✅ Live chat ended');
+        try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+
+        // Refresh detail view
+        const updated = await db.from('leads').select('*').eq('telegram_id', lead.telegram_id).single();
+        if (updated.data) renderDetail(updated.data);
+      } catch(e) {
+        showToast('❌ Error: ' + e.message);
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       SEND MESSAGE MODAL
+       ════════════════════════════════════════════ */
+    function openMessageModal(lead) {
+      const name = `${lead.first_name || ''} ${lead.last_name || ''}`.trim() || 'Unknown';
+      document.getElementById('message-recipient').textContent = `To: ${name}`;
+      document.getElementById('message-textarea').value = '';
+      document.getElementById('message-error').style.display = 'none';
+      clearMessageAttachment();
+      document.getElementById('modal-message').classList.add('open');
+    }
+
+    function closeMessageModal() {
+      document.getElementById('modal-message').classList.remove('open');
+    }
+
+    function clearMessageAttachment() {
+      document.getElementById('message-file-input').value = '';
+      document.getElementById('message-attach-name').textContent = 'Attach photo, video or file (optional)';
+      document.getElementById('message-preview').style.display = 'none';
+      document.getElementById('message-preview-img').style.display = 'none';
+      document.getElementById('message-preview-img').src = '';
+      document.getElementById('message-preview-vid').style.display = 'none';
+      document.getElementById('message-preview-vid').src = '';
+    }
+
+    // Wire file picker preview
+    document.getElementById('message-file-input').addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      document.getElementById('message-attach-name').textContent = file.name;
+      const preview = document.getElementById('message-preview');
+      const img = document.getElementById('message-preview-img');
+      const vid = document.getElementById('message-preview-vid');
+      img.style.display = 'none';
+      vid.style.display = 'none';
+      if (file.type.startsWith('image/')) {
+        img.src = URL.createObjectURL(file);
+        img.style.display = 'block';
+      } else if (file.type.startsWith('video/')) {
+        vid.src = URL.createObjectURL(file);
+        vid.style.display = 'block';
+      }
+      preview.style.display = 'block';
+    });
+
+    async function confirmSendMessage() {
+      const text = document.getElementById('message-textarea').value.trim();
+      const file = document.getElementById('message-file-input').files[0];
+      if (!text && !file) { showToast('❌ Add text or attach a file'); return; }
+
+      const btn = document.getElementById('message-confirm-btn');
+      const errEl = document.getElementById('message-error');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const chatId = currentLead.telegram_id;
+        let endpoint, body;
+
+        if (file) {
+          if (file.size > 3 * 1024 * 1024) {
+            throw new Error('File too large (max 3MB via admin proxy)');
+          }
+          const isImage = file.type.startsWith('image/');
+          const isVideo = file.type.startsWith('video/');
+          const action = isImage ? 'sendPhoto' : isVideo ? 'sendVideo' : 'sendDocument';
+          const data = await fileToBase64(file);
+          await tgApi({
+            action,
+            chat_id: chatId,
+            text: text || undefined,
+            file: { name: file.name, mimeType: file.type, data },
+          });
+        } else {
+          await tgApi({ action: 'sendMessage', chat_id: chatId, text });
+        }
+
+        closeMessageModal();
+        showToast('✅ Message sent!');
+        try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+      } catch (e) {
+        errEl.textContent = 'Error: ' + e.message;
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send';
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       SEARCH
+       ════════════════════════════════════════════ */
+    function setupSearch() {
+      const input = document.getElementById('search-input');
+      input.addEventListener('input', () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => doSearch(input.value.trim()), 350);
+      });
+    }
+
+    async function doSearch(query) {
+      const container = document.getElementById('search-list');
+      if (!query) {
+        container.innerHTML = '<div class="empty">Start typing to search</div>';
+        return;
+      }
+      container.innerHTML = '<div class="loading">Searching…</div>';
+
+      try {
+        const q = `%${query}%`;
+        const { data, error } = await db
+          .from('leads')
+          .select('*')
+          .or(`first_name.ilike.${q},last_name.ilike.${q},username.ilike.${q},phone.ilike.${q}`)
+          .order('created_at', { ascending: false })
+          .limit(30);
+
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          container.innerHTML = '<div class="empty">No results</div>';
+          return;
+        }
+
+        // Merge into allLeads cache
+        data.forEach(d => {
+          if (!allLeads.find(l => l.id === d.id)) allLeads.push(d);
+        });
+
+        renderLeadsList(data, container);
+      } catch (e) {
+        container.innerHTML = `<div class="error-msg">Search failed: ${e.message}</div>`;
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       PROFILE
+       ════════════════════════════════════════════ */
+    function setupProfile() {
+      // Populate from Telegram user
+      const tgName = [tgUser?.first_name, tgUser?.last_name].filter(Boolean).join(' ') || 'Admin';
+      document.getElementById('profile-name').textContent = tgName;
+      document.getElementById('profile-id').textContent = 'ID: ' + (tgUser?.id || '—');
+      document.getElementById('profile-avatar').textContent = (tgName.charAt(0) || 'A').toUpperCase();
+
+      // Pre-fill saved display name
+      const saved = localStorage.getItem('crm_admin_name') || '';
+      document.getElementById('admin-name-input').value = saved || tgName;
+
+      document.getElementById('save-name-btn').addEventListener('click', () => {
+        const val = document.getElementById('admin-name-input').value.trim();
+        if (!val) return;
+        localStorage.setItem('crm_admin_name', val);
+        const msg = document.getElementById('profile-msg');
+        msg.textContent = 'Saved!';
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 2000);
+        tg.HapticFeedback?.notificationOccurred('success');
+      });
+
+      // Team members
+      loadTwaMembers();
+      document.getElementById('twa-add-member-btn').addEventListener('click', addTwaMember);
+    }
+
+    async function loadTwaMembers() {
+      const el = document.getElementById('twa-members-list');
+      el.innerHTML = '<div style="font-size:13px;color:var(--hint);">Loading…</div>';
+      const { data, error } = await db.from('team_members').select('*').order('name');
+      if (error) { el.innerHTML = '<div style="color:#ef4444;font-size:13px;">Error loading</div>'; return; }
+      renderTwaMembers(data || []);
+    }
+
+    function renderTwaMembers(members) {
+      const el = document.getElementById('twa-members-list');
+      if (!members.length) {
+        el.innerHTML = '<div style="font-size:13px;color:var(--hint);padding:4px 0;">No members yet.</div>';
+        return;
+      }
+      el.innerHTML = members.map(m => `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.07);">
+          <span style="flex:1;font-size:14px;">${escHtml(m.name)}</span>
+          <span style="font-size:12px;color:var(--hint);">${m.telegram_id}</span>
+          <button onclick="removeTwaMember(${m.id})" style="background:none;border:none;color:#ef4444;font-size:16px;cursor:pointer;padding:0 4px;">✕</button>
+        </div>`).join('');
+    }
+
+    async function addTwaMember() {
+      const name = document.getElementById('twa-member-name').value.trim();
+      const tgId = parseInt(document.getElementById('twa-member-tgid').value.trim(), 10);
+      const msg = document.getElementById('twa-members-msg');
+      if (!name) { msg.style.color = '#ef4444'; msg.textContent = 'Name required'; msg.style.display = 'block'; return; }
+      if (!tgId || isNaN(tgId)) { msg.style.color = '#ef4444'; msg.textContent = 'Valid Telegram ID required'; msg.style.display = 'block'; return; }
+
+      const { error } = await db.from('team_members').insert({ name, telegram_id: tgId });
+      if (error) { msg.style.color = '#ef4444'; msg.textContent = error.message; msg.style.display = 'block'; return; }
+
+      document.getElementById('twa-member-name').value = '';
+      document.getElementById('twa-member-tgid').value = '';
+      msg.style.color = '#22c55e'; msg.textContent = 'Added!'; msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 2000);
+      loadTwaMembers();
+      try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+    }
+
+    async function removeTwaMember(id) {
+      await db.from('team_members').delete().eq('id', id);
+      loadTwaMembers();
+    }
+
+    /* ════════════════════════════════════════════
+       UTILITIES
+       ════════════════════════════════════════════ */
+    function fullName(lead) {
+      return [lead.first_name, lead.last_name].filter(Boolean).join(' ') || lead.username || 'Unknown';
+    }
+
+    function relTime(iso) {
+      if (!iso) return '—';
+      const diff = Date.now() - new Date(iso).getTime();
+      const mins = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return mins + 'm ago';
+      if (hours < 24) return hours + 'h ago';
+      return days + 'd ago';
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function truncate(str, len) {
+      if (!str) return '';
+      return str.length > len ? str.slice(0, len) + '…' : str;
+    }
+
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function hashStr(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+      return h;
+    }
+  </script>
+</body>
+
+</html>
