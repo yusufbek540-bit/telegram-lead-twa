@@ -2845,18 +2845,22 @@
         const lang = (window.obState && window.obState.lang) || (document.documentElement.lang) || 'ru';
 
         Cal('init', 'strategy', { origin: 'https://cal.com' });
+        const tgId = String(tgUser.id || '');
+        const tgUsername = tgUser.username || '';
+        // Cal.com inline embed mangles config.metadata into a single `a` key; pass
+        // metadata via calLink query string so it survives into the webhook payload.
+        const metaQs = new URLSearchParams({
+            'metadata[telegram_id]': tgId,
+            'metadata[lang]': lang,
+            'metadata[username]': tgUsername,
+        }).toString();
         Cal.ns.strategy('inline', {
             elementOrSelector: '#cal-embed',
             config: {
                 layout: 'month_view',
                 name: tgUser.first_name || '',
-                metadata: {
-                    telegram_id: String(tgUser.id || ''),
-                    lang: lang,
-                    username: tgUser.username || '',
-                },
             },
-            calLink: 'mqsd-agency/strategy',
+            calLink: `mqsd-agency/strategy?${metaQs}`,
         });
     }
 

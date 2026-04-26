@@ -146,13 +146,31 @@ export default async function handler(req, res) {
     const meta = payload.metadata || {};
     let telegramId = parseInt(meta.telegram_id || '0', 10);
 
-    // Fallback: when Cal.com strips metadata (rebook flow, native UI, etc.),
-    // try to resolve telegram_id from leads via attendee email.
+    // Fallback chain when Cal.com strips metadata (embed serialization bug):
+    //   1. attendee SMS email of the form <phone>@sms.cal.com → leads.phone
+    //   2. attendee real email → leads.email
+    //   3. responses.smsReminderNumber / phone field → leads.phone
     if (!telegramId) {
-        const attendeeEmail = (payload.attendees && payload.attendees[0] && payload.attendees[0].email) || null;
-        if (attendeeEmail) {
+        const attendee = (payload.attendees && payload.attendees[0]) || {};
+        const attendeeEmail = attendee.email || null;
+        const responses = payload.responses || {};
+
+        const candidates = [];
+        if (attendeeEmail && attendeeEmail.endsWith('@sms.cal.com')) {
+            const phone = attendeeEmail.replace(/@sms\.cal\.com$/, '').replace(/^\+/, '');
+            if (phone) candidates.push({ field: 'phone', value: phone });
+        } else if (attendeeEmail) {
+            candidates.push({ field: 'email', value: attendeeEmail });
+        }
+        const respPhone = responses.smsReminderNumber || responses.phone || responses.attendeePhoneNumber;
+        if (respPhone) {
+            const cleaned = String(respPhone).replace(/^\+/, '').replace(/\s+/g, '');
+            if (cleaned) candidates.push({ field: 'phone', value: cleaned });
+        }
+
+        for (const c of candidates) {
             try {
-                const url = `${process.env.SUPABASE_URL}/rest/v1/leads?email=eq.${encodeURIComponent(attendeeEmail)}&select=telegram_id&limit=1`;
+                const url = `${process.env.SUPABASE_URL}/rest/v1/leads?${c.field}=eq.${encodeURIComponent(c.value)}&select=telegram_id&limit=1`;
                 const r = await fetch(url, {
                     headers: {
                         apikey: process.env.SUPABASE_SERVICE_KEY,
@@ -161,10 +179,14 @@ export default async function handler(req, res) {
                 });
                 if (r.ok) {
                     const rows = await r.json();
-                    if (rows[0] && rows[0].telegram_id) telegramId = parseInt(rows[0].telegram_id, 10);
+                    if (rows[0] && rows[0].telegram_id) {
+                        telegramId = parseInt(rows[0].telegram_id, 10);
+                        console.log(`webhook: resolved telegram_id ${telegramId} via ${c.field}=${c.value}`);
+                        break;
+                    }
                 }
             } catch (e) {
-                console.error('lead-email lookup failed', e);
+                console.error(`lead-${c.field} lookup failed`, e);
             }
         }
     }
