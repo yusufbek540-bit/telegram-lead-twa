@@ -794,6 +794,25 @@
         .step:first-child { padding-top: 0; }
         .step:last-child { border-bottom: none; padding-bottom: 0; }
 
+        .step-lede { font-size: 12.5px; color: var(--dim); font-style: italic; margin: 6px 0 10px; line-height: 1.5; }
+        .step-bullets { list-style: none; padding: 0; margin: 8px 0 10px; display: flex; flex-direction: column; gap: 6px; }
+        .step-bullets li { font-size: 12.5px; color: var(--dim); line-height: 1.5; padding-left: 14px; position: relative; }
+        .step-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+        .step-deliverable { font-size: 12px; color: var(--text); background: var(--accent-s); border-radius: 8px; padding: 8px 10px; margin-top: 8px; line-height: 1.5; }
+        .methodology-closer { margin-top: 18px; text-align: center; }
+        .methodology-closer p { font-size: 13.5px; color: var(--text); font-weight: 700; margin-bottom: 12px; line-height: 1.5; }
+        .methodology-closer button {
+            padding: 12px 22px;
+            border-radius: 10px;
+            background: var(--text);
+            color: var(--bg);
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
         .step-num {
             width: 26px;
             height: 26px;
@@ -2201,31 +2220,64 @@
             <div class="step">
                 <div class="step-num">1</div>
                 <div class="step-content">
-                    <div class="step-title" data-t="st1_t">Bepul tahlil</div>
-                    <div class="step-desc" data-t="st1_d">Biznesingiz, maqsad va raqobatchilarni o'rganamiz</div>
+                    <div class="step-title" data-t="st1_t">Strategiya va diagnostika</div>
+                    <p class="step-lede" data-t="st1_lede">30 daqiqalik strategik sessiya — bepul. Biznesni tahlil qilamiz, voronka auditi qilamiz, KPI'larni kelishamiz.</p>
+                    <ul class="step-bullets">
+                        <li data-t="st1_b1">Joriy voronka auditi: lid qayerda yo'qoladi, qayerda ortiqcha to'laysiz, qayerda savdo buziladi</li>
+                        <li data-t="st1_b2">Strategiya: segment, taklif, kanallar, metrikalar</li>
+                        <li data-t="st1_b3">Tizim brifi: nima quramiz, muddatlar, 30 / 60 / 90 kunlik KPI</li>
+                    </ul>
+                    <div class="step-deliverable" data-t="st1_dlv"><b>Natija:</b> hujjat-brif + kelishilgan KPI</div>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
                 <div class="step-content">
-                    <div class="step-title" data-t="st2_t">Taklif va narx</div>
-                    <div class="step-desc" data-t="st2_d">Individual strategiya va aniq byudjet</div>
+                    <div class="step-title" data-t="st2_t">Tizimni qurish</div>
+                    <p class="step-lede" data-t="st2_lede">Oylar emas, kunlar. Raqobatchilar TZ kelishayotgan paytda, sizning tizimingiz allaqachon lid qabul qiladi.</p>
+                    <ul class="step-bullets">
+                        <li data-t="st2_b1"><b>Kontent-mashina</b> — postlar, rils, video, reklama kreativlari. Oylik reja + prodakshn.</li>
+                        <li data-t="st2_b2"><b>Reklama infratuzilmasi</b> — Meta Ads, Google Ads, Telegram Ads. Akkauntlar, pikseller, voqealar, auditoriyalar.</li>
+                        <li data-t="st2_b3"><b>Tutish voronkasi</b> — lending yoki Telegram-bot. Kirishda kvalifikatsiya.</li>
+                        <li data-t="st2_b4"><b>CRM ulanish</b> — lidlar darhol sizning yoki bizning tizimga, teg va statuslar bilan.</li>
+                        <li data-t="st2_b5"><b>Avtomatlashtirish</b> — eslatmalar, follow-up'lar, segmentatsiya, retargeting.</li>
+                    </ul>
+                    <div class="step-deliverable" data-t="st2_dlv"><b>Natija:</b> 5–10 ish kunida ishlaydigan tizim — trafikni qabul qilishga tayyor.</div>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
                 <div class="step-content">
-                    <div class="step-title" data-t="st3_t">Shartnoma va start</div>
-                    <div class="step-desc" data-t="st3_d">Rasmiy shartnoma — 48 soat ichida birinchi natija</div>
+                    <div class="step-title" data-t="st3_t">Ishga tushirish va trafik</div>
+                    <p class="step-lede" data-t="st3_lede">Birinchi kundan — ma'lumotlar. «Bir oydan keyin ko'ramiz» emas. Har kuni — o'lchov, sozlash, yangi gipotezalar.</p>
+                    <ul class="step-bullets">
+                        <li data-t="st3_b1"><b>Pullik trafik</b> — har kuni boshqarish: stavkalar, byudjetlar, kreativlar, auditoriyalar</li>
+                        <li data-t="st3_b2"><b>Kontent ishlab chiqarish</b> — haftalik organika va reklama kreativlari oqimi</li>
+                        <li data-t="st3_b3"><b>Haftalik hisobotlar</b> — nima ishladi, nima yo'q, keyin qayerga boramiz</li>
+                        <li data-t="st3_b4"><b>A/B testlar</b> — kreativlar, taklifllar, lending'lar, bot matni</li>
+                    </ul>
+                    <div class="step-deliverable" data-t="st3_dlv"><b>Natija:</b> kelishilgan narxda maqsadli lidlar, prognozli dinamika bilan.</div>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">4</div>
                 <div class="step-content">
-                    <div class="step-title" data-t="st4_t">Oylik hisobot</div>
-                    <div class="step-desc" data-t="st4_d">Natijalar, tahlil va keyingi o'sish rejasi</div>
+                    <div class="step-title" data-t="st4_t">Konversiya va masshtablash</div>
+                    <p class="step-lede" data-t="st4_lede">Bitimsiz lidlar — havoga ketgan pul. Tizim bitimlarni yopmaguncha biz ketmaymiz.</p>
+                    <ul class="step-bullets">
+                        <li data-t="st4_b1"><b>Lid-menedjment</b> — kvalifikatsiya, skoring, tartiblash. Menejer faqat tayyor mijozlarni oladi.</li>
+                        <li data-t="st4_b2"><b>CRM-kuzatuv</b> — statuslar, follow-up'lar, savdo qisilishlarini aniqlash</li>
+                        <li data-t="st4_b3"><b>Savdo bo'limini qo'llab-quvvatlash</b> — skript, material, menejerlarni o'qitish (Co-Pilot) yoki to'liq olib borish</li>
+                        <li data-t="st4_b4"><b>Optimizatsiya</b> — bitim ma'lumotlariga asoslangan oylik strategiya qayta ko'rib chiqilishi</li>
+                        <li data-t="st4_b5"><b>Masshtablash</b> — yunit-ekonomika tasdiqlanganda, byudjet va kanallarni kengaytiramiz</li>
+                    </ul>
+                    <div class="step-deliverable" data-t="st4_dlv"><b>Natija:</b> to'langan bitimlarning prognozli oqimi va masshtablashga tayyor pipeline.</div>
                 </div>
             </div>
+        </div>
+        <div class="methodology-closer">
+            <p data-t="meth_closer">Biz agentlik emasmiz. Biz tashqi performance-departamentmiz — daromadga javob beramiz, ko'rsatkichlarga emas.</p>
+            <button onclick="showTab('schedule')" data-t="meth_cta">Strategik sessiyaga yozilish</button>
         </div>
     </div>
 
@@ -2407,10 +2459,37 @@
             about_label:"O'zimiz haqimizda", about_title:"MQSD kim?",
             about_desc:"Biz agentlik emasmiz — sizning tashqi performance-departamentingizmiz. Reklamadan savdoga qadar butun siklni o'z zimmamizga olamiz va daromadga javob beramiz, ko'rsatkichlarga emas. Asosiy sohalar — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — strategik sessiyada muhokama qilamiz.",
             about_process:"Qanday ishlaymiz?",
-            st1_t:"Bepul tahlil", st1_d:"Biznesingiz, maqsad va raqobatchilarni o'rganamiz",
-            st2_t:"Taklif va narx", st2_d:"Individual strategiya va aniq byudjet",
-            st3_t:"Shartnoma va start", st3_d:"Rasmiy shartnoma — 48 soat ichida birinchi natija",
-            st4_t:"Oylik hisobot", st4_d:"Natijalar, tahlil va keyingi o'sish rejasi",
+            st1_t:"Strategiya va diagnostika",
+            st1_lede:"30 daqiqalik strategik sessiya — bepul. Biznesni tahlil qilamiz, voronka auditi qilamiz, KPI'larni kelishamiz.",
+            st1_b1:"Joriy voronka auditi: lid qayerda yo'qoladi, qayerda ortiqcha to'laysiz, qayerda savdo buziladi",
+            st1_b2:"Strategiya: segment, taklif, kanallar, metrikalar",
+            st1_b3:"Tizim brifi: nima quramiz, muddatlar, 30 / 60 / 90 kunlik KPI",
+            st1_dlv:"<b>Natija:</b> hujjat-brif + kelishilgan KPI",
+            st2_t:"Tizimni qurish",
+            st2_lede:"Oylar emas, kunlar. Raqobatchilar TZ kelishayotgan paytda, sizning tizimingiz allaqachon lid qabul qiladi.",
+            st2_b1:"<b>Kontent-mashina</b> — postlar, rils, video, reklama kreativlari. Oylik reja + prodakshn.",
+            st2_b2:"<b>Reklama infratuzilmasi</b> — Meta Ads, Google Ads, Telegram Ads. Akkauntlar, pikseller, voqealar, auditoriyalar.",
+            st2_b3:"<b>Tutish voronkasi</b> — lending yoki Telegram-bot. Kirishda kvalifikatsiya.",
+            st2_b4:"<b>CRM ulanish</b> — lidlar darhol sizning yoki bizning tizimga, teg va statuslar bilan.",
+            st2_b5:"<b>Avtomatlashtirish</b> — eslatmalar, follow-up'lar, segmentatsiya, retargeting.",
+            st2_dlv:"<b>Natija:</b> 5–10 ish kunida ishlaydigan tizim — trafikni qabul qilishga tayyor.",
+            st3_t:"Ishga tushirish va trafik",
+            st3_lede:"Birinchi kundan — ma'lumotlar. «Bir oydan keyin ko'ramiz» emas. Har kuni — o'lchov, sozlash, yangi gipotezalar.",
+            st3_b1:"<b>Pullik trafik</b> — har kuni boshqarish: stavkalar, byudjetlar, kreativlar, auditoriyalar",
+            st3_b2:"<b>Kontent ishlab chiqarish</b> — haftalik organika va reklama kreativlari oqimi",
+            st3_b3:"<b>Haftalik hisobotlar</b> — nima ishladi, nima yo'q, keyin qayerga boramiz",
+            st3_b4:"<b>A/B testlar</b> — kreativlar, taklifllar, lending'lar, bot matni",
+            st3_dlv:"<b>Natija:</b> kelishilgan narxda maqsadli lidlar, prognozli dinamika bilan.",
+            st4_t:"Konversiya va masshtablash",
+            st4_lede:"Bitimsiz lidlar — havoga ketgan pul. Tizim bitimlarni yopmaguncha biz ketmaymiz.",
+            st4_b1:"<b>Lid-menedjment</b> — kvalifikatsiya, skoring, tartiblash. Menejer faqat tayyor mijozlarni oladi.",
+            st4_b2:"<b>CRM-kuzatuv</b> — statuslar, follow-up'lar, savdo qisilishlarini aniqlash",
+            st4_b3:"<b>Savdo bo'limini qo'llab-quvvatlash</b> — skript, material, menejerlarni o'qitish (Co-Pilot) yoki to'liq olib borish",
+            st4_b4:"<b>Optimizatsiya</b> — bitim ma'lumotlariga asoslangan oylik strategiya qayta ko'rib chiqilishi",
+            st4_b5:"<b>Masshtablash</b> — yunit-ekonomika tasdiqlanganda, byudjet va kanallarni kengaytiramiz",
+            st4_dlv:"<b>Natija:</b> to'langan bitimlarning prognozli oqimi va masshtablashga tayyor pipeline.",
+            meth_closer:"Biz agentlik emasmiz. Biz tashqi performance-departamentmiz — daromadga javob beramiz, ko'rsatkichlarga emas.",
+            meth_cta:"Strategik sessiyaga yozilish",
             about_contacts:"Aloqa",
             c_site:"Sayt", c_tg:"Telegram", c_loc:"Shahar", c_loc_v:"Toshkent", c_hrs:"Ish vaqti", c_hrs_v:"Du–Ju 9–18",
             cta:"Boshlash — botda suhbat",
@@ -2506,10 +2585,37 @@
             about_label:"О нас", about_title:"Кто такие MQSD?",
             about_desc:"Мы не агентство — мы ваш внешний performance-департамент. Берём на себя весь цикл от рекламы до продажи и отвечаем за выручку, не за охваты. Приоритетные ниши — недвижимость, частная медицина, образование. Открыты к другим направлениям — обсудим на стратегической сессии.",
             about_process:"Как мы работаем?",
-            st1_t:"Бесплатный анализ", st1_d:"Изучаем ваш бизнес, цели и конкурентов",
-            st2_t:"Предложение и цена", st2_d:"Индивидуальная стратегия и точный бюджет",
-            st3_t:"Договор и старт", st3_d:"Официальный договор — первый результат за 48ч",
-            st4_t:"Ежемесячный отчёт", st4_d:"Результаты, анализ и план следующего роста",
+            st1_t:"Стратегия и диагностика",
+            st1_lede:"30-минутная стратегическая сессия — бесплатно. Разбираем бизнес, делаем аудит воронки, согласовываем KPI.",
+            st1_b1:"Аудит текущей воронки: где теряется лид, где переплачиваете, где ломается продажа",
+            st1_b2:"Стратегия: сегмент, оффер, каналы, метрики",
+            st1_b3:"Бриф системы: что строим, сроки, KPI на 30 / 60 / 90 дней",
+            st1_dlv:"<b>Результат:</b> документ-бриф + согласованные KPI",
+            st2_t:"Построение системы",
+            st2_lede:"Не месяцы, а дни. Пока конкуренты согласовывают ТЗ — у вас уже работает система, которая принимает лидов.",
+            st2_b1:"<b>Контент-машина</b> — посты, рилс, видео, рекламные креативы. Месячный план + продакшн.",
+            st2_b2:"<b>Рекламная инфраструктура</b> — Meta Ads, Google Ads, Telegram Ads. Аккаунты, пиксели, события, аудитории.",
+            st2_b3:"<b>Воронка захвата</b> — лендинг или Telegram-бот. Квалификация на входе.",
+            st2_b4:"<b>CRM-подключение</b> — лиды сразу в вашу или нашу систему, с тегами и статусами.",
+            st2_b5:"<b>Автоматизация</b> — напоминания, follow-up'ы, сегментация, ретаргетинг.",
+            st2_dlv:"<b>Результат:</b> работающая система за 5–10 рабочих дней — готовая принимать трафик.",
+            st3_t:"Запуск и трафик",
+            st3_lede:"Данные с первого дня. Не «посмотрим через месяц». Каждый день — замер, корректировка, новые гипотезы.",
+            st3_b1:"<b>Платный трафик</b> — ежедневное управление: ставки, бюджеты, креативы, аудитории",
+            st3_b2:"<b>Контент-производство</b> — еженедельный поток органики и рекламных креативов",
+            st3_b3:"<b>Еженедельные отчёты</b> — что сработало, что нет, куда двигаемся дальше",
+            st3_b4:"<b>A/B-тесты</b> — креативы, офферы, лендинги, тексты бота",
+            st3_dlv:"<b>Результат:</b> целевые лиды по согласованной цене, с прогнозируемой динамикой.",
+            st4_t:"Конверсия и масштаб",
+            st4_lede:"Лиды без сделок — деньги в воздух. Мы не уходим, пока система не закроет сделки.",
+            st4_b1:"<b>Лид-менеджмент</b> — квалификация, скоринг, приоритизация. Менеджер получает только готовых клиентов.",
+            st4_b2:"<b>CRM-сопровождение</b> — статусы, follow-up'ы, выявление узких мест продаж",
+            st4_b3:"<b>Поддержка отдела продаж</b> — скрипт, материалы, обучение менеджеров (Co-Pilot) или полное ведение",
+            st4_b4:"<b>Оптимизация</b> — ежемесячный пересмотр стратегии на данных по сделкам",
+            st4_b5:"<b>Масштабирование</b> — когда юнит-экономика подтверждена, расширяем бюджет и каналы",
+            st4_dlv:"<b>Результат:</b> прогнозируемый поток оплаченных сделок и pipeline, готовый к масштабированию.",
+            meth_closer:"Мы не агентство. Мы внешний performance-департамент — отвечаем за выручку, не за показатели.",
+            meth_cta:"Записаться на стратегическую сессию",
             about_contacts:"Контакты",
             c_site:"Сайт", c_tg:"Telegram", c_loc:"Город", c_loc_v:"Ташкент", c_hrs:"Часы работы", c_hrs_v:"Пн–Пт 9–18",
             cta:"Начать разговор в боте",
