@@ -1426,18 +1426,42 @@
         .svc-ladder { margin-bottom: 32px; }
         .svc-ladder-sub { font-size: 13px; color: var(--dim); margin: 8px 0 18px; line-height: 1.5; }
         .svc-tier {
-            background: var(--bg);
+            background: linear-gradient(180deg, var(--card) 0%, var(--bg) 100%);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 14px;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 16px;
             position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
+        .svc-tier::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+        .svc-tier:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 36px rgba(0,0,0,0.10);
+            border-color: var(--accent);
+        }
+        .svc-tier:hover::before { transform: scaleY(1); }
         .svc-tier--featured {
             border-color: var(--accent);
             background: linear-gradient(180deg, var(--accent-s) 0%, var(--bg) 60%);
         }
-        .svc-tier--recommended { border-color: var(--text); }
+        .svc-tier--featured::before { transform: scaleY(1); }
+        .svc-tier--recommended {
+            border-color: var(--text);
+            background: linear-gradient(180deg, var(--card) 0%, var(--bg) 100%);
+        }
+        .svc-tier--recommended::before { background: var(--text); transform: scaleY(1); }
         .svc-tier-badge {
             display: inline-block;
             font-size: 10px;
@@ -1514,20 +1538,43 @@
         }
         .svc-price-logic { font-size: 11.5px; color: var(--dim); line-height: 1.5; }
         .svc-cta {
+            position: relative;
             width: 100%;
-            padding: 13px;
+            padding: 14px;
             margin-top: 14px;
-            border: 1px solid var(--text);
-            border-radius: 10px;
-            background: transparent;
-            color: var(--text);
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, #6FBF7A 100%);
+            color: #fff;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 13.5px;
             font-family: inherit;
             cursor: pointer;
-            transition: var(--ease);
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(82, 173, 96, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
         }
-        .svc-cta--primary { background: var(--text); color: var(--bg); }
+        .svc-cta::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -120%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+            transition: left 0.6s ease;
+        }
+        .svc-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(82, 173, 96, 0.40);
+            filter: brightness(1.05);
+        }
+        .svc-cta:hover::after { left: 120%; }
+        .svc-cta--primary {
+            background: linear-gradient(135deg, var(--text) 0%, #2a2a2a 100%);
+            color: var(--bg);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.20);
+        }
+        .svc-cta--primary:hover { box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
         .svc-cta:active { transform: scale(0.98); }
         .svc-finepoint { font-size: 11px; color: var(--dim); margin-top: 10px; line-height: 1.5; }
         .svc-divider {
@@ -2100,7 +2147,7 @@
                 <li data-t="audit_b4">Sizning biznesga moslashtirilgan tizim brifi (qurish qaroriga kelsangiz)</li>
             </ul>
             <button class="svc-cta svc-cta--primary" onclick="showTab('schedule')" data-t="tier_audit_cta">Auditni bron qilish</button>
-            <p class="svc-finepoint" data-t="tier_audit_fine">Audit bepul. Hech qanday majburiyatsiz.</p>
+            <p class="svc-finepoint" data-t-html="tier_audit_fine">Hozircha bepul, majburiyatsiz. Aksiya tugaganidan so'ng to'liq audit narxi <b>$1 000</b> bo'ladi — ichki va tashqi omillar tahlili, aniq strategiya va yo'l xaritasi bilan.</p>
         </div>
 
         <div class="svc-divider" data-t="ladder_divider">To'liq tizim</div>
@@ -2284,7 +2331,7 @@
                         <li data-t="st1_b2">Strategiya: segment, taklif, kanallar, metrikalar</li>
                         <li data-t="st1_b3">Tizim brifi: nima quramiz, muddatlar, 30 / 60 / 90 kunlik KPI</li>
                     </ul>
-                    <div class="step-deliverable" data-t="st1_dlv"><b>Natija:</b> hujjat-brif + kelishilgan KPI</div>
+                    <div class="step-deliverable" data-t-html="st1_dlv"><b>Natija:</b> hujjat-brif + kelishilgan KPI</div>
                 </div>
             </div>
             <div class="step">
@@ -2293,13 +2340,13 @@
                     <div class="step-title" data-t="st2_t">Tizimni qurish</div>
                     <p class="step-lede" data-t="st2_lede">Oylar emas, kunlar. Raqobatchilar TZ kelishayotgan paytda, sizning tizimingiz allaqachon lid qabul qiladi.</p>
                     <ul class="step-bullets">
-                        <li data-t="st2_b1"><b>Kontent-mashina</b> — postlar, rils, video, reklama kreativlari. Oylik reja + prodakshn.</li>
-                        <li data-t="st2_b2"><b>Reklama infratuzilmasi</b> — Meta Ads, Google Ads, Telegram Ads. Akkauntlar, pikseller, voqealar, auditoriyalar.</li>
-                        <li data-t="st2_b3"><b>Tutish voronkasi</b> — lending yoki Telegram-bot. Kirishda kvalifikatsiya.</li>
-                        <li data-t="st2_b4"><b>CRM ulanish</b> — lidlar darhol sizning yoki bizning tizimga, teg va statuslar bilan.</li>
-                        <li data-t="st2_b5"><b>Avtomatlashtirish</b> — eslatmalar, follow-up'lar, segmentatsiya, retargeting.</li>
+                        <li data-t-html="st2_b1"><b>Kontent-mashina</b> — postlar, rils, video, reklama kreativlari. Oylik reja + prodakshn.</li>
+                        <li data-t-html="st2_b2"><b>Reklama infratuzilmasi</b> — Meta Ads, Google Ads, Telegram Ads. Akkauntlar, pikseller, voqealar, auditoriyalar.</li>
+                        <li data-t-html="st2_b3"><b>Tutish voronkasi</b> — lending yoki Telegram-bot. Kirishda kvalifikatsiya.</li>
+                        <li data-t-html="st2_b4"><b>CRM ulanish</b> — lidlar darhol sizning yoki bizning tizimga, teg va statuslar bilan.</li>
+                        <li data-t-html="st2_b5"><b>Avtomatlashtirish</b> — eslatmalar, follow-up'lar, segmentatsiya, retargeting.</li>
                     </ul>
-                    <div class="step-deliverable" data-t="st2_dlv"><b>Natija:</b> 5–10 ish kunida ishlaydigan tizim — trafikni qabul qilishga tayyor.</div>
+                    <div class="step-deliverable" data-t-html="st2_dlv"><b>Natija:</b> 5–10 ish kunida ishlaydigan tizim — trafikni qabul qilishga tayyor.</div>
                 </div>
             </div>
             <div class="step">
@@ -2308,12 +2355,12 @@
                     <div class="step-title" data-t="st3_t">Ishga tushirish va trafik</div>
                     <p class="step-lede" data-t="st3_lede">Birinchi kundan — ma'lumotlar. «Bir oydan keyin ko'ramiz» emas. Har kuni — o'lchov, sozlash, yangi gipotezalar.</p>
                     <ul class="step-bullets">
-                        <li data-t="st3_b1"><b>Pullik trafik</b> — har kuni boshqarish: stavkalar, byudjetlar, kreativlar, auditoriyalar</li>
-                        <li data-t="st3_b2"><b>Kontent ishlab chiqarish</b> — haftalik organika va reklama kreativlari oqimi</li>
-                        <li data-t="st3_b3"><b>Haftalik hisobotlar</b> — nima ishladi, nima yo'q, keyin qayerga boramiz</li>
-                        <li data-t="st3_b4"><b>A/B testlar</b> — kreativlar, taklifllar, lending'lar, bot matni</li>
+                        <li data-t-html="st3_b1"><b>Pullik trafik</b> — har kuni boshqarish: stavkalar, byudjetlar, kreativlar, auditoriyalar</li>
+                        <li data-t-html="st3_b2"><b>Kontent ishlab chiqarish</b> — haftalik organika va reklama kreativlari oqimi</li>
+                        <li data-t-html="st3_b3"><b>Haftalik hisobotlar</b> — nima ishladi, nima yo'q, keyin qayerga boramiz</li>
+                        <li data-t-html="st3_b4"><b>A/B testlar</b> — kreativlar, takliflar, lending'lar, bot matni</li>
                     </ul>
-                    <div class="step-deliverable" data-t="st3_dlv"><b>Natija:</b> kelishilgan narxda maqsadli lidlar, prognozli dinamika bilan.</div>
+                    <div class="step-deliverable" data-t-html="st3_dlv"><b>Natija:</b> kelishilgan narxda maqsadli lidlar, prognozli dinamika bilan.</div>
                 </div>
             </div>
             <div class="step">
@@ -2322,13 +2369,13 @@
                     <div class="step-title" data-t="st4_t">Konversiya va masshtablash</div>
                     <p class="step-lede" data-t="st4_lede">Bitimsiz lidlar — havoga ketgan pul. Tizim bitimlarni yopmaguncha biz ketmaymiz.</p>
                     <ul class="step-bullets">
-                        <li data-t="st4_b1"><b>Lid-menedjment</b> — kvalifikatsiya, skoring, tartiblash. Menejer faqat tayyor mijozlarni oladi.</li>
-                        <li data-t="st4_b2"><b>CRM-kuzatuv</b> — statuslar, follow-up'lar, savdo qisilishlarini aniqlash</li>
-                        <li data-t="st4_b3"><b>Savdo bo'limini qo'llab-quvvatlash</b> — skript, material, menejerlarni o'qitish (Co-Pilot) yoki to'liq olib borish</li>
-                        <li data-t="st4_b4"><b>Optimizatsiya</b> — bitim ma'lumotlariga asoslangan oylik strategiya qayta ko'rib chiqilishi</li>
-                        <li data-t="st4_b5"><b>Masshtablash</b> — yunit-ekonomika tasdiqlanganda, byudjet va kanallarni kengaytiramiz</li>
+                        <li data-t-html="st4_b1"><b>Lid-menedjment</b> — kvalifikatsiya, skoring, tartiblash. Menejer faqat tayyor mijozlarni oladi.</li>
+                        <li data-t-html="st4_b2"><b>CRM-kuzatuv</b> — statuslar, follow-up'lar, savdo qisilishlarini aniqlash</li>
+                        <li data-t-html="st4_b3"><b>Savdo bo'limini qo'llab-quvvatlash</b> — skript, material, menejerlarni o'qitish (Co-Pilot) yoki to'liq olib borish</li>
+                        <li data-t-html="st4_b4"><b>Optimizatsiya</b> — bitim ma'lumotlariga asoslangan oylik strategiya qayta ko'rib chiqilishi</li>
+                        <li data-t-html="st4_b5"><b>Masshtablash</b> — yunit-ekonomika tasdiqlanganda, byudjet va kanallarni kengaytiramiz</li>
                     </ul>
-                    <div class="step-deliverable" data-t="st4_dlv"><b>Natija:</b> to'langan bitimlarning prognozli oqimi va masshtablashga tayyor pipeline.</div>
+                    <div class="step-deliverable" data-t-html="st4_dlv"><b>Natija:</b> to'langan bitimlarning prognozli oqimi va masshtablashga tayyor pipeline.</div>
                 </div>
             </div>
         </div>
@@ -2418,9 +2465,6 @@
 <!-- ── BOTTOM CTA ─────────────────────────────────── -->
 <div class="bottom-bar">
     <button class="cta-btn" onclick="openChatPanel()">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
         <span data-t="chat_btn">💬 Menejer bilan gaplashing</span>
     </button>
 </div>
@@ -2476,7 +2520,7 @@
             audit_b3:"3 ta tezkor yaxshilash bo'yicha tavsiya",
             audit_b4:"Sizning biznesga moslashtirilgan tizim brifi (qurish qaroriga kelsangiz)",
             tier_audit_cta:"Auditni bron qilish",
-            tier_audit_fine:"Audit bepul. Hech qanday majburiyatsiz.",
+            tier_audit_fine:"Hozircha bepul, majburiyatsiz. Aksiya tugaganidan so'ng to'liq audit narxi <b>$1 000</b> bo'ladi — ichki va tashqi omillar tahlili, aniq strategiya va yo'l xaritasi bilan.",
             tier_build_title:"Tizimni qurish", tier_build_sub:"Reklamadan CRM'ga to'liq voronka — 4–8 hafta ichida.",
             build_b1:"Kontent-mashina va prodakshn (video, kreativlar, postlar)",
             build_b2:"Reklama infratuzilmasi (Meta / Google / Telegram Ads)",
@@ -2538,7 +2582,7 @@
             st3_b1:"<b>Pullik trafik</b> — har kuni boshqarish: stavkalar, byudjetlar, kreativlar, auditoriyalar",
             st3_b2:"<b>Kontent ishlab chiqarish</b> — haftalik organika va reklama kreativlari oqimi",
             st3_b3:"<b>Haftalik hisobotlar</b> — nima ishladi, nima yo'q, keyin qayerga boramiz",
-            st3_b4:"<b>A/B testlar</b> — kreativlar, taklifllar, lending'lar, bot matni",
+            st3_b4:"<b>A/B testlar</b> — kreativlar, takliflar, lending'lar, bot matni",
             st3_dlv:"<b>Natija:</b> kelishilgan narxda maqsadli lidlar, prognozli dinamika bilan.",
             st4_t:"Konversiya va masshtablash",
             st4_lede:"Bitimsiz lidlar — havoga ketgan pul. Tizim bitimlarni yopmaguncha biz ketmaymiz.",
@@ -2548,7 +2592,7 @@
             st4_b4:"<b>Optimizatsiya</b> — bitim ma'lumotlariga asoslangan oylik strategiya qayta ko'rib chiqilishi",
             st4_b5:"<b>Masshtablash</b> — yunit-ekonomika tasdiqlanganda, byudjet va kanallarni kengaytiramiz",
             st4_dlv:"<b>Natija:</b> to'langan bitimlarning prognozli oqimi va masshtablashga tayyor pipeline.",
-            meth_closer:"Biz agentlik emasmiz. Biz tashqi performance-departamentmiz — daromadga javob beramiz, ko'rsatkichlarga emas.",
+            meth_closer:"Biz agentlik emasmiz. Biz tashqi performance-departamentmiz — daromadga javob beramiz, mavhum ko'rsatkichlarga emas.",
             meth_cta:"Strategik sessiyaga yozilish",
             about_contacts:"Aloqa",
             c_site:"Sayt", c_tg:"Telegram", c_loc:"Shahar", c_loc_v:"Toshkent", c_hrs:"Ish vaqti", c_hrs_v:"Du–Ju 9–18",
@@ -2605,7 +2649,7 @@
             audit_b3:"Рекомендации по 3 быстрым улучшениям",
             audit_b4:"Бриф системы под ваш бизнес (если решите строить)",
             tier_audit_cta:"Забронировать аудит",
-            tier_audit_fine:"Аудит бесплатен. Никаких обязательств.",
+            tier_audit_fine:"Сейчас бесплатно, без обязательств. После окончания акции стоимость <b>полного аудита — $1 000</b>: разбор внутренних и внешних факторов, чёткая стратегия и дорожная карта.",
             tier_build_title:"Построение системы", tier_build_sub:"Полная воронка от рекламы до CRM — за 4–8 недель.",
             build_b1:"Контент-движок и продакшн (видео, креативы, посты)",
             build_b2:"Рекламная инфраструктура (Meta / Google / Telegram Ads)",
@@ -2677,7 +2721,7 @@
             st4_b4:"<b>Оптимизация</b> — ежемесячный пересмотр стратегии на данных по сделкам",
             st4_b5:"<b>Масштабирование</b> — когда юнит-экономика подтверждена, расширяем бюджет и каналы",
             st4_dlv:"<b>Результат:</b> прогнозируемый поток оплаченных сделок и pipeline, готовый к масштабированию.",
-            meth_closer:"Мы не агентство. Мы внешний performance-департамент — отвечаем за выручку, не за показатели.",
+            meth_closer:"Мы не агентство. Мы внешний performance-департамент — отвечаем за выручку, не абстрактные охваты.",
             meth_cta:"Записаться на стратегическую сессию",
             about_contacts:"Контакты",
             c_site:"Сайт", c_tg:"Telegram", c_loc:"Город", c_loc_v:"Ташкент", c_hrs:"Часы работы", c_hrs_v:"Пн–Пт 9–18",
