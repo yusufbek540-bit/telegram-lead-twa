@@ -271,10 +271,255 @@
             border-radius: var(--r);
             overflow: hidden;
             margin-bottom: 10px;
-            transition: border-color var(--ease);
+            cursor: pointer;
+            transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
+            will-change: transform;
         }
 
-        .project-card:active { border-color: var(--border-hi); }
+        .project-card:hover {
+            border-color: var(--border-hi);
+            box-shadow: 0 6px 18px rgba(0,35,71,0.06);
+        }
+
+        .project-card:active {
+            transform: scale(0.985);
+            border-color: var(--border-hi);
+        }
+
+        /* ── SCROLL REVEAL ───────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── PROJECT DETAIL MODAL ────────────────────── */
+        .proj-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,35,71,0.55);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.28s cubic-bezier(0.4,0,0.2,1);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .proj-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .proj-sheet {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            max-height: 92vh;
+            background: var(--bg);
+            border-radius: 18px 18px 0 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transform: translateY(100%);
+            transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 -10px 30px rgba(0,35,71,0.15);
+        }
+
+        .proj-modal.open .proj-sheet { transform: translateY(0); }
+
+        .proj-sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--border-hi);
+            border-radius: 2px;
+            margin: 10px auto 6px;
+        }
+
+        .proj-sheet-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--faint);
+            border-radius: 50%;
+            font-size: 18px;
+            color: var(--dim);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: var(--ease);
+        }
+
+        .proj-sheet-close:active { background: var(--border-hi); }
+
+        .proj-hero {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(150deg, var(--surface-hi) 0%, var(--surface) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .proj-hero-idx {
+            position: absolute;
+            right: 16px;
+            bottom: 12px;
+            font-size: 96px;
+            font-weight: 900;
+            letter-spacing: -6px;
+            line-height: 1;
+            color: var(--border-hi);
+            user-select: none;
+        }
+
+        .proj-sheet-body { padding: 20px 18px 32px; }
+
+        .proj-sheet-type {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .proj-sheet-name {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            line-height: 1.15;
+            margin-bottom: 4px;
+        }
+
+        .proj-sheet-client {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .proj-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 20px 0 10px;
+        }
+
+        .proj-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .proj-media {
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(150deg, var(--surface-hi) 0%, var(--surface) 100%);
+            border-radius: var(--r-sm);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform var(--ease);
+        }
+
+        .proj-media:active { transform: scale(0.97); }
+
+        .proj-media.video::after {
+            content: '▶';
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 14px;
+            padding-left: 3px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .proj-result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .proj-result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 14px 10px;
+            text-align: center;
+        }
+
+        .proj-result-val {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 3px;
+        }
+
+        .proj-result-val.pos { color: var(--green); }
+        .proj-result-val.neg { color: var(--accent); }
+
+        .proj-result-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 0.3px;
+        }
+
+        .proj-sheet-cta {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px;
+            background: var(--text);
+            color: var(--bg);
+            border: none;
+            border-radius: var(--r);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--ease);
+        }
+
+        .proj-sheet-cta:active { transform: scale(0.98); opacity: 0.9; }
+
+        /* Chip ripple on active */
+        .filter-chip:active { transform: scale(0.95); }
+        .filter-chip.active { animation: chipPulse 0.3s cubic-bezier(0.4,0,0.2,1); }
+
+        @keyframes chipPulse {
+            0% { transform: scale(0.95); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+
+        /* Lang/tab button micro-interactions */
+        .lang-btn:active, .tab:active { transform: scale(0.96); }
 
         .project-thumb {
             width: 100%;
@@ -653,12 +898,6 @@
         }
 
 /* ── ONBOARDING ──────────────────────────────── */
-.ob-brand-sm {
-    font-size: 20px;
-    font-weight: 900;
-    letter-spacing: -1px;
-}
-
 #onboarding {
     position: fixed;
     inset: 0;
@@ -677,6 +916,8 @@
     flex-shrink: 0;
 }
 
+.ob-brand-sm svg { display: block; height: 26px; width: auto; }
+
 .ob-body {
     flex: 1;
     overflow: hidden;
@@ -691,11 +932,11 @@
 .ob-slide {
     position: absolute;
     inset: 0;
-    padding: 24px 20px 0;
+    padding: 28px 20px 20px;
     overflow-y: auto;
     opacity: 0;
-    transform: translateX(40px);
-    transition: opacity 0.28s ease, transform 0.28s ease;
+    transform: translateX(32px);
+    transition: opacity 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.32s cubic-bezier(0.4,0,0.2,1);
     pointer-events: none;
 }
 
@@ -707,35 +948,33 @@
 
 .ob-slide.exit-left {
     opacity: 0;
-    transform: translateX(-40px);
+    transform: translateX(-32px);
 }
 
 .ob-footer {
-    padding: 16px 20px max(16px, env(safe-area-inset-bottom));
+    padding: 14px 20px max(14px, env(safe-area-inset-bottom));
     flex-shrink: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--bg) 28%);
 }
 
 .ob-dots {
     display: flex;
-    gap: 6px;
+    gap: 5px;
     justify-content: center;
     margin-bottom: 14px;
 }
 
 .ob-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 100px;
     background: var(--faint);
-    border: 1px solid var(--border);
     transition: var(--ease);
 }
 
 .ob-dot.active {
-    width: 20px;
-    border-radius: 100px;
-    background: var(--text);
-    border-color: var(--text);
+    width: 22px;
+    background: var(--accent);
 }
 
 .ob-next {
@@ -746,19 +985,23 @@
     border: none;
     border-radius: var(--r);
     font-family: 'Inter', sans-serif;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 700;
+    letter-spacing: -0.2px;
     cursor: pointer;
-    transition: var(--ease);
-    margin-bottom: 8px;
+    transition: transform var(--ease), opacity var(--ease);
+    margin-bottom: 6px;
 }
 
 .ob-next:disabled {
-    opacity: 0.35;
+    opacity: 0.28;
     cursor: default;
 }
 
-.ob-next:active:not(:disabled) { opacity: 0.8; }
+.ob-next:active:not(:disabled) {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
 
 .ob-skip {
     width: 100%;
@@ -766,33 +1009,57 @@
     background: transparent;
     border: none;
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--muted);
     cursor: pointer;
     text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.ob-sec-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.ob-sec-label::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
 }
 
 .ob-q-title {
-    font-size: 20px;
+    font-size: clamp(24px, 7vw, 28px);
     font-weight: 900;
-    letter-spacing: -0.6px;
-    line-height: 1.2;
-    margin-bottom: 6px;
+    letter-spacing: -1px;
+    line-height: 1.08;
+    margin-bottom: 8px;
     color: var(--text);
 }
 
 .ob-q-sub {
     font-size: 13px;
     color: var(--dim);
-    margin-bottom: 20px;
-    line-height: 1.55;
+    margin-bottom: 22px;
+    line-height: 1.6;
+    max-width: 320px;
 }
 
 .ob-options {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding-bottom: 16px;
+    padding-bottom: 20px;
 }
 
 .ob-opt {
@@ -801,46 +1068,58 @@
     gap: 14px;
     padding: 14px 16px;
     background: var(--surface);
-    border: 1.5px solid var(--border);
+    border: 1px solid var(--border);
     border-radius: var(--r);
     cursor: pointer;
-    transition: var(--ease);
+    transition: border-color var(--ease), background var(--ease), transform var(--ease);
     -webkit-tap-highlight-color: transparent;
 }
 
-.ob-opt:active { opacity: 0.8; }
+.ob-opt:active { transform: scale(0.98); }
 
 .ob-opt.selected {
     border-color: var(--text);
-    background: var(--faint);
+    background: var(--surface);
+    box-shadow: 0 0 0 1px var(--text) inset;
 }
 
 .ob-opt-icon {
-    font-size: 22px;
+    font-size: 20px;
     flex-shrink: 0;
-    width: 32px;
-    text-align: center;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--faint);
+    border-radius: var(--r-sm);
+    transition: var(--ease);
 }
 
-.ob-opt-text { flex: 1; }
+.ob-opt.selected .ob-opt-icon {
+    background: var(--accent-s);
+}
+
+.ob-opt-text { flex: 1; min-width: 0; }
 
 .ob-opt-label {
     font-size: 14px;
     font-weight: 600;
     color: var(--text);
     line-height: 1.3;
+    letter-spacing: -0.2px;
 }
 
 .ob-opt-desc {
     font-size: 11.5px;
     color: var(--dim);
     margin-top: 2px;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 .ob-opt-check {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     border: 1.5px solid var(--border);
     flex-shrink: 0;
@@ -869,121 +1148,112 @@
     background: var(--text);
 }
 
+.ob-opt-multi.selected .ob-opt-check::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    background: transparent;
+    border-radius: 0;
+    inset: auto;
+}
+
 .ob-welcome {
     text-align: center;
-    padding-top: 32px;
+    padding-top: 40px;
 }
 
 .ob-brand {
-    font-size: 36px;
-    font-weight: 900;
-    letter-spacing: -2px;
-    color: var(--text);
-    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 18px;
 }
 
-.ob-brand .dot { color: var(--accent); }
+.ob-brand svg { display: block; height: 48px; width: auto; }
 
 .ob-tagline {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--dim);
-    line-height: 1.6;
-    max-width: 280px;
-    margin: 0 auto 32px;
+    line-height: 1.65;
+    max-width: 300px;
+    margin: 0 auto 36px;
+    letter-spacing: -0.1px;
 }
 
 .ob-lang-prompt {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
+    color: var(--accent);
+    margin-bottom: 14px;
 }
 
 .ob-field { margin-bottom: 14px; }
 
 .ob-field label {
     display: block;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
 .ob-field input {
     width: 100%;
-    padding: 14px 16px;
-    border: 1.5px solid var(--border);
+    padding: 15px 16px;
+    border: 1px solid var(--border);
     border-radius: var(--r);
     font-family: 'Inter', sans-serif;
     font-size: 15px;
+    font-weight: 500;
     color: var(--text);
     background: var(--surface);
     outline: none;
-    transition: border-color var(--ease);
+    transition: border-color var(--ease), box-shadow var(--ease);
     -webkit-appearance: none;
 }
 
-.ob-field input:focus { border-color: var(--text); }
-.ob-field input::placeholder { color: var(--muted); }
-
-.ob-done {
-    text-align: center;
-    padding-top: 40px;
+.ob-field input:focus {
+    border-color: var(--text);
+    box-shadow: 0 0 0 1px var(--text) inset;
 }
 
-.ob-done-icon {
-    font-size: 64px;
-    margin-bottom: 20px;
-    animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+.ob-field input::placeholder { color: var(--muted); font-weight: 400; }
+
+.ob-share-contact {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 16px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: var(--r);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    cursor: pointer;
+    transition: transform var(--ease), opacity var(--ease);
 }
 
-@keyframes pop {
-    from { transform: scale(0); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
+.ob-share-contact:active { transform: scale(0.98); opacity: 0.9; }
+
+.ob-share-contact.shared {
+    background: var(--green);
+    color: #fff;
 }
-
-.ob-done-title {
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: -0.8px;
-    margin-bottom: 8px;
 }
-
-.ob-done-sub {
-    font-size: 14px;
-    color: var(--dim);
-    line-height: 1.6;
-    max-width: 280px;
-    margin: 0 auto;
-}
-
-        /* ── SERVICE CTA BUTTON ────────────────────────── */
-        .service-cta {
-            display: block;
-            width: 100%;
-            margin-top: 14px;
-            padding: 10px;
-            background: transparent;
-            border: 1px solid var(--border-hi);
-            border-radius: var(--r-sm);
-            font-family: 'Inter', sans-serif;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--dim);
-            cursor: pointer;
-            transition: var(--ease);
-            text-align: center;
-        }
-
-        .service-cta:active {
-            background: var(--accent-s);
-            border-color: var(--accent);
-            color: var(--accent);
-        }
 
         /* ── PROJECT FILTER CHIPS ──────────────────────── */
         .filter-chips {
@@ -1083,7 +1353,11 @@
 <div id="onboarding" style="display:none">
 
   <div class="ob-header">
-    <div class="ob-brand-sm">MQSD<span class="dot">.</span></div>
+    <div class="ob-brand-sm">
+      <svg height="26" viewBox="0 0 1024 338" xmlns="http://www.w3.org/2000/svg" style="display:block;width:auto;fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+        <g transform="matrix(1,0,0,1,0,-4125)"><g transform="matrix(1,0,0,0.330078,0,2877.231914)"><rect x="0" y="3780.22" width="1024" height="1024" style="fill:none;"/><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M212.155,369.081L226.311,369.081L243.097,453.619L270.724,369.081L286.721,369.081L274.092,565.614L257.147,565.614L265.093,442.058L242.202,512.724L237.993,512.724L224.416,441.625L216.47,565.614L199.526,565.614L212.155,369.081Z" style="fill:#002347;fill-rule:nonzero;"/></g><g transform="matrix(1,0,0,3.029586,0,2735.013372)"><path d="M498.568,602.141C490.444,607.149 481.363,611.18 471.326,614.235C460.564,617.511 448.678,619.148 435.67,619.148C421.538,619.148 408.646,616.856 396.995,612.27C385.343,607.684 375.353,601.343 367.023,593.248C358.694,585.153 352.26,575.537 347.721,564.4C343.182,553.263 340.913,541.143 340.913,528.041C340.913,520.367 341.965,512.365 344.071,504.036C346.177,495.707 349.359,487.518 353.617,479.469C357.875,471.421 363.21,463.747 369.62,456.447C376.031,449.147 383.518,442.736 392.081,437.215C400.645,431.693 410.331,427.295 421.14,424.019C431.95,420.743 443.859,419.106 456.867,419.106C471.092,419.106 484.007,421.375 495.612,425.914C507.217,430.453 517.184,436.77 525.513,444.866C533.843,452.961 540.277,462.577 544.816,473.714C549.355,484.851 551.624,496.97 551.624,510.073C551.624,517.747 550.571,525.748 548.466,534.078C546.36,542.407 543.155,550.619 538.85,558.714C536.28,563.546 534.048,567.49 531.303,571.436L547.595,588.958L514.726,619.519L498.568,602.141ZM501.175,538.365C501.385,537.875 501.589,537.382 501.789,536.885C505.065,528.743 506.702,520.18 506.702,511.196C506.702,503.896 505.369,497.134 502.702,490.911C500.034,484.687 496.314,479.259 491.541,474.626C486.768,469.994 481.036,466.367 474.345,463.747C467.653,461.126 460.283,459.816 452.235,459.816C442.408,459.816 433.424,461.618 425.281,465.221C417.139,468.824 410.144,473.714 404.295,479.891C398.445,486.067 393.906,493.227 390.678,501.369C387.449,509.511 385.834,518.074 385.834,527.059C385.834,534.265 387.168,541.003 389.835,547.273C392.503,553.544 396.223,558.995 400.996,563.628C405.769,568.26 411.501,571.887 418.192,574.507C424.884,577.128 432.254,578.438 440.302,578.438C450.035,578.438 458.973,576.636 467.115,573.033L467.525,572.85L462.191,533.13L501.175,538.365Z" style="fill:#002347;"/><g transform="matrix(0.933333,0,0,0.933333,94.266667,225)"><circle cx="379" cy="315" r="15" style="fill:rgb(191,26,26);"/></g></g><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M398.964,570.528C394.544,570.528 390.781,569.323 387.677,566.915C384.572,564.506 381.985,561.399 379.915,557.594C377.845,553.788 376.231,549.453 375.074,544.588C373.916,539.723 373.074,534.858 372.548,529.993C372.021,525.127 371.741,520.479 371.706,516.047C371.671,511.616 371.758,507.858 371.969,504.776L388.597,504.776C388.422,507.377 388.413,510.243 388.571,513.374C388.729,516.505 389.211,519.467 390.018,522.261C390.825,525.055 392.053,527.391 393.702,529.27C395.351,531.149 397.596,532.088 400.437,532.088C403.49,532.088 405.954,531.245 407.831,529.559C409.708,527.873 411.155,525.802 412.172,523.345C413.19,520.888 413.874,518.239 414.224,515.397C414.575,512.555 414.751,509.93 414.751,507.521C414.751,504.631 414.461,502.03 413.882,499.718C413.304,497.406 412.47,495.31 411.383,493.432C410.295,491.553 408.953,489.819 407.357,488.229C405.761,486.64 403.946,485.074 401.911,483.533C399.28,481.51 396.587,479.197 393.833,476.596C391.079,473.995 388.589,470.623 386.361,466.481C384.133,462.338 382.3,457.232 380.862,451.162C379.424,445.093 378.704,437.579 378.704,428.619C378.704,425.247 378.862,421.297 379.178,416.769C379.494,412.241 380.064,407.593 380.888,402.824C381.713,398.055 382.844,393.359 384.282,388.734C385.721,384.11 387.58,379.967 389.86,376.306C392.141,372.646 394.877,369.707 398.069,367.491C401.262,365.276 405.033,364.168 409.383,364.168C414.821,364.168 419.267,365.854 422.723,369.225C426.178,372.597 428.845,377.149 430.722,382.882C432.598,388.614 433.782,395.213 434.274,402.679C434.765,410.146 434.747,417.925 434.221,426.018L417.803,426.018C417.908,424.284 417.917,422.164 417.829,419.659C417.741,417.155 417.373,414.746 416.724,412.434C416.075,410.122 415.031,408.147 413.593,406.509C412.155,404.871 410.12,404.052 407.489,404.052C404.682,404.052 402.49,404.847 400.911,406.437C399.332,408.026 398.148,409.929 397.359,412.145C396.57,414.361 396.079,416.576 395.886,418.792C395.693,421.008 395.596,422.79 395.596,424.139C395.596,426.837 395.886,429.269 396.464,431.437C397.043,433.605 397.929,435.58 399.122,437.362C400.315,439.144 401.823,440.806 403.647,442.347C405.472,443.889 407.647,445.478 410.173,447.116C413.26,449.043 416.136,451.452 418.803,454.342C421.469,457.232 423.775,460.845 425.722,465.18C427.669,469.515 429.195,474.693 430.301,480.715C431.406,486.736 431.958,493.841 431.958,502.03C431.958,506.751 431.739,511.712 431.3,516.914C430.862,522.117 430.125,527.271 429.09,532.377C428.055,537.483 426.705,542.324 425.038,546.9C423.372,551.476 421.32,555.523 418.882,559.039C416.443,562.555 413.575,565.349 410.278,567.421C406.98,569.492 403.209,570.528 398.964,570.528Z" style="fill:#002347;fill-rule:nonzero;"/></g><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M450.902,369.081L479.897,369.081C484.984,369.081 489.544,370.936 493.579,374.645C497.613,378.354 501.042,383.604 503.866,390.396C506.69,397.188 508.848,405.401 510.339,415.035C511.83,424.669 512.575,435.459 512.575,447.405C512.575,455.401 512.225,463.903 511.523,472.911C510.821,481.919 509.707,490.782 508.181,499.501C506.655,508.22 504.708,516.577 502.34,524.573C499.972,532.57 497.113,539.602 493.763,545.672C490.413,551.741 486.554,556.582 482.186,560.195C477.818,563.808 472.898,565.614 467.425,565.614L438.273,565.614L450.902,369.081ZM468.478,525.007C472.933,525.007 476.854,523.032 480.239,519.082C483.624,515.132 486.448,509.882 488.711,503.33C490.974,496.779 492.675,489.241 493.816,480.715C494.956,472.189 495.526,463.349 495.526,454.197C495.526,447.357 495.184,441.191 494.5,435.7C493.816,430.209 492.754,425.536 491.316,421.683C489.878,417.829 488.036,414.866 485.791,412.795C483.545,410.724 480.862,409.688 477.739,409.688L464.952,409.688L457.585,525.007L468.478,525.007Z" style="fill:#002347;fill-rule:nonzero;"/></g></g></g>
+      </svg>
+    </div>
     <div class="lang-toggle">
       <button class="lang-btn ob-lang-btn active" data-lang="uz" onclick="obSetLang('uz')">UZ</button>
       <button class="lang-btn ob-lang-btn" data-lang="ru" onclick="obSetLang('ru')">RU</button>
@@ -1096,7 +1370,11 @@
       <!-- SLIDE 0: Welcome + Language -->
       <div class="ob-slide active" id="ob-slide-0">
         <div class="ob-welcome">
-          <div class="ob-brand">MQSD<span class="dot">.</span></div>
+          <div class="ob-brand">
+            <svg height="48" viewBox="0 0 1024 338" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;width:auto;fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+              <g transform="matrix(1,0,0,1,0,-4125)"><g transform="matrix(1,0,0,0.330078,0,2877.231914)"><rect x="0" y="3780.22" width="1024" height="1024" style="fill:none;"/><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M212.155,369.081L226.311,369.081L243.097,453.619L270.724,369.081L286.721,369.081L274.092,565.614L257.147,565.614L265.093,442.058L242.202,512.724L237.993,512.724L224.416,441.625L216.47,565.614L199.526,565.614L212.155,369.081Z" style="fill:#002347;fill-rule:nonzero;"/></g><g transform="matrix(1,0,0,3.029586,0,2735.013372)"><path d="M498.568,602.141C490.444,607.149 481.363,611.18 471.326,614.235C460.564,617.511 448.678,619.148 435.67,619.148C421.538,619.148 408.646,616.856 396.995,612.27C385.343,607.684 375.353,601.343 367.023,593.248C358.694,585.153 352.26,575.537 347.721,564.4C343.182,553.263 340.913,541.143 340.913,528.041C340.913,520.367 341.965,512.365 344.071,504.036C346.177,495.707 349.359,487.518 353.617,479.469C357.875,471.421 363.21,463.747 369.62,456.447C376.031,449.147 383.518,442.736 392.081,437.215C400.645,431.693 410.331,427.295 421.14,424.019C431.95,420.743 443.859,419.106 456.867,419.106C471.092,419.106 484.007,421.375 495.612,425.914C507.217,430.453 517.184,436.77 525.513,444.866C533.843,452.961 540.277,462.577 544.816,473.714C549.355,484.851 551.624,496.97 551.624,510.073C551.624,517.747 550.571,525.748 548.466,534.078C546.36,542.407 543.155,550.619 538.85,558.714C536.28,563.546 534.048,567.49 531.303,571.436L547.595,588.958L514.726,619.519L498.568,602.141ZM501.175,538.365C501.385,537.875 501.589,537.382 501.789,536.885C505.065,528.743 506.702,520.18 506.702,511.196C506.702,503.896 505.369,497.134 502.702,490.911C500.034,484.687 496.314,479.259 491.541,474.626C486.768,469.994 481.036,466.367 474.345,463.747C467.653,461.126 460.283,459.816 452.235,459.816C442.408,459.816 433.424,461.618 425.281,465.221C417.139,468.824 410.144,473.714 404.295,479.891C398.445,486.067 393.906,493.227 390.678,501.369C387.449,509.511 385.834,518.074 385.834,527.059C385.834,534.265 387.168,541.003 389.835,547.273C392.503,553.544 396.223,558.995 400.996,563.628C405.769,568.26 411.501,571.887 418.192,574.507C424.884,577.128 432.254,578.438 440.302,578.438C450.035,578.438 458.973,576.636 467.115,573.033L467.525,572.85L462.191,533.13L501.175,538.365Z" style="fill:#002347;"/><g transform="matrix(0.933333,0,0,0.933333,94.266667,225)"><circle cx="379" cy="315" r="15" style="fill:rgb(191,26,26);"/></g></g><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M398.964,570.528C394.544,570.528 390.781,569.323 387.677,566.915C384.572,564.506 381.985,561.399 379.915,557.594C377.845,553.788 376.231,549.453 375.074,544.588C373.916,539.723 373.074,534.858 372.548,529.993C372.021,525.127 371.741,520.479 371.706,516.047C371.671,511.616 371.758,507.858 371.969,504.776L388.597,504.776C388.422,507.377 388.413,510.243 388.571,513.374C388.729,516.505 389.211,519.467 390.018,522.261C390.825,525.055 392.053,527.391 393.702,529.27C395.351,531.149 397.596,532.088 400.437,532.088C403.49,532.088 405.954,531.245 407.831,529.559C409.708,527.873 411.155,525.802 412.172,523.345C413.19,520.888 413.874,518.239 414.224,515.397C414.575,512.555 414.751,509.93 414.751,507.521C414.751,504.631 414.461,502.03 413.882,499.718C413.304,497.406 412.47,495.31 411.383,493.432C410.295,491.553 408.953,489.819 407.357,488.229C405.761,486.64 403.946,485.074 401.911,483.533C399.28,481.51 396.587,479.197 393.833,476.596C391.079,473.995 388.589,470.623 386.361,466.481C384.133,462.338 382.3,457.232 380.862,451.162C379.424,445.093 378.704,437.579 378.704,428.619C378.704,425.247 378.862,421.297 379.178,416.769C379.494,412.241 380.064,407.593 380.888,402.824C381.713,398.055 382.844,393.359 384.282,388.734C385.721,384.11 387.58,379.967 389.86,376.306C392.141,372.646 394.877,369.707 398.069,367.491C401.262,365.276 405.033,364.168 409.383,364.168C414.821,364.168 419.267,365.854 422.723,369.225C426.178,372.597 428.845,377.149 430.722,382.882C432.598,388.614 433.782,395.213 434.274,402.679C434.765,410.146 434.747,417.925 434.221,426.018L417.803,426.018C417.908,424.284 417.917,422.164 417.829,419.659C417.741,417.155 417.373,414.746 416.724,412.434C416.075,410.122 415.031,408.147 413.593,406.509C412.155,404.871 410.12,404.052 407.489,404.052C404.682,404.052 402.49,404.847 400.911,406.437C399.332,408.026 398.148,409.929 397.359,412.145C396.57,414.361 396.079,416.576 395.886,418.792C395.693,421.008 395.596,422.79 395.596,424.139C395.596,426.837 395.886,429.269 396.464,431.437C397.043,433.605 397.929,435.58 399.122,437.362C400.315,439.144 401.823,440.806 403.647,442.347C405.472,443.889 407.647,445.478 410.173,447.116C413.26,449.043 416.136,451.452 418.803,454.342C421.469,457.232 423.775,460.845 425.722,465.18C427.669,469.515 429.195,474.693 430.301,480.715C431.406,486.736 431.958,493.841 431.958,502.03C431.958,506.751 431.739,511.712 431.3,516.914C430.862,522.117 430.125,527.271 429.09,532.377C428.055,537.483 426.705,542.324 425.038,546.9C423.372,551.476 421.32,555.523 418.882,559.039C416.443,562.555 413.575,565.349 410.278,567.421C406.98,569.492 403.209,570.528 398.964,570.528Z" style="fill:#002347;fill-rule:nonzero;"/></g><g transform="matrix(2.667712,0,0,2.943026,-432.539185,2932.975164)"><path d="M450.902,369.081L479.897,369.081C484.984,369.081 489.544,370.936 493.579,374.645C497.613,378.354 501.042,383.604 503.866,390.396C506.69,397.188 508.848,405.401 510.339,415.035C511.83,424.669 512.575,435.459 512.575,447.405C512.575,455.401 512.225,463.903 511.523,472.911C510.821,481.919 509.707,490.782 508.181,499.501C506.655,508.22 504.708,516.577 502.34,524.573C499.972,532.57 497.113,539.602 493.763,545.672C490.413,551.741 486.554,556.582 482.186,560.195C477.818,563.808 472.898,565.614 467.425,565.614L438.273,565.614L450.902,369.081ZM468.478,525.007C472.933,525.007 476.854,523.032 480.239,519.082C483.624,515.132 486.448,509.882 488.711,503.33C490.974,496.779 492.675,489.241 493.816,480.715C494.956,472.189 495.526,463.349 495.526,454.197C495.526,447.357 495.184,441.191 494.5,435.7C493.816,430.209 492.754,425.536 491.316,421.683C489.878,417.829 488.036,414.866 485.791,412.795C483.545,410.724 480.862,409.688 477.739,409.688L464.952,409.688L457.585,525.007L468.478,525.007Z" style="fill:#002347;fill-rule:nonzero;"/></g></g></g>
+            </svg>
+          </div>
           <div class="ob-tagline" id="ob-tagline">
             AI-kontent, avtomatizatsiya va prodakshn — bitta tizimda.
           </div>
@@ -1108,184 +1386,184 @@
         </div>
       </div>
 
-      <!-- SLIDE 1: Business Type (Q1) -->
+      <!-- SLIDE 1: Vertical (Q1) -->
       <div class="ob-slide" id="ob-slide-1">
-        <div class="ob-q-title" id="ob-q1-title">Biznesingiz soha?</div>
-        <div class="ob-q-sub" id="ob-q1-sub">To'g'ri yechim tavsiya qilishimiz uchun</div>
+        <span class="ob-sec-label" id="ob-q1-label">01 · Направление</span>
+        <div class="ob-q-title" id="ob-q1-title">В каком направлении вы работаете?</div>
+        <div class="ob-q-sub" id="ob-q1-sub">Чтобы аудит был по делу</div>
         <div class="ob-options" id="ob-q1-opts">
-          <div class="ob-opt" data-val="restaurant" onclick="obSelectSingle(this,'business_type',1,2)">
-            <div class="ob-opt-icon">🍽</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_restaurant">Restoran / Cafe</div></div>
+          <div class="ob-opt" data-val="q_v_realestate" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">🏠</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_realestate">Жилая недвижимость / девелопмент</div></div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="retail" onclick="obSelectSingle(this,'business_type',1,2)">
-            <div class="ob-opt-icon">🛍</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_retail">Do'kon / Retail</div></div>
+          <div class="ob-opt" data-val="q_v_clinic" onclick="obSelectSingle(this,'business_type',1,2)">
+            <div class="ob-opt-icon">🏥</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_clinic">Частная медицинская клиника</div></div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="service" onclick="obSelectSingle(this,'business_type',1,2)">
-            <div class="ob-opt-icon">🔧</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_service">Xizmat / B2B</div></div>
-            <div class="ob-opt-check"></div>
-          </div>
-          <div class="ob-opt" data-val="education" onclick="obSelectSingle(this,'business_type',1,2)">
+          <div class="ob-opt" data-val="q_v_education" onclick="obSelectSingle(this,'business_type',1,2)">
             <div class="ob-opt-icon">📚</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_education">Ta'lim / Kurslar</div></div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_education">Образование / коучинг</div></div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="beauty" onclick="obSelectSingle(this,'business_type',1,2)">
-            <div class="ob-opt-icon">💄</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_beauty">Go'zallik / Saloon</div></div>
-            <div class="ob-opt-check"></div>
-          </div>
-          <div class="ob-opt" data-val="other" onclick="obSelectSingle(this,'business_type',1,2)">
+          <div class="ob-opt" data-val="q_v_other" onclick="obSelectSingle(this,'business_type',1,2)">
             <div class="ob-opt-icon">⚡</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_other">Boshqa</div></div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="biz_other">Другое направление</div></div>
             <div class="ob-opt-check"></div>
           </div>
         </div>
       </div>
 
-      <!-- SLIDE 2: Services (Q2, multi-select) -->
+      <!-- SLIDE 2: Current channels (Q2, multi-select) -->
       <div class="ob-slide" id="ob-slide-2">
-        <div class="ob-q-title" id="ob-q2-title">Nimaga kerak?</div>
-        <div class="ob-q-sub" id="ob-q2-sub">Bir nechta tanlash mumkin</div>
+        <span class="ob-sec-label" id="ob-q2-label">02 · Каналы</span>
+        <div class="ob-q-title" id="ob-q2-title">Какие каналы работают сейчас?</div>
+        <div class="ob-q-sub" id="ob-q2-sub">Можно выбрать несколько</div>
         <div class="ob-options" id="ob-q2-opts">
-          <div class="ob-opt ob-opt-multi" data-val="smm" onclick="obToggleMulti(this,'service_interest')">
+          <div class="ob-opt ob-opt-multi" data-val="meta" onclick="obToggleMulti(this,'service_interest')">
             <div class="ob-opt-icon">📱</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="svc_smm">SMM / Kontent</div>
-              <div class="ob-opt-desc" data-ob="svc_smm_d">AI-vizuallar, Reels, SMM boshqaruv</div>
+              <div class="ob-opt-label" data-ob="ch_meta">Реклама Instagram / Facebook</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt ob-opt-multi" data-val="targeting" onclick="obToggleMulti(this,'service_interest')">
-            <div class="ob-opt-icon">🎯</div>
+          <div class="ob-opt ob-opt-multi" data-val="google" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">🔍</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="svc_targeting">Targetlangan reklama</div>
-              <div class="ob-opt-desc" data-ob="svc_targeting_d">Meta Ads, Google, Telegram Ads</div>
+              <div class="ob-opt-label" data-ob="ch_google">Google Ads</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt ob-opt-multi" data-val="bot" onclick="obToggleMulti(this,'service_interest')">
-            <div class="ob-opt-icon">🤖</div>
+          <div class="ob-opt ob-opt-multi" data-val="telegram" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">✈️</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="svc_bot">Bot / Avtomatizatsiya</div>
-              <div class="ob-opt-desc" data-ob="svc_bot_d">Telegram bot, CRM, savdo voronkasi</div>
+              <div class="ob-opt-label" data-ob="ch_telegram">Telegram (канал / реклама)</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt ob-opt-multi" data-val="production" onclick="obToggleMulti(this,'service_interest')">
-            <div class="ob-opt-icon">🎬</div>
-            <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="svc_prod">Prodakshn / Video</div>
-              <div class="ob-opt-desc" data-ob="svc_prod_d">Hero-roliklar, reklama kliplari</div>
-            </div>
-            <div class="ob-opt-check"></div>
-          </div>
-          <div class="ob-opt ob-opt-multi" data-val="branding" onclick="obToggleMulti(this,'service_interest')">
-            <div class="ob-opt-icon">✨</div>
-            <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="svc_brand">Brending / Dizayn</div>
-              <div class="ob-opt-desc" data-ob="svc_brand_d">Logo, firmalik uslub, Key Visual</div>
-            </div>
-            <div class="ob-opt-check"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLIDE 3: Current Marketing (Q3) -->
-      <div class="ob-slide" id="ob-slide-3">
-        <div class="ob-q-title" id="ob-q3-title">Marketing holati?</div>
-        <div class="ob-q-sub" id="ob-q3-sub">Hozir qanday ahvolda</div>
-        <div class="ob-options" id="ob-q3-opts">
-          <div class="ob-opt" data-val="no_marketing" onclick="obSelectSingle(this,'current_marketing',3,4)">
+          <div class="ob-opt ob-opt-multi" data-val="organic" onclick="obToggleMulti(this,'service_interest')">
             <div class="ob-opt-icon">🌱</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="mkt_none">Marketing yo'q, noldan</div>
-              <div class="ob-opt-desc" data-ob="mkt_none_d">Hali hech narsa sinalmagan</div>
+              <div class="ob-opt-label" data-ob="ch_organic">Органический контент / SMM</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="has_no_results" onclick="obSelectSingle(this,'current_marketing',3,4)">
-            <div class="ob-opt-icon">📉</div>
+          <div class="ob-opt ob-opt-multi" data-val="offline" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">🏙</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="mkt_poor">Bor, lekin natija yo'q</div>
-              <div class="ob-opt-desc" data-ob="mkt_poor_d">Pul sarflanmoqda, daromad yo'q</div>
+              <div class="ob-opt-label" data-ob="ch_offline">Офлайн (билборды, агенты)</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="has_wants_scale" onclick="obSelectSingle(this,'current_marketing',3,4)">
-            <div class="ob-opt-icon">🚀</div>
+          <div class="ob-opt ob-opt-multi" data-val="none" onclick="obToggleMulti(this,'service_interest')">
+            <div class="ob-opt-icon">⏸</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="mkt_scale">Bor, ko'paytirmoqchi</div>
-              <div class="ob-opt-desc" data-ob="mkt_scale_d">Ishlayapti, yanada kengaytirish kerak</div>
+              <div class="ob-opt-label" data-ob="ch_none">Пока ничего не работает</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
         </div>
       </div>
 
-      <!-- SLIDE 4: Budget (Q4) -->
+      <!-- SLIDE 3: CRM status (Q3) -->
+      <div class="ob-slide" id="ob-slide-3">
+        <span class="ob-sec-label" id="ob-q3-label">03 · CRM</span>
+        <div class="ob-q-title" id="ob-q3-title">Как вы ведёте лидов и сделки?</div>
+        <div class="ob-q-sub" id="ob-q3-sub">Это нужно для аудита воронки</div>
+        <div class="ob-options" id="ob-q3-opts">
+          <div class="ob-opt" data-val="q_crm_yes" onclick="obSelectSingle(this,'current_marketing',3,4)">
+            <div class="ob-opt-icon">📊</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="crm_yes">Полноценная CRM</div>
+              <div class="ob-opt-desc" data-ob="crm_yes_d">Bitrix, AmoCRM, HubSpot и т.д.</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="q_crm_sheet" onclick="obSelectSingle(this,'current_marketing',3,4)">
+            <div class="ob-opt-icon">📝</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="crm_sheet">Excel / Google Sheets</div>
+              <div class="ob-opt-desc" data-ob="crm_sheet_d">Учёт ведём, но руками</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="q_crm_no" onclick="obSelectSingle(this,'current_marketing',3,4)">
+            <div class="ob-opt-icon">⏸</div>
+            <div class="ob-opt-text">
+              <div class="ob-opt-label" data-ob="crm_no">Учёта пока нет</div>
+              <div class="ob-opt-desc" data-ob="crm_no_d">Лиды и сделки нигде не фиксируем</div>
+            </div>
+            <div class="ob-opt-check"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Monthly ad spend (Q4) -->
       <div class="ob-slide" id="ob-slide-4">
-        <div class="ob-q-title" id="ob-q4-title">Oylik byudjet?</div>
-        <div class="ob-q-sub" id="ob-q4-sub">Taxminiy marketing xarajat</div>
+        <span class="ob-sec-label" id="ob-q4-label">04 · Бюджет на рекламу</span>
+        <div class="ob-q-title" id="ob-q4-title">Сколько вы тратите на рекламу в месяц?</div>
+        <div class="ob-q-sub" id="ob-q4-sub">Примерно — диапазона достаточно</div>
         <div class="ob-options" id="ob-q4-opts">
-          <div class="ob-opt" data-val="under_500" onclick="obSelectSingle(this,'budget_range',4,5)">
-            <div class="ob-opt-icon">💰</div>
-            <div class="ob-opt-text"><div class="ob-opt-label">$500 gacha</div></div>
+          <div class="ob-opt" data-val="q_spend_none" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">⏸</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="spend_none">Пока не запускаем рекламу</div></div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="500_1000" onclick="obSelectSingle(this,'budget_range',4,5)">
-            <div class="ob-opt-icon">💰</div>
-            <div class="ob-opt-text"><div class="ob-opt-label">$500 – $1,000</div></div>
+          <div class="ob-opt" data-val="q_spend_lt1k" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">💵</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="spend_lt1k">До $1 000</div></div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="1000_3000" onclick="obSelectSingle(this,'budget_range',4,5)">
+          <div class="ob-opt" data-val="q_spend_1k_3k" onclick="obSelectSingle(this,'budget_range',4,5)">
             <div class="ob-opt-icon">💰</div>
-            <div class="ob-opt-text"><div class="ob-opt-label">$1,000 – $3,000</div></div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="spend_1k_3k">$1 000 — $3 000</div></div>
             <div class="ob-opt-check"></div>
           </div>
-          <div class="ob-opt" data-val="3000_plus" onclick="obSelectSingle(this,'budget_range',4,5)">
+          <div class="ob-opt" data-val="q_spend_3k_10k" onclick="obSelectSingle(this,'budget_range',4,5)">
+            <div class="ob-opt-icon">🏦</div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="spend_3k_10k">$3 000 — $10 000</div></div>
+            <div class="ob-opt-check"></div>
+          </div>
+          <div class="ob-opt" data-val="q_spend_10k_plus" onclick="obSelectSingle(this,'budget_range',4,5)">
             <div class="ob-opt-icon">💎</div>
-            <div class="ob-opt-text"><div class="ob-opt-label">$3,000+</div></div>
-            <div class="ob-opt-check"></div>
-          </div>
-          <div class="ob-opt" data-val="unknown" onclick="obSelectSingle(this,'budget_range',4,5)">
-            <div class="ob-opt-icon">🤷</div>
-            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="budget_unknown">Hali aniq emas</div></div>
+            <div class="ob-opt-text"><div class="ob-opt-label" data-ob="spend_10k_plus">$10 000+</div></div>
             <div class="ob-opt-check"></div>
           </div>
         </div>
       </div>
 
-      <!-- SLIDE 5: Contact Info -->
+      <!-- SLIDE 5: Top problem -->
       <div class="ob-slide" id="ob-slide-5">
-        <div class="ob-q-title" id="ob-q5-title">Aloqa ma'lumotlari</div>
-        <div class="ob-q-sub" id="ob-q5-sub">Tez orada bog'lanamiz</div>
+        <span class="ob-sec-label" id="ob-q5-label">05 · Главная задача</span>
+        <div class="ob-q-title" id="ob-q5-title">Какая сейчас главная проблема в продажах?</div>
+        <div class="ob-q-sub" id="ob-q5-sub">Хватит одного-двух предложений</div>
         <div class="ob-field">
-          <label id="ob-name-label">Ismingiz</label>
-          <input type="text" id="ob-name-input" placeholder="Ism" autocomplete="given-name">
+          <label id="ob-biz-name-label">Опишите коротко</label>
+          <input type="text" id="ob-biz-name-input" placeholder="Например: лиды есть, но мало доходят до сделки">
         </div>
-        <div class="ob-field">
-          <label id="ob-phone-label">Telefon raqam</label>
-          <input type="tel" id="ob-phone-input" placeholder="+998 90 123 45 67" autocomplete="tel">
+      </div>
+
+      <!-- SLIDE 6: Share Contact -->
+      <div class="ob-slide" id="ob-slide-6">
+        <span class="ob-sec-label" id="ob-q6-label">06 · Kontakt</span>
+        <div class="ob-q-title" id="ob-q6-title">Kontaktingizni ulashing</div>
+        <div class="ob-q-sub" id="ob-q6-sub">Bitta bosish — va biz siz bilan bog'lanamiz</div>
+        <div class="ob-field" style="margin-top:24px">
+          <button type="button" id="ob-share-contact-btn" class="ob-share-contact"
+                  onclick="obShareContact()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span id="ob-share-contact-text">📱 Telegram orqali ulashish</span>
+          </button>
         </div>
-        <div style="margin-top:8px; font-size:11px; color:var(--muted); line-height:1.5" id="ob-privacy-note">
+        <div style="margin-top:12px; font-size:11px; color:var(--muted); line-height:1.5; text-align:center" id="ob-privacy-note">
           Raqamingiz faqat taklif yuborish uchun ishlatiladi
         </div>
       </div>
 
-      <!-- SLIDE 6: Done -->
-      <div class="ob-slide" id="ob-slide-6">
-        <div class="ob-done">
-          <div class="ob-done-icon">✅</div>
-          <div class="ob-done-title" id="ob-done-title">Rahmat!</div>
-          <div class="ob-done-sub" id="ob-done-sub">
-            Ma'lumotlaringiz qabul qilindi. Tez orada mutaxassisimiz bog'lanadi.
-          </div>
-        </div>
-      </div>
 
     </div><!-- /ob-slides -->
   </div><!-- /ob-body -->
@@ -1322,7 +1600,7 @@
     <h1>
         <span class="brand" data-t-html="hero_h1">MQSD &mdash;<br><span class="tagline">maqsad yetakchi</span></span>
     </h1>
-    <p class="hero-desc" data-t="hero_p">Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM</p>
+    <p class="hero-desc" data-t="hero_p">Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM · Targeting</p>
 </section>
 
 <!-- ── STATS ────────────────────────────────────────── -->
@@ -1366,10 +1644,11 @@
         <button class="filter-chip" data-filter="smm" onclick="filterProjects('smm')">SMM</button>
         <button class="filter-chip" data-filter="automation" onclick="filterProjects('automation')" data-t="filter_auto">Avtomatizatsiya</button>
         <button class="filter-chip" data-filter="production" onclick="filterProjects('production')" data-t="filter_prod">Prodakshn</button>
+        <button class="filter-chip" data-filter="targeting" onclick="filterProjects('targeting')" data-t="filter_target">Targeting</button>
     </div>
 
     <!-- Project 1 -->
-    <div class="project-card" data-category="smm">
+    <div class="project-card reveal" data-category="smm" onclick="openProject('p1')">
         <div class="project-ph">
             <span class="ph-index">01</span>
             <span class="ph-type-badge" data-t="p1_type">SMM • AI-kontent</span>
@@ -1424,7 +1703,7 @@
     </div>
 
     <!-- Project 2 -->
-    <div class="project-card" data-category="automation">
+    <div class="project-card reveal" data-category="automation" onclick="openProject('p2')">
         <div class="project-ph">
             <span class="ph-index">02</span>
             <span class="ph-type-badge" data-t="p2_type">Avtomatizatsiya • Bot</span>
@@ -1475,7 +1754,7 @@
     </div>
 
     <!-- Project 3 -->
-    <div class="project-card" data-category="production">
+    <div class="project-card reveal" data-category="production" onclick="openProject('p3')">
         <div class="project-ph">
             <span class="ph-index">03</span>
             <span class="ph-type-badge" data-t="p3_type">Prodakshn • Brending</span>
@@ -1525,6 +1804,57 @@
         </div>
     </div>
 
+    <!-- Project 4 -->
+    <div class="project-card reveal" data-category="targeting" onclick="openProject('p4')">
+        <div class="project-ph">
+            <span class="ph-index">04</span>
+            <span class="ph-type-badge" data-t="p4_type">Reklama • Targeting</span>
+        </div>
+        <div class="project-body">
+            <div class="project-type" data-t="p4_type">Reklama • Targeting</div>
+            <div class="project-name" data-t="p4_name">[Loyiha nomi]</div>
+            <div class="project-client" data-t="p4_client">[Mijoz nomi]</div>
+
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_tools">Instrumentlar</div>
+                <div class="tool-tags">
+                    <span class="tool-tag">Meta Ads</span>
+                    <span class="tool-tag">Google Ads</span>
+                    <span class="tool-tag">GA4</span>
+                </div>
+            </div>
+
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_task">Vazifa</div>
+                <div class="proj-block-text" data-t="p4_task">[Meta Ads va Google orqali maqsadli auditoriyani jalb qilish — past CPL bilan]</div>
+            </div>
+
+            <div class="proj-block">
+                <div class="proj-block-label" data-t="lbl_solution">Yechim</div>
+                <ul class="bullet-list">
+                    <li data-t="p4_s1">Meta Ads kampaniyalar</li>
+                    <li data-t="p4_s2">A/B test va kreativlar</li>
+                    <li data-t="p4_s3">Analitika va optimizatsiya</li>
+                </ul>
+            </div>
+
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-val pos" data-t="p4_m1">3.2x</div>
+                    <div class="metric-lbl" data-t="p4_m1l">ROAS</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val neg" data-t="p4_m2">−45%</div>
+                    <div class="metric-lbl" data-t="p4_m2l">Lid narxi</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-val pos" data-t="p4_m3">12K+</div>
+                    <div class="metric-lbl" data-t="p4_m3l">Qamrov</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -1539,7 +1869,7 @@
     <div class="svc-list">
 
         <!-- Content -->
-        <div class="svc-card">
+        <div class="svc-card reveal">
             <div class="svc-icon-wrap">
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="12 2 2 7 12 12 22 7 12 2"/>
@@ -1557,12 +1887,11 @@
                     <li data-t="svc1_b3">SMM boshqaruv va strategiya</li>
                     <li data-t="svc1_b4">Key Visuals va brending</li>
                 </ul>
-                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
         <!-- Automation -->
-        <div class="svc-card">
+        <div class="svc-card reveal">
             <div class="svc-icon-wrap">
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="4" y="4" width="16" height="16" rx="2"/>
@@ -1583,12 +1912,11 @@
                     <li data-t="svc2_b3">CRM va savdo voronkalari</li>
                     <li data-t="svc2_b4">Biznes jarayonlari avtomati</li>
                 </ul>
-                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
         <!-- Production -->
-        <div class="svc-card">
+        <div class="svc-card reveal">
             <div class="svc-icon-wrap">
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="23 7 16 12 23 17 23 7"/>
@@ -1605,12 +1933,11 @@
                     <li data-t="svc3_b3">Raqamli avatarlar va Lip-Sync</li>
                     <li data-t="svc3_b4">4K + rangga ishlov berish</li>
                 </ul>
-                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
         <!-- Advertising -->
-        <div class="svc-card">
+        <div class="svc-card reveal">
             <div class="svc-icon-wrap">
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"/>
@@ -1627,7 +1954,6 @@
                     <li data-t="svc4_b2">Telegram Ads</li>
                     <li data-t="svc4_b3">A/B test va analitika</li>
                 </ul>
-                <button class="service-cta" onclick="scrollToContact()" data-t="svc_discuss">Muhokama qilish →</button>
             </div>
         </div>
 
@@ -1643,11 +1969,11 @@
         <div class="sec-title" data-t="about_title">MQSD kim?</div>
     </div>
 
-    <div class="about-card">
+    <div class="about-card reveal">
         <p data-t="about_desc">Biz — AI-kontent, avtomatizatsiya va kinematografik prodakshnni birlashtirib, yagona tizimga aylantiramiz. Shunday qilib har bir element sinergiyada ishlaydi va natijani maksimallashtiradi.</p>
     </div>
 
-    <div class="about-card">
+    <div class="about-card reveal">
         <h3 data-t="about_process">Qanday ishlaymiz?</h3>
         <div class="steps">
             <div class="step">
@@ -1681,7 +2007,7 @@
         </div>
     </div>
 
-    <div class="about-card">
+    <div class="about-card reveal">
         <h3 data-t="about_contacts">Aloqa</h3>
         <div class="contacts">
             <div class="contact-row">
@@ -1715,6 +2041,36 @@
         <p class="sec-sub" data-t="sched_sub">Qulay vaqtni tanlang. Uchrashuvda biznesingizni tahlil qilib, audit shu yerda tayyorlaymiz. ~30 daqiqa.</p>
     </div>
     <div id="cal-embed" style="min-height:560px;"></div>
+</div>
+
+<!-- ── PROJECT DETAIL MODAL ────────────────────── -->
+<div class="proj-modal" id="projModal" onclick="if(event.target===this)closeProject()">
+    <div class="proj-sheet">
+        <div class="proj-sheet-handle"></div>
+        <button class="proj-sheet-close" onclick="closeProject()">✕</button>
+        <div class="proj-hero">
+            <span class="proj-hero-idx" id="projHeroIdx">01</span>
+        </div>
+        <div class="proj-sheet-body">
+            <div class="proj-sheet-type" id="projSheetType">—</div>
+            <div class="proj-sheet-name" id="projSheetName">—</div>
+            <div class="proj-sheet-client" id="projSheetClient">—</div>
+
+            <div class="proj-section-label" data-t="lbl_task">Vazifa</div>
+            <div class="proj-block-text" id="projSheetTask">—</div>
+
+            <div class="proj-section-label" data-t="lbl_solution">Yechim</div>
+            <ul class="bullet-list" id="projSheetSolution"></ul>
+
+            <div class="proj-section-label" data-t="proj_gallery">Galereya</div>
+            <div class="proj-gallery" id="projSheetGallery"></div>
+
+            <div class="proj-section-label" data-t="proj_result">Natija</div>
+            <div class="proj-result-grid" id="projSheetResults"></div>
+
+            <button class="proj-sheet-cta" onclick="closeProject();openChatPanel()" data-t="chat_btn">💬 Menejer bilan gaplashing</button>
+        </div>
+    </div>
 </div>
 
 <!-- ── LIVE CHAT PANEL ──────────────────────────── -->
@@ -1755,7 +2111,7 @@
         uz: {
             hero_label: "Marketing agentlik",
             hero_h1: "MQSD &mdash;<br><span class=\"tagline\">maqsad yetakchi</span>",
-            hero_p: "Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM",
+            hero_p: "Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM · Targeting",
             s1:"Loyiha", s2:"Foto", s3:"AI bot", s4:"Natija",
             tab_works:"Ishlarimiz", tab_svc:"Xizmatlar", tab_sched:"Sessiya", tab_about:"Haqimizda",
             sched_label:"Bepul sessiya", sched_title:"Strategik sessiya — onlayn",
@@ -1801,15 +2157,20 @@
             chat_placeholder:"Xabaringizni yozing...",
             chat_send:"Yuborish",
             chat_note:"Tez orada Telegram orqali javob beramiz",
-            svc_discuss:"Muhokama qilish →",
             filter_all:"Barchasi",
             filter_auto:"Avtomatizatsiya",
             filter_prod:"Prodakshn",
+            filter_target:"Targeting",
+            p4_type:"Reklama • Targeting", p4_name:"[Loyiha nomi]", p4_client:"[Mijoz nomi]",
+            p4_task:"[Meta Ads va Google orqali maqsadli auditoriyani jalb qilish — past CPL bilan]",
+            p4_s1:"Meta Ads kampaniyalar", p4_s2:"A/B test va kreativlar", p4_s3:"Analitika va optimizatsiya",
+            p4_m1:"3.2x", p4_m1l:"ROAS", p4_m2:"−45%", p4_m2l:"Lid narxi", p4_m3:"12K+", p4_m3l:"Qamrov",
+            proj_gallery:"Galereya", proj_result:"Natija", proj_close:"Yopish",
         },
         ru: {
             hero_label: "Маркетинговое агентство",
             hero_h1: "MQSD &mdash;<br><span class=\"tagline\">цель превыше всего</span>",
-            hero_p: "Маркетинг, где каждое действие ведёт к результату · ИИ · Автоматизация · Продакшн · SMM",
+            hero_p: "Маркетинг, где каждое действие ведёт к результату · ИИ · Автоматизация · Продакшн · SMM · Таргетинг",
             s1:"Проектов", s2:"Фото", s3:"AI бот", s4:"Результат",
             tab_works:"Работы", tab_svc:"Услуги", tab_sched:"Сессия", tab_about:"О нас",
             sched_label:"Бесплатная сессия", sched_title:"Стратегическая сессия — онлайн",
@@ -1855,10 +2216,15 @@
             chat_placeholder:"Напишите ваш вопрос...",
             chat_send:"Отправить",
             chat_note:"Ответим в Telegram в ближайшее время",
-            svc_discuss:"Обсудить →",
             filter_all:"Все",
             filter_auto:"Автоматизация",
             filter_prod:"Продакшн",
+            filter_target:"Таргетинг",
+            p4_type:"Реклама • Таргетинг", p4_name:"[Название проекта]", p4_client:"[Название клиента]",
+            p4_task:"[Привлечение целевой аудитории через Meta Ads и Google — с низким CPL]",
+            p4_s1:"Кампании Meta Ads", p4_s2:"A/B тесты и креативы", p4_s3:"Аналитика и оптимизация",
+            p4_m1:"3.2x", p4_m1l:"ROAS", p4_m2:"−45%", p4_m2l:"Стоимость лида", p4_m3:"12K+", p4_m3l:"Охват",
+            proj_gallery:"Галерея", proj_result:"Результат", proj_close:"Закрыть",
         }
     };
 
@@ -1894,6 +2260,7 @@
             tab.classList.add('active');
             document.getElementById(tab.dataset.section).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => armReveal && armReveal(), 50);
             if (tab.dataset.section === 'schedule') loadCalEmbed();
         });
     });
@@ -1959,6 +2326,80 @@
         });
     }
 
+    // ── PROJECT DETAIL MODAL ───────────────────────
+    const PROJECTS = {
+        p1: { idx: '01', gallery: [{type:'img',label:'Visual 01'},{type:'img',label:'Visual 02'},{type:'video',label:'Reel 01'},{type:'img',label:'Visual 03'}] },
+        p2: { idx: '02', gallery: [{type:'img',label:'Bot UI'},{type:'img',label:'Funnel'},{type:'video',label:'Demo'},{type:'img',label:'Dashboard'}] },
+        p3: { idx: '03', gallery: [{type:'video',label:'Hero 60s'},{type:'video',label:'Ad 15s'},{type:'img',label:'Key Visual'},{type:'img',label:'Avatar'}] },
+        p4: { idx: '04', gallery: [{type:'img',label:'Creative A'},{type:'img',label:'Creative B'},{type:'img',label:'Report'},{type:'img',label:'Audience'}] },
+    };
+
+    function openProject(id) {
+        const t = T[lang];
+        const p = PROJECTS[id];
+        if (!p) return;
+
+        document.getElementById('projHeroIdx').textContent = p.idx;
+        document.getElementById('projSheetType').textContent = t[id + '_type'] || '';
+        document.getElementById('projSheetName').textContent = t[id + '_name'] || '';
+        document.getElementById('projSheetClient').textContent = t[id + '_client'] || '';
+        document.getElementById('projSheetTask').textContent = t[id + '_task'] || '';
+
+        const solutionList = document.getElementById('projSheetSolution');
+        solutionList.innerHTML = '';
+        ['_s1', '_s2', '_s3'].forEach(suf => {
+            const txt = t[id + suf];
+            if (txt) {
+                const li = document.createElement('li');
+                li.textContent = txt;
+                solutionList.appendChild(li);
+            }
+        });
+
+        const gal = document.getElementById('projSheetGallery');
+        gal.innerHTML = '';
+        p.gallery.forEach(m => {
+            const div = document.createElement('div');
+            div.className = 'proj-media' + (m.type === 'video' ? ' video' : '');
+            div.textContent = m.label;
+            gal.appendChild(div);
+        });
+
+        const res = document.getElementById('projSheetResults');
+        res.innerHTML = '';
+        [['_m1','_m1l','pos'], ['_m2','_m2l',''], ['_m3','_m3l','neg']].forEach(([vk,lk,cls]) => {
+            const v = t[id + vk], l = t[id + lk];
+            if (!v) return;
+            const card = document.createElement('div');
+            card.className = 'proj-result-card';
+            const valCls = (v.startsWith('+') || v.startsWith('-') || v.startsWith('−')) ? (v.startsWith('+') ? 'pos' : 'neg') : cls;
+            card.innerHTML = `<div class="proj-result-val ${valCls}">${v}</div><div class="proj-result-lbl">${l||''}</div>`;
+            res.appendChild(card);
+        });
+
+        document.getElementById('projModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeProject() {
+        document.getElementById('projModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── SCROLL REVEAL ──────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                revealObserver.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    function armReveal() {
+        document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+    }
+
     // ── SCROLL TO CONTACT (About tab) ─────────────
     function scrollToContact() {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1979,27 +2420,48 @@
         document.getElementById('chatInput').value = '';
     }
 
-    function sendLiveChat() {
+    async function sendLiveChat() {
         const chatInput = document.getElementById('chatInput');
         const msg = chatInput ? chatInput.value.trim() : '';
         if (!msg) {
             if (tg) tg.showAlert(lang === 'ru' ? 'Напишите сообщение' : 'Xabar yozing');
             return;
         }
-        if (!tg) { closeChatPanel(); return; }
+        if (!tg || !tg.initData) {
+            if (tg) tg.showAlert(lang === 'ru' ? 'Откройте приложение из чата бота' : 'Ilovani bot chatidan oching');
+            return;
+        }
 
-        // sendData closes the app instantly when it works (opened via menu/keyboard button).
-        // If we're still running after 300ms, it silently failed (inline keyboard context).
-        try { tg.sendData(JSON.stringify({ action: 'live_chat_request', message: msg })); } catch(e) {}
-        setTimeout(() => {
-            // Still alive → sendData failed. Instruct user to open via menu button.
-            closeChatPanel();
+        const sendBtn = document.querySelector('#chatPanel .cta-btn');
+        if (sendBtn) { sendBtn.disabled = true; sendBtn.style.opacity = '0.6'; }
+
+        try {
+            const res = await fetch('/api/live-chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ initData: tg.initData, message: msg }),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.error || `http_${res.status}`);
+            }
+            chatInput.value = '';
             tg.showAlert(
                 lang === 'ru'
-                    ? '💬 Чтобы написать менеджеру, откройте мини-приложение через кнопку «🌐 TWA» в нижней части чата.'
-                    : '💬 Menejerga yozish uchun chat pastidagi «🌐 TWA» tugmasi orqali mini-ilovani oching.'
+                    ? '✅ Сообщение отправлено! Менеджер ответит в Telegram.'
+                    : '✅ Xabar yuborildi! Menejer Telegram orqali javob beradi.',
+                () => { try { tg.close(); } catch(e) {} }
             );
-        }, 300);
+        } catch (e) {
+            console.error('live-chat', e);
+            tg.showAlert(
+                lang === 'ru'
+                    ? '⚠️ Не удалось отправить. Попробуйте ещё раз.'
+                    : '⚠️ Yuborib boʻlmadi. Qayta urinib koʻring.'
+            );
+        } finally {
+            if (sendBtn) { sendBtn.disabled = false; sendBtn.style.opacity = ''; }
+        }
     }
 
     // ── CTA ────────────────────────────────────────────
@@ -2030,60 +2492,83 @@ const obState = {
         current_marketing: null,
         budget_range: null,
         phone: '',
-        name: tgUser?.first_name || '',
+        business_name: '',
+        contact_shared: false,
     }
 };
 
 const OB_T = {
     uz: {
         next: 'Davom etish', skip: 'Keyinroq', submit: 'Yuborish', explore: 'Xizmatlarni ko\'rish',
-        ob_tagline: 'AI-kontent, avtomatizatsiya va prodakshn — bitta tizimda.',
+        ob_tagline: 'Reklamadan yopilgan bitimgacha — bitta tizim.',
         ob_lang_prompt: 'Tilni tanlang / Выберите язык',
-        q1_title: 'Biznesingiz soha?', q1_sub: 'To\'g\'ri yechim tavsiya qilishimiz uchun',
-        q2_title: 'Nimaga kerak?', q2_sub: 'Bir nechta tanlash mumkin',
-        q3_title: 'Marketing holati?', q3_sub: 'Hozir qanday ahvolda',
-        q4_title: 'Oylik byudjet?', q4_sub: 'Taxminiy marketing xarajat',
-        q5_title: 'Aloqa ma\'lumotlari', q5_sub: 'Tez orada bog\'lanamiz',
-        name_label: 'Ismingiz', phone_label: 'Telefon raqam',
-        privacy: 'Raqamingiz faqat taklif yuborish uchun ishlatiladi',
-        done_title: 'Rahmat!', done_sub: 'Ma\'lumotlaringiz qabul qilindi. Tez orada mutaxassisimiz bog\'lanadi.',
-        biz_restaurant: 'Restoran / Cafe', biz_retail: 'Do\'kon / Retail',
-        biz_service: 'Xizmat / B2B', biz_education: 'Ta\'lim / Kurslar',
-        biz_beauty: 'Go\'zallik / Saloon', biz_other: 'Boshqa',
-        svc_smm: 'SMM / Kontent', svc_smm_d: 'AI-vizuallar, Reels, SMM boshqaruv',
-        svc_targeting: 'Targetlangan reklama', svc_targeting_d: 'Meta Ads, Google, Telegram Ads',
-        svc_bot: 'Bot / Avtomatizatsiya', svc_bot_d: 'Telegram bot, CRM, savdo voronkasi',
-        svc_prod: 'Prodakshn / Video', svc_prod_d: 'Hero-roliklar, reklama kliplari',
-        svc_brand: 'Brending / Dizayn', svc_brand_d: 'Logo, firmalik uslub, Key Visual',
-        mkt_none: 'Marketing yo\'q, noldan', mkt_none_d: 'Hali hech narsa sinalmagan',
-        mkt_poor: 'Bor, lekin natija yo\'q', mkt_poor_d: 'Pul sarflanmoqda, daromad yo\'q',
-        mkt_scale: 'Bor, ko\'paytirmoqchi', mkt_scale_d: 'Ishlayapti, yanada kengaytirish kerak',
-        budget_unknown: 'Hali aniq emas',
+        q1_title: 'Qaysi yo\'nalishda ishlaysiz?', q1_sub: 'Audit aniqroq bo\'lsin',
+        q2_title: 'Hozir qaysi kanallar ishlaydi?', q2_sub: 'Bir nechta tanlash mumkin',
+        q3_title: 'Lidlar va bitimlarni qanday yuritasiz?', q3_sub: 'Voronkani audit qilish uchun',
+        q4_title: 'Oyiga reklamaga qancha sarflaysiz?', q4_sub: 'Taxminiy diapazon yetadi',
+        q5_title: 'Sotuvda eng katta muammo qaysi?', q5_sub: '1–2 jumla yetadi',
+        q6_title: 'Telefon raqamingizni ulashing', q6_sub: 'Partnyor 24 soat ichida bog\'lanadi',
+        biz_name_label: 'Qisqacha tasvirlang',
+        sec_01: '01 · Yo\'nalish', sec_02: '02 · Kanallar', sec_03: '03 · CRM',
+        sec_04: '04 · Reklama byudjeti', sec_05: '05 · Asosiy muammo', sec_06: '06 · Kontakt',
+        share_contact: '📱 Telegram orqali ulashish',
+        share_contact_done: '✅ Kontakt ulashildi',
+        privacy: 'Raqamingiz faqat audit yuborish uchun ishlatiladi',
+        done_title: 'Rahmat', done_sub: 'Auditingizni tayyorlamoqdamiz — partnyor 24 soat ichida bog\'lanadi.',
+        biz_realestate: 'Ko\'chmas mulk (devlopment)',
+        biz_clinic: 'Xususiy klinika',
+        biz_education: 'Ta\'lim / kouching',
+        biz_other: 'Boshqa yo\'nalish',
+        ch_meta: 'Instagram / Facebook reklama',
+        ch_google: 'Google Ads',
+        ch_telegram: 'Telegram (kanal/reklama)',
+        ch_organic: 'Organik kontent / SMM',
+        ch_offline: 'Offline (bilbord, agentlar)',
+        ch_none: 'Hozircha hech narsa',
+        crm_yes: 'To\'liq CRM', crm_yes_d: 'Bitrix, AmoCRM, HubSpot va h.k.',
+        crm_sheet: 'Excel / Google Sheets', crm_sheet_d: 'Yuritamiz, lekin qo\'lda',
+        crm_no: 'Hisob yo\'q', crm_no_d: 'Lid va bitim hech qayerda yozilmaydi',
+        spend_none: 'Hali reklama qilmaymiz',
+        spend_lt1k: '$1 000 gacha',
+        spend_1k_3k: '$1 000 — $3 000',
+        spend_3k_10k: '$3 000 — $10 000',
+        spend_10k_plus: '$10 000+',
     },
     ru: {
         next: 'Продолжить', skip: 'Позже', submit: 'Отправить', explore: 'Смотреть услуги',
-        ob_tagline: 'AI-контент, автоматизация и продакшн — в одной системе.',
+        ob_tagline: 'От первого объявления до закрытой сделки — одна система.',
         ob_lang_prompt: 'Tilni tanlang / Выберите язык',
-        q1_title: 'Сфера бизнеса?', q1_sub: 'Чтобы предложить правильное решение',
-        q2_title: 'Что нужно?', q2_sub: 'Можно выбрать несколько',
-        q3_title: 'Состояние маркетинга?', q3_sub: 'Как дела сейчас',
-        q4_title: 'Месячный бюджет?', q4_sub: 'Примерные расходы на маркетинг',
-        q5_title: 'Контактные данные', q5_sub: 'Свяжемся в ближайшее время',
-        name_label: 'Ваше имя', phone_label: 'Номер телефона',
-        privacy: 'Номер используется только для отправки предложения',
-        done_title: 'Спасибо!', done_sub: 'Данные получены. Наш специалист свяжется с вами.',
-        biz_restaurant: 'Ресторан / Кафе', biz_retail: 'Магазин / Retail',
-        biz_service: 'Услуги / B2B', biz_education: 'Образование / Курсы',
-        biz_beauty: 'Красота / Салон', biz_other: 'Другое',
-        svc_smm: 'SMM / Контент', svc_smm_d: 'AI-визуалы, Reels, SMM-ведение',
-        svc_targeting: 'Таргетированная реклама', svc_targeting_d: 'Meta Ads, Google, Telegram Ads',
-        svc_bot: 'Бот / Автоматизация', svc_bot_d: 'Telegram бот, CRM, воронка продаж',
-        svc_prod: 'Продакшн / Видео', svc_prod_d: 'Hero-ролики, рекламные ролики',
-        svc_brand: 'Брендинг / Дизайн', svc_brand_d: 'Логотип, фирстиль, Key Visual',
-        mkt_none: 'Нет маркетинга, с нуля', mkt_none_d: 'Ещё ничего не пробовали',
-        mkt_poor: 'Есть, но нет результата', mkt_poor_d: 'Тратим деньги, нет дохода',
-        mkt_scale: 'Есть, хотим масштабировать', mkt_scale_d: 'Работает, нужно больше',
-        budget_unknown: 'Пока не определились',
+        q1_title: 'В каком направлении вы работаете?', q1_sub: 'Чтобы аудит был по делу',
+        q2_title: 'Какие каналы работают сейчас?', q2_sub: 'Можно выбрать несколько',
+        q3_title: 'Как вы ведёте лидов и сделки?', q3_sub: 'Это нужно для аудита воронки',
+        q4_title: 'Сколько вы тратите на рекламу в месяц?', q4_sub: 'Примерно — диапазона достаточно',
+        q5_title: 'Какая сейчас главная проблема в продажах?', q5_sub: 'Хватит одного-двух предложений',
+        q6_title: 'Поделитесь номером', q6_sub: 'Партнёр свяжется в течение 24 часов',
+        biz_name_label: 'Опишите коротко',
+        sec_01: '01 · Направление', sec_02: '02 · Каналы', sec_03: '03 · CRM',
+        sec_04: '04 · Бюджет на рекламу', sec_05: '05 · Главная задача', sec_06: '06 · Контакт',
+        share_contact: '📱 Поделиться через Telegram',
+        share_contact_done: '✅ Контакт отправлен',
+        privacy: 'Номер используется только для отправки аудита',
+        done_title: 'Спасибо', done_sub: 'Готовим ваш аудит — партнёр свяжется в течение 24 часов.',
+        biz_realestate: 'Жилая недвижимость / девелопмент',
+        biz_clinic: 'Частная медицинская клиника',
+        biz_education: 'Образование / коучинг',
+        biz_other: 'Другое направление',
+        ch_meta: 'Реклама Instagram / Facebook',
+        ch_google: 'Google Ads',
+        ch_telegram: 'Telegram (канал/реклама)',
+        ch_organic: 'Органический контент / SMM',
+        ch_offline: 'Офлайн (билборды, агенты)',
+        ch_none: 'Пока ничего не работает',
+        crm_yes: 'Полноценная CRM', crm_yes_d: 'Bitrix, AmoCRM, HubSpot и т.д.',
+        crm_sheet: 'Excel / Google Sheets', crm_sheet_d: 'Учёт ведём, но руками',
+        crm_no: 'Учёта пока нет', crm_no_d: 'Лиды и сделки нигде не фиксируем',
+        spend_none: 'Пока не запускаем рекламу',
+        spend_lt1k: 'До $1 000',
+        spend_1k_3k: '$1 000 — $3 000',
+        spend_3k_10k: '$3 000 — $10 000',
+        spend_10k_plus: '$10 000+',
     }
 };
 
@@ -2104,11 +2589,19 @@ function obSetLang(l) {
     document.getElementById('ob-q4-sub').textContent = t.q4_sub;
     document.getElementById('ob-q5-title').textContent = t.q5_title;
     document.getElementById('ob-q5-sub').textContent = t.q5_sub;
-    document.getElementById('ob-name-label').textContent = t.name_label;
-    document.getElementById('ob-phone-label').textContent = t.phone_label;
+    document.getElementById('ob-q6-title').textContent = t.q6_title;
+    document.getElementById('ob-q6-sub').textContent = t.q6_sub;
+    document.getElementById('ob-biz-name-label').textContent = t.biz_name_label;
+    // Section labels on each slide
+    for (let i = 1; i <= 6; i++) {
+        const lbl = document.getElementById('ob-q' + i + '-label');
+        if (lbl) lbl.textContent = t['sec_0' + i] || '';
+    }
+    const shareBtn = document.getElementById('ob-share-contact-text');
+    if (shareBtn) {
+        shareBtn.textContent = obState.answers.contact_shared ? t.share_contact_done : t.share_contact;
+    }
     document.getElementById('ob-privacy-note').textContent = t.privacy;
-    document.getElementById('ob-done-title').textContent = t.done_title;
-    document.getElementById('ob-done-sub').textContent = t.done_sub;
     document.querySelectorAll('[data-ob]').forEach(el => {
         const key = el.dataset.ob;
         if (t[key] !== undefined) el.textContent = t[key];
@@ -2135,8 +2628,8 @@ function obUpdateFooter() {
     const skipBtn = document.getElementById('obSkipBtn');
     const dotsEl = document.getElementById('obDots');
     dotsEl.innerHTML = '';
-    if (slide > 0 && slide < 6) {
-        for (let i = 1; i <= 5; i++) {
+    if (slide > 0 && slide <= 6) {
+        for (let i = 1; i <= 6; i++) {
             const d = document.createElement('div');
             d.className = 'ob-dot' + (i === slide ? ' active' : '');
             dotsEl.appendChild(d);
@@ -2145,24 +2638,30 @@ function obUpdateFooter() {
     if (slide === 0) {
         nextBtn.textContent = t.next;
         nextBtn.disabled = false;
+        nextBtn.style.display = 'block';
         skipBtn.style.display = 'none';
     } else if (slide === 6) {
-        nextBtn.textContent = t.explore;
-        nextBtn.disabled = false;
-        skipBtn.style.display = 'none';
+        // Share-contact slide: main action is the share button in the slide body.
+        // Footer shows only "Skip" so the user can bypass sharing.
+        nextBtn.style.display = 'none';
+        skipBtn.style.display = 'block';
+        skipBtn.textContent = t.skip;
     } else if (slide === 5) {
-        nextBtn.textContent = t.submit;
-        const phone = document.getElementById('ob-phone-input').value.trim();
-        nextBtn.disabled = phone.length < 8;
+        nextBtn.textContent = t.next;
+        nextBtn.style.display = 'block';
+        const bizVal = document.getElementById('ob-biz-name-input').value.trim();
+        nextBtn.disabled = bizVal.length < 2;
         skipBtn.style.display = 'block';
         skipBtn.textContent = t.skip;
     } else if (slide === 2) {
         nextBtn.textContent = t.next;
+        nextBtn.style.display = 'block';
         nextBtn.disabled = obState.answers.service_interest.length === 0;
         skipBtn.style.display = 'block';
         skipBtn.textContent = t.skip;
     } else {
         nextBtn.textContent = t.next;
+        nextBtn.style.display = 'block';
         nextBtn.disabled = false;
         skipBtn.style.display = 'block';
         skipBtn.textContent = t.skip;
@@ -2189,34 +2688,49 @@ function obToggleMulti(el, field) {
 function obNext() {
     const slide = obState.slide;
     if (slide === 5) {
-        obSubmit();
-    } else if (slide === 6) {
-        obFinish();
+        const bizVal = document.getElementById('ob-biz-name-input').value.trim();
+        if (bizVal) obState.answers.business_name = bizVal;
+        obGoToSlide(6);
     } else {
         obGoToSlide(slide + 1);
     }
 }
 
 function obSkip() {
-    if (obState.slide === 5) {
-        obState.answers.phone = '';
-        obSendData(false);
+    const slide = obState.slide;
+    if (slide === 5) {
         obGoToSlide(6);
+    } else if (slide === 6) {
+        // Skipped contact share — finalize and close.
+        obSendData();
     } else {
-        obGoToSlide(Math.min(obState.slide + 1, 6));
+        obGoToSlide(Math.min(slide + 1, 6));
     }
 }
 
-function obSubmit() {
-    const nameVal = document.getElementById('ob-name-input').value.trim();
-    const phoneVal = document.getElementById('ob-phone-input').value.trim();
-    if (nameVal) obState.answers.name = nameVal;
-    obState.answers.phone = phoneVal;
-    obSendData(true);
-    obGoToSlide(6);
+function obShareContact() {
+    // Native Telegram contact-share popup. When the user confirms, the contact
+    // is delivered directly to the bot chat (handled by bot/handlers/contact.py)
+    // — no extra button press required. Callback receives true on share.
+    if (!tg || typeof tg.requestContact !== 'function') {
+        try { tg && tg.showAlert && tg.showAlert('Update Telegram to share your contact'); } catch(e) {}
+        return;
+    }
+    tg.requestContact((shared) => {
+        if (shared) {
+            obState.answers.contact_shared = true;
+            const shareBtnText = document.getElementById('ob-share-contact-text');
+            if (shareBtnText) {
+                shareBtnText.textContent = OB_T[obState.lang].share_contact_done;
+            }
+            // Persist questionnaire data to bot. sendData auto-closes the TWA;
+            // by then Telegram has already delivered the contact message to the bot.
+            setTimeout(obSendData, 300);
+        }
+    });
 }
 
-function obSendData(withPhone) {
+function obSendData() {
     localStorage.setItem(OB_KEY, '1');
     const payload = {
         action: 'questionnaire_complete',
@@ -2225,8 +2739,9 @@ function obSendData(withPhone) {
         service_interest: obState.answers.service_interest,
         current_marketing: obState.answers.current_marketing || '',
         budget_range: obState.answers.budget_range || '',
-        phone: withPhone ? obState.answers.phone : '',
-        name: obState.answers.name || '',
+        phone: obState.answers.phone || '',
+        business_name: obState.answers.business_name || '',
+        contact_shared: !!obState.answers.contact_shared,
     };
     if (tg) {
         tg.sendData(JSON.stringify(payload));
@@ -2242,10 +2757,8 @@ function obFinish() {
 function showOnboarding() {
     document.getElementById('onboarding').style.display = 'flex';
     document.getElementById('main-app').style.display = 'none';
-    if (tgUser?.first_name) {
-        document.getElementById('ob-name-input').value = tgUser.first_name;
-    }
-    document.getElementById('ob-phone-input').addEventListener('input', () => {
+    const bizEl = document.getElementById('ob-biz-name-input');
+    if (bizEl) bizEl.addEventListener('input', () => {
         if (obState.slide === 5) obUpdateFooter();
     });
     obSetLang(obState.lang);
@@ -2255,15 +2768,21 @@ function showOnboarding() {
 function showMainApp() {
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('main-app').style.display = 'block';
+    setTimeout(() => { try { armReveal(); } catch(e) {} }, 50);
     setTimeout(() => { try { applyUrlTab(); } catch(e) {} }, 60);
 }
 
 (function initApp() {
-    const alreadyDone = localStorage.getItem(OB_KEY) === '1';
-    if (alreadyDone) {
-        showMainApp();
-    } else {
+    const params = new URLSearchParams(location.search);
+    const hasLangQuery = params.has('lang');
+    // Onboarding fires ONLY when the bot explicitly requests it via ?lang=xx
+    // (from_kb flow in start.py). Every other entry point — /app, /portfolio,
+    // menu buttons, re-opens — goes straight to the main app. Telegram WebApp
+    // localStorage is unreliable across sessions, so we don't trust it as a gate.
+    if (hasLangQuery) {
         showOnboarding();
+    } else {
+        showMainApp();
     }
 })();
 </script>
