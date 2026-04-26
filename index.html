@@ -3234,12 +3234,13 @@ function showMainApp() {
 
 (function initApp() {
     const params = new URLSearchParams(location.search);
-    const hasLangQuery = params.has('lang');
-    // Onboarding fires ONLY when the bot explicitly requests it via ?lang=xx
-    // (from_kb flow in start.py). Every other entry point — /app, /portfolio,
-    // menu buttons, re-opens — goes straight to the main app. Telegram WebApp
-    // localStorage is unreliable across sessions, so we don't trust it as a gate.
-    if (hasLangQuery) {
+    // Onboarding fires only when the bot explicitly requests the questionnaire
+    // via ?lang=xx with NO tab param (from_kb flow in start.py for fresh leads).
+    // Any URL with tab= (schedule, portfolio, etc.) goes straight to the main
+    // app — those CTAs are post-onboarding actions and must never re-trigger
+    // the questionnaire even if lang= is also present.
+    const onboardingRequested = params.has('lang') && !params.has('tab');
+    if (onboardingRequested) {
         showOnboarding();
     } else {
         showMainApp();
