@@ -1350,6 +1350,7 @@
     <div class="tabs">
         <button class="tab active" data-section="works" data-t="tab_works">Ishlarimiz</button>
         <button class="tab" data-section="services" data-t="tab_svc">Xizmatlar</button>
+        <button class="tab" data-section="schedule" data-t="tab_sched">Sessiya</button>
         <button class="tab" data-section="about" data-t="tab_about">Haqimizda</button>
     </div>
 </div>
@@ -1704,6 +1705,18 @@
 
 </div>
 
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SCHEDULE                                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="schedule" class="section">
+    <div class="sec-head">
+        <span class="sec-label" data-t="sched_label">Bepul sessiya</span>
+        <div class="sec-title" data-t="sched_title">Strategik sessiya — onlayn</div>
+        <p class="sec-sub" data-t="sched_sub">Qulay vaqtni tanlang. Uchrashuvda biznesingizni tahlil qilib, audit shu yerda tayyorlaymiz. ~30 daqiqa.</p>
+    </div>
+    <div id="cal-embed" style="min-height:560px;"></div>
+</div>
+
 <!-- ── LIVE CHAT PANEL ──────────────────────────── -->
 <div id="chatPanel">
     <div class="chat-panel-header">
@@ -1744,7 +1757,9 @@
             hero_h1: "MQSD &mdash;<br><span class=\"tagline\">maqsad yetakchi</span>",
             hero_p: "Marketing, har bir harakat natijaga olib boradi · AI · Avtomatizatsiya · Prodakshn · SMM",
             s1:"Loyiha", s2:"Foto", s3:"AI bot", s4:"Natija",
-            tab_works:"Ishlarimiz", tab_svc:"Xizmatlar", tab_about:"Haqimizda",
+            tab_works:"Ishlarimiz", tab_svc:"Xizmatlar", tab_sched:"Sessiya", tab_about:"Haqimizda",
+            sched_label:"Bepul sessiya", sched_title:"Strategik sessiya — onlayn",
+            sched_sub:"Qulay vaqtni tanlang. Uchrashuvda biznesingizni tahlil qilib, audit shu yerda tayyorlaymiz. ~30 daqiqa.",
             lbl_tools:"Instrumentlar", lbl_task:"Vazifa", lbl_solution:"Yechim",
             p1_type:"SMM • AI-kontent", p1_name:"[Loyiha nomi]", p1_client:"[Mijoz nomi]",
             p1_task:"[Yangi kolleksiya uchun vizual kontent — fotosessiyasiz, modellar va chiqishsiz]",
@@ -1796,7 +1811,9 @@
             hero_h1: "MQSD &mdash;<br><span class=\"tagline\">цель превыше всего</span>",
             hero_p: "Маркетинг, где каждое действие ведёт к результату · ИИ · Автоматизация · Продакшн · SMM",
             s1:"Проектов", s2:"Фото", s3:"AI бот", s4:"Результат",
-            tab_works:"Работы", tab_svc:"Услуги", tab_about:"О нас",
+            tab_works:"Работы", tab_svc:"Услуги", tab_sched:"Сессия", tab_about:"О нас",
+            sched_label:"Бесплатная сессия", sched_title:"Стратегическая сессия — онлайн",
+            sched_sub:"Выберите удобное время. На встрече разберём бизнес и подготовим аудит здесь же. ~30 минут.",
             lbl_tools:"Инструменты", lbl_task:"Задача", lbl_solution:"Решение",
             p1_type:"SMM • AI-контент", p1_name:"[Название проекта]", p1_client:"[Название клиента]",
             p1_task:"[Быстрый запуск визуального контента при отсутствии готовых образцов — без фотосессий]",
@@ -1877,8 +1894,59 @@
             tab.classList.add('active');
             document.getElementById(tab.dataset.section).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (tab.dataset.section === 'schedule') loadCalEmbed();
         });
     });
+
+    // ── CAL.COM INLINE EMBED ──────────────────────────
+    let calEmbedLoaded = false;
+    function loadCalEmbed() {
+        if (calEmbedLoaded) return;
+        calEmbedLoaded = true;
+        (function (C, A, L) {
+            const p = function (a, ar) { a.q.push(ar); };
+            const d = C.document;
+            C.Cal = C.Cal || function () {
+                const cal = C.Cal; const ar = arguments;
+                if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement('script')).src = A; cal.loaded = true; }
+                if (ar[0] === L) {
+                    const api = function () { p(api, arguments); };
+                    const namespace = ar[1]; api.q = api.q || [];
+                    if (typeof namespace === 'string') { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ['initNamespace', namespace]); }
+                    else p(cal, ar); return;
+                }
+                p(cal, ar);
+            };
+        })(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+        const tg = window.Telegram && window.Telegram.WebApp;
+        const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {};
+        const lang = (window.obState && window.obState.lang) || (document.documentElement.lang) || 'ru';
+
+        Cal('init', 'strategy', { origin: 'https://cal.com' });
+        Cal.ns.strategy('inline', {
+            elementOrSelector: '#cal-embed',
+            config: {
+                layout: 'month_view',
+                name: tgUser.first_name || '',
+                metadata: {
+                    telegram_id: String(tgUser.id || ''),
+                    lang: lang,
+                    username: tgUser.username || '',
+                },
+            },
+            calLink: 'mqsd-agency/strategy',
+        });
+    }
+
+    function applyUrlTab() {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get('tab');
+        if (!tab) return;
+        const target = document.querySelector(`.tab[data-section="${tab}"]`);
+        if (!target) return;
+        target.click();
+    }
 
     // ── PROJECT FILTER ──────────────────────────────
     function filterProjects(category) {
@@ -2187,6 +2255,7 @@ function showOnboarding() {
 function showMainApp() {
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('main-app').style.display = 'block';
+    setTimeout(() => { try { applyUrlTab(); } catch(e) {} }, 60);
 }
 
 (function initApp() {
