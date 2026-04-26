@@ -1344,6 +1344,135 @@
             color: var(--muted);
             margin: 6px 0 12px;
         }
+
+        /* ── Engagement ladder (services) ─────────────── */
+        .svc-ladder { margin-bottom: 32px; }
+        .svc-ladder-sub { font-size: 13px; color: var(--dim); margin: 8px 0 18px; line-height: 1.5; }
+        .svc-tier {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+            position: relative;
+        }
+        .svc-tier--featured {
+            border-color: var(--accent);
+            background: linear-gradient(180deg, var(--accent-s) 0%, var(--bg) 60%);
+        }
+        .svc-tier--recommended { border-color: var(--text); }
+        .svc-tier-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: var(--text);
+            color: var(--bg);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .svc-tier-badge--limited { background: var(--accent); }
+        .svc-tier-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+        .svc-tier-sub { font-size: 13px; color: var(--dim); margin-bottom: 8px; line-height: 1.5; }
+        .svc-tier-for { font-size: 12.5px; color: var(--dim); font-style: italic; margin-bottom: 12px; line-height: 1.5; }
+        .scarcity {
+            background: var(--faint);
+            border-radius: 10px;
+            padding: 11px 13px;
+            margin: 12px 0;
+        }
+        .scarcity-counter { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .scarcity-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .scarcity-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.5s ease;
+        }
+        .scarcity-sub { font-size: 11.5px; color: var(--dim); margin-top: 7px; }
+        .svc-includes {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .svc-includes li {
+            font-size: 13px;
+            color: var(--dim);
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+        }
+        .svc-includes li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .svc-pricing {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        .svc-price {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .svc-price-logic { font-size: 11.5px; color: var(--dim); line-height: 1.5; }
+        .svc-cta {
+            width: 100%;
+            padding: 13px;
+            margin-top: 14px;
+            border: 1px solid var(--text);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--ease);
+        }
+        .svc-cta--primary { background: var(--text); color: var(--bg); }
+        .svc-cta:active { transform: scale(0.98); }
+        .svc-finepoint { font-size: 11px; color: var(--dim); margin-top: 10px; line-height: 1.5; }
+        .svc-divider {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--dim);
+            margin: 28px 0 14px;
+            position: relative;
+        }
+        .svc-divider::before, .svc-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: var(--border);
+        }
+        .svc-divider::before { left: 0; }
+        .svc-divider::after { right: 0; }
     </style>
 </head>
 <body>
@@ -1874,6 +2003,91 @@
         <div class="sec-title" data-t="svc_title">Nima qilamiz</div>
     </div>
 
+    <!-- ── ENGAGEMENT LADDER ──────────────────────── -->
+    <div class="svc-ladder">
+        <p class="svc-ladder-sub" data-t="ladder_sub">Auditdan to to'liq voronkani boshqarishgacha — qatnashish darajasini siz tanlaysiz.</p>
+
+        <!-- Tier 1: Free Audit + Strategy Session (scarcity) -->
+        <div class="svc-tier svc-tier--featured reveal">
+            <div class="svc-tier-badge svc-tier-badge--limited" data-t="tier_audit_badge">Cheklangan taklif</div>
+            <div class="svc-tier-title" data-t="tier_audit_title">Bepul audit + strategik sessiya</div>
+            <p class="svc-tier-sub" data-t="tier_audit_sub">Katta strateg bilan 30 daqiqa. Voronkangizni tahlil qilamiz, yo'qotish nuqtalarini ko'rsatamiz, KPI'larni kelishamiz.</p>
+            <div class="scarcity">
+                <div class="scarcity-counter"><span data-t="scarcity_label">Joylar</span>: <span id="scarcity-filled">6</span> / <span id="scarcity-total">10</span></div>
+                <div class="scarcity-bar"><div class="scarcity-bar-fill" id="scarcity-bar-fill" style="width:60%"></div></div>
+                <div class="scarcity-sub"><span data-t="scarcity_left">Bu oyda qoldi</span>: <span id="scarcity-remaining">4</span></div>
+            </div>
+            <ul class="svc-includes">
+                <li data-t="audit_b1">Joriy reklama kanallari va xarajatlar auditi</li>
+                <li data-t="audit_b2">Trafikdan bitimgacha voronka tahlili</li>
+                <li data-t="audit_b3">3 ta tezkor yaxshilash bo'yicha tavsiya</li>
+                <li data-t="audit_b4">Sizning biznesga moslashtirilgan tizim brifi (qurish qaroriga kelsangiz)</li>
+            </ul>
+            <button class="svc-cta svc-cta--primary" onclick="showTab('schedule')" data-t="tier_audit_cta">Auditni bron qilish</button>
+            <p class="svc-finepoint" data-t="tier_audit_fine">Audit bepul. Hech qanday majburiyatsiz. Birinchi navbatda — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — sessiyada muhokama qilamiz.</p>
+        </div>
+
+        <div class="svc-divider" data-t="ladder_divider">Yoki to'liq tizim</div>
+
+        <!-- Tier 2: System Build -->
+        <div class="svc-tier reveal">
+            <div class="svc-tier-title" data-t="tier_build_title">Tizimni qurish</div>
+            <p class="svc-tier-sub" data-t="tier_build_sub">Reklamadan CRM'ga to'liq voronka — 4–8 hafta ichida.</p>
+            <ul class="svc-includes">
+                <li data-t="build_b1">Kontent-mashina va prodakshn (video, kreativlar, postlar)</li>
+                <li data-t="build_b2">Reklama infratuzilmasi (Meta / Google / Telegram Ads)</li>
+                <li data-t="build_b3">Lid tutish uchun lending yoki Telegram-bot</li>
+                <li data-t="build_b4">CRM ulanishi va avtomatlashtirish</li>
+                <li data-t="build_b5">Analitika va dashbordlar</li>
+            </ul>
+            <div class="svc-pricing">
+                <div class="svc-price">$4 000 – $12 000</div>
+                <div class="svc-price-logic" data-t="build_logic">Yakuniy narx kontent hajmi, voronka murakkabligi va kanallar soniga bog'liq. Aniq narxni strategik sessiyadan keyin kelishamiz.</div>
+            </div>
+            <button class="svc-cta" onclick="showTab('schedule')" data-t="tier_build_cta">Sessiyada muhokama qilish</button>
+        </div>
+
+        <!-- Tier 3: Self-Drive -->
+        <div class="svc-tier reveal">
+            <div class="svc-tier-title" data-t="tier_self_title">Self-Drive</div>
+            <p class="svc-tier-sub" data-t="tier_self_sub">Biz quramiz — sizning jamoangiz boshqaradi.</p>
+            <p class="svc-tier-for" data-t="tier_self_for">Agar sizda tizimni har kuni boshqaradigan marketolog yoki menejer bo'lsa, mos keladi.</p>
+            <ul class="svc-includes">
+                <li data-t="self_b1">Kalit tayyor tizimni topshirish</li>
+                <li data-t="self_b2">Hujjatlar va jamoani o'qitish (8 soat)</li>
+                <li data-t="self_b3">Bir oylik qo'llab-quvvatlash va konsultatsiya</li>
+                <li data-t="self_b4">Jarayon, skript va hisobot shablonlari</li>
+            </ul>
+            <div class="svc-pricing">
+                <div class="svc-price-logic" data-t="self_logic">System Build narxiga kiritilgan. Qo'shimcha qo'llab-quvvatlash yoki kengaytirilgan o'qitish — alohida kelishuv.</div>
+            </div>
+            <button class="svc-cta" onclick="showTab('schedule')" data-t="tier_self_cta">Sessiyada aniqlashtirish</button>
+        </div>
+
+        <!-- Tier 4: Co-Pilot -->
+        <div class="svc-tier svc-tier--recommended reveal">
+            <div class="svc-tier-badge" data-t="tier_co_badge">Tavsiya etamiz</div>
+            <div class="svc-tier-title" data-t="tier_co_title">Co-Pilot</div>
+            <p class="svc-tier-sub" data-t="tier_co_sub">Biz quramiz, biz boshqaramiz — natijaga javob beramiz.</p>
+            <p class="svc-tier-for" data-t="tier_co_for">Agar sizda ichki jamoa bo'lmasa yoki operatsionni o'zingizdan olib, savdoga e'tibor bermoqchi bo'lsangiz, mos keladi.</p>
+            <ul class="svc-includes">
+                <li data-t="co_b1">System Build + Self-Drive ning hammasi</li>
+                <li data-t="co_b2">Trafik va kontentni har kuni boshqarish</li>
+                <li data-t="co_b3">Lid-menedjment va kvalifikatsiya</li>
+                <li data-t="co_b4">Haftalik hisobot va strategik qo'ng'iroqlar</li>
+                <li data-t="co_b5">Savdo bo'limini qo'llab-quvvatlash (skript, o'qitish, analitika)</li>
+                <li data-t="co_b6">Doimiy optimizatsiya va masshtablash</li>
+            </ul>
+            <div class="svc-pricing">
+                <div class="svc-price">$1 500 – $6 000 / oy + reklama byudjetidan %</div>
+                <div class="svc-price-logic" data-t="co_logic">Reteyner hajmi ish miqdoriga bog'liq. Reklama byudjetidan foiz — odatda 10–15%. Aniq stavkani strategik sessiyadan keyin kelishamiz.</div>
+            </div>
+            <button class="svc-cta svc-cta--primary" onclick="showTab('schedule')" data-t="tier_co_cta">Sessiyada muhokama qilish</button>
+        </div>
+    </div>
+
+    <div class="svc-divider" data-t="capabilities_divider">Imkoniyatlar</div>
+
     <div class="svc-list">
 
         <!-- Content -->
@@ -2138,6 +2352,46 @@
             p3_s1:"Hero-rolik 30–60 sek", p3_s2:"Ad-seriya 15–30 sek", p3_s3:"Raqamli avatarlar va Lip-Sync",
             p3_m1:"10x", p3_m1l:"Tezlik", p3_m2:"100%", p3_m2l:"Litsenziya", p3_m3:"−80%", p3_m3l:"Prodakshn",
             svc_label:"Yo'nalishlar", svc_title:"Nima qilamiz",
+            ladder_sub:"Auditdan to to'liq voronkani boshqarishgacha — qatnashish darajasini siz tanlaysiz.",
+            ladder_divider:"Yoki to'liq tizim",
+            capabilities_divider:"Imkoniyatlar",
+            tier_audit_badge:"Cheklangan taklif",
+            tier_audit_title:"Bepul audit + strategik sessiya",
+            tier_audit_sub:"Katta strateg bilan 30 daqiqa. Voronkangizni tahlil qilamiz, yo'qotish nuqtalarini ko'rsatamiz, KPI'larni kelishamiz.",
+            scarcity_label:"Joylar", scarcity_left:"Bu oyda qoldi",
+            audit_b1:"Joriy reklama kanallari va xarajatlar auditi",
+            audit_b2:"Trafikdan bitimgacha voronka tahlili",
+            audit_b3:"3 ta tezkor yaxshilash bo'yicha tavsiya",
+            audit_b4:"Sizning biznesga moslashtirilgan tizim brifi (qurish qaroriga kelsangiz)",
+            tier_audit_cta:"Auditni bron qilish",
+            tier_audit_fine:"Audit bepul. Hech qanday majburiyatsiz. Birinchi navbatda — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — sessiyada muhokama qilamiz.",
+            tier_build_title:"Tizimni qurish", tier_build_sub:"Reklamadan CRM'ga to'liq voronka — 4–8 hafta ichida.",
+            build_b1:"Kontent-mashina va prodakshn (video, kreativlar, postlar)",
+            build_b2:"Reklama infratuzilmasi (Meta / Google / Telegram Ads)",
+            build_b3:"Lid tutish uchun lending yoki Telegram-bot",
+            build_b4:"CRM ulanishi va avtomatlashtirish",
+            build_b5:"Analitika va dashbordlar",
+            build_logic:"Yakuniy narx kontent hajmi, voronka murakkabligi va kanallar soniga bog'liq. Aniq narxni strategik sessiyadan keyin kelishamiz.",
+            tier_build_cta:"Sessiyada muhokama qilish",
+            tier_self_title:"Self-Drive", tier_self_sub:"Biz quramiz — sizning jamoangiz boshqaradi.",
+            tier_self_for:"Agar sizda tizimni har kuni boshqaradigan marketolog yoki menejer bo'lsa, mos keladi.",
+            self_b1:"Kalit tayyor tizimni topshirish",
+            self_b2:"Hujjatlar va jamoani o'qitish (8 soat)",
+            self_b3:"Bir oylik qo'llab-quvvatlash va konsultatsiya",
+            self_b4:"Jarayon, skript va hisobot shablonlari",
+            self_logic:"System Build narxiga kiritilgan. Qo'shimcha qo'llab-quvvatlash yoki kengaytirilgan o'qitish — alohida kelishuv.",
+            tier_self_cta:"Sessiyada aniqlashtirish",
+            tier_co_badge:"Tavsiya etamiz", tier_co_title:"Co-Pilot",
+            tier_co_sub:"Biz quramiz, biz boshqaramiz — natijaga javob beramiz.",
+            tier_co_for:"Agar sizda ichki jamoa bo'lmasa yoki operatsionni o'zingizdan olib, savdoga e'tibor bermoqchi bo'lsangiz, mos keladi.",
+            co_b1:"System Build + Self-Drive ning hammasi",
+            co_b2:"Trafik va kontentni har kuni boshqarish",
+            co_b3:"Lid-menedjment va kvalifikatsiya",
+            co_b4:"Haftalik hisobot va strategik qo'ng'iroqlar",
+            co_b5:"Savdo bo'limini qo'llab-quvvatlash (skript, o'qitish, analitika)",
+            co_b6:"Doimiy optimizatsiya va masshtablash",
+            co_logic:"Reteyner hajmi ish miqdoriga bog'liq. Reklama byudjetidan foiz — odatda 10–15%. Aniq stavkani strategik sessiyadan keyin kelishamiz.",
+            tier_co_cta:"Sessiyada muhokama qilish",
             svc1_label:"Kontent ishlab chiqarish", svc1_name:"Kontent",
             svc1_desc:"Vizuallar, video va SMM — fotosessiyasiz, jamoaning o'lchovida.",
             svc1_b1:"Vizual kontent va foto mahsulot", svc1_b2:"Reels / Shorts video", svc1_b3:"SMM boshqaruv va strategiya", svc1_b4:"Key Visuals va brending",
@@ -2197,6 +2451,46 @@
             p3_s1:"Hero-ролик 30–60 сек", p3_s2:"Ad-серия 15–30 сек", p3_s3:"Цифровые аватары и Lip-Sync",
             p3_m1:"10x", p3_m1l:"Скорость", p3_m2:"100%", p3_m2l:"Лицензия", p3_m3:"−80%", p3_m3l:"Стоимость",
             svc_label:"Направления", svc_title:"Чем занимаемся",
+            ladder_sub:"От аудита до полного управления воронкой — выбираете уровень включённости.",
+            ladder_divider:"Или полная система",
+            capabilities_divider:"Возможности",
+            tier_audit_badge:"Ограниченное предложение",
+            tier_audit_title:"Бесплатный аудит + стратегическая сессия",
+            tier_audit_sub:"30 минут со старшим стратегом. Разбираем вашу воронку, показываем точки потерь, согласовываем KPI.",
+            scarcity_label:"Места", scarcity_left:"Осталось до конца месяца",
+            audit_b1:"Аудит текущих рекламных каналов и расходов",
+            audit_b2:"Анализ воронки от трафика до сделки",
+            audit_b3:"Рекомендации по 3 быстрым улучшениям",
+            audit_b4:"Бриф системы под ваш бизнес (если решите строить)",
+            tier_audit_cta:"Забронировать аудит",
+            tier_audit_fine:"Аудит бесплатен. Никаких обязательств. Приоритетно — недвижимость, частная медицина, образование. Открыты и к другим нишам, обсудим на сессии.",
+            tier_build_title:"Построение системы", tier_build_sub:"Полная воронка от рекламы до CRM — за 4–8 недель.",
+            build_b1:"Контент-движок и продакшн (видео, креативы, посты)",
+            build_b2:"Рекламная инфраструктура (Meta / Google / Telegram Ads)",
+            build_b3:"Лендинг или Telegram-бот для захвата лидов",
+            build_b4:"CRM-сцепка и автоматизация",
+            build_b5:"Аналитика и дашборды",
+            build_logic:"Финальная цена зависит от объёма контента, сложности воронки и количества каналов. Точную стоимость согласуем после стратегической сессии.",
+            tier_build_cta:"Обсудить на сессии",
+            tier_self_title:"Self-Drive", tier_self_sub:"Мы строим — ваша команда управляет.",
+            tier_self_for:"Подходит, если у вас есть собственный маркетолог или менеджер, способный вести систему ежедневно.",
+            self_b1:"Передача системы под ключ",
+            self_b2:"Документация и обучение команды (8 часов)",
+            self_b3:"Месяц поддержки и консультаций",
+            self_b4:"Шаблоны процессов, скриптов, отчётов",
+            self_logic:"Включено в стоимость System Build. Дополнительная плата за продление поддержки или расширенное обучение — обсуждается.",
+            tier_self_cta:"Уточнить на сессии",
+            tier_co_badge:"Рекомендуем", tier_co_title:"Co-Pilot",
+            tier_co_sub:"Мы строим, мы и управляем — отвечаем за результат.",
+            tier_co_for:"Подходит, если у вас нет внутренней команды или вы хотите снять с себя операционку и сфокусироваться на продажах.",
+            co_b1:"Всё из System Build + Self-Drive",
+            co_b2:"Ежедневное управление трафиком и контентом",
+            co_b3:"Лид-менеджмент и квалификация",
+            co_b4:"Еженедельные отчёты и стратегические созвоны",
+            co_b5:"Поддержка отдела продаж (скрипты, обучение, аналитика)",
+            co_b6:"Постоянная оптимизация и масштабирование",
+            co_logic:"Размер ретейнера зависит от объёма работ. Процент от рекламного бюджета — обычно 10–15%. Точную ставку согласуем после стратегической сессии.",
+            tier_co_cta:"Обсудить на сессии",
             svc1_label:"Производство контента", svc1_name:"Контент",
             svc1_desc:"Визуалы, видео и SMM — без фотосессий, масштабируем без команды.",
             svc1_b1:"Визуальный контент и фото продукта", svc1_b2:"Reels / Shorts видео", svc1_b3:"SMM-ведение и стратегия", svc1_b4:"Key Visuals и брендинг",
@@ -2272,6 +2566,12 @@
             if (tab.dataset.section === 'schedule') loadCalEmbed();
         });
     });
+
+    // Programmatic tab navigation (used by ladder + banner CTAs)
+    window.showTab = function(name) {
+        const target = document.querySelector(`.tab[data-section="${name}"]`);
+        if (target) target.click();
+    };
 
     // ── CAL.COM INLINE EMBED ──────────────────────────
     let calEmbedLoaded = false;
