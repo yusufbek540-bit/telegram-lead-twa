@@ -2043,7 +2043,7 @@
                 <li data-t="audit_b4">Sizning biznesga moslashtirilgan tizim brifi (qurish qaroriga kelsangiz)</li>
             </ul>
             <button class="svc-cta svc-cta--primary" onclick="showTab('schedule')" data-t="tier_audit_cta">Auditni bron qilish</button>
-            <p class="svc-finepoint" data-t="tier_audit_fine">Audit bepul. Hech qanday majburiyatsiz. Birinchi navbatda — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — sessiyada muhokama qilamiz.</p>
+            <p class="svc-finepoint" data-t="tier_audit_fine">Audit bepul. Hech qanday majburiyatsiz.</p>
         </div>
 
         <div class="svc-divider" data-t="ladder_divider">Yoki to'liq tizim</div>
@@ -2211,7 +2211,7 @@
     </div>
 
     <div class="about-card reveal">
-        <p data-t="about_desc">Biz agentlik emasmiz — sizning tashqi performance-departamentingizmiz. Reklamadan savdoga qadar butun siklni o'z zimmamizga olamiz va daromadga javob beramiz, ko'rsatkichlarga emas. Asosiy sohalar — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — strategik sessiyada muhokama qilamiz.</p>
+        <p data-t="about_desc">Biz agentlik emasmiz — sizning tashqi performance-departamentingizmiz. Reklamadan savdoga qadar butun siklni o'z zimmamizga olamiz va daromadga javob beramiz, ko'rsatkichlarga emas.</p>
     </div>
 
     <div class="about-card reveal">
@@ -2416,7 +2416,7 @@
             audit_b3:"3 ta tezkor yaxshilash bo'yicha tavsiya",
             audit_b4:"Sizning biznesga moslashtirilgan tizim brifi (qurish qaroriga kelsangiz)",
             tier_audit_cta:"Auditni bron qilish",
-            tier_audit_fine:"Audit bepul. Hech qanday majburiyatsiz. Birinchi navbatda — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — sessiyada muhokama qilamiz.",
+            tier_audit_fine:"Audit bepul. Hech qanday majburiyatsiz.",
             tier_build_title:"Tizimni qurish", tier_build_sub:"Reklamadan CRM'ga to'liq voronka — 4–8 hafta ichida.",
             build_b1:"Kontent-mashina va prodakshn (video, kreativlar, postlar)",
             build_b2:"Reklama infratuzilmasi (Meta / Google / Telegram Ads)",
@@ -2457,7 +2457,7 @@
             svc4_desc:"Meta Ads, Google, Telegram — kampaniya sozlash va optimallashtirish.",
             svc4_b1:"Meta Ads va Google", svc4_b2:"Telegram Ads", svc4_b3:"A/B test va analitika",
             about_label:"O'zimiz haqimizda", about_title:"MQSD kim?",
-            about_desc:"Biz agentlik emasmiz — sizning tashqi performance-departamentingizmiz. Reklamadan savdoga qadar butun siklni o'z zimmamizga olamiz va daromadga javob beramiz, ko'rsatkichlarga emas. Asosiy sohalar — ko'chmas mulk, xususiy tibbiyot, ta'lim. Boshqa yo'nalishlar bilan ham ishlaymiz — strategik sessiyada muhokama qilamiz.",
+            about_desc:"Biz agentlik emasmiz — sizning tashqi performance-departamentingizmiz. Reklamadan savdoga qadar butun siklni o'z zimmamizga olamiz va daromadga javob beramiz, ko'rsatkichlarga emas.",
             about_process:"Qanday ishlaymiz?",
             st1_t:"Strategiya va diagnostika",
             st1_lede:"30 daqiqalik strategik sessiya — bepul. Biznesni tahlil qilamiz, voronka auditi qilamiz, KPI'larni kelishamiz.",
@@ -2542,7 +2542,7 @@
             audit_b3:"Рекомендации по 3 быстрым улучшениям",
             audit_b4:"Бриф системы под ваш бизнес (если решите строить)",
             tier_audit_cta:"Забронировать аудит",
-            tier_audit_fine:"Аудит бесплатен. Никаких обязательств. Приоритетно — недвижимость, частная медицина, образование. Открыты и к другим нишам, обсудим на сессии.",
+            tier_audit_fine:"Аудит бесплатен. Никаких обязательств.",
             tier_build_title:"Построение системы", tier_build_sub:"Полная воронка от рекламы до CRM — за 4–8 недель.",
             build_b1:"Контент-движок и продакшн (видео, креативы, посты)",
             build_b2:"Рекламная инфраструктура (Meta / Google / Telegram Ads)",
@@ -2583,7 +2583,7 @@
             svc4_desc:"Meta Ads, Google, Telegram — настройка и оптимизация кампаний.",
             svc4_b1:"Meta Ads и Google", svc4_b2:"Telegram Ads", svc4_b3:"A/B тест и аналитика",
             about_label:"О нас", about_title:"Кто такие MQSD?",
-            about_desc:"Мы не агентство — мы ваш внешний performance-департамент. Берём на себя весь цикл от рекламы до продажи и отвечаем за выручку, не за охваты. Приоритетные ниши — недвижимость, частная медицина, образование. Открыты к другим направлениям — обсудим на стратегической сессии.",
+            about_desc:"Мы не агентство — мы ваш внешний performance-департамент. Берём на себя весь цикл от рекламы до продажи и отвечаем за выручку, не за охваты.",
             about_process:"Как мы работаем?",
             st1_t:"Стратегия и диагностика",
             st1_lede:"30-минутная стратегическая сессия — бесплатно. Разбираем бизнес, делаем аудит воронки, согласовываем KPI.",
@@ -3170,10 +3170,9 @@ function obShareContact() {
     });
 }
 
-function obSendData() {
+async function obSendData() {
     localStorage.setItem(OB_KEY, '1');
     const payload = {
-        action: 'questionnaire_complete',
         lang: obState.lang,
         business_type: obState.answers.business_type || '',
         service_interest: obState.answers.service_interest,
@@ -3185,11 +3184,22 @@ function obSendData() {
         social_handle: obState.answers.social_handle || '',
         contact_shared: !!obState.answers.contact_shared,
     };
-    if (tg) {
-        tg.sendData(JSON.stringify(payload));
-    } else {
-        console.warn('sendData unavailable (non-Telegram context) — data not sent');
+    const initData = (tg && tg.initData) || '';
+    if (!initData) {
+        console.warn('initData unavailable — falling back to sendData()');
+        if (tg) tg.sendData(JSON.stringify({ action: 'questionnaire_complete', ...payload }));
+        return;
     }
+    try {
+        await fetch('/api/questionnaire', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initData, payload }),
+        });
+    } catch (e) {
+        console.error('questionnaire POST failed', e);
+    }
+    showMainApp();
 }
 
 function obFinish() {
