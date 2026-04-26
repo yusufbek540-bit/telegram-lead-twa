@@ -144,10 +144,40 @@ export default async function handler(req, res) {
     const trigger = body.triggerEvent;
     const payload = body.payload || {};
     const meta = payload.metadata || {};
-    const telegramId = parseInt(meta.telegram_id || '0', 10);
+    let telegramId = parseInt(meta.telegram_id || '0', 10);
+
+    // Fallback: when Cal.com strips metadata (rebook flow, native UI, etc.),
+    // try to resolve telegram_id from leads via attendee email.
+    if (!telegramId) {
+        const attendeeEmail = (payload.attendees && payload.attendees[0] && payload.attendees[0].email) || null;
+        if (attendeeEmail) {
+            try {
+                const url = `${process.env.SUPABASE_URL}/rest/v1/leads?email=eq.${encodeURIComponent(attendeeEmail)}&select=telegram_id&limit=1`;
+                const r = await fetch(url, {
+                    headers: {
+                        apikey: process.env.SUPABASE_SERVICE_KEY,
+                        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+                    },
+                });
+                if (r.ok) {
+                    const rows = await r.json();
+                    if (rows[0] && rows[0].telegram_id) telegramId = parseInt(rows[0].telegram_id, 10);
+                }
+            } catch (e) {
+                console.error('lead-email lookup failed', e);
+            }
+        }
+    }
 
     if (!telegramId) {
-        return res.status(200).json({ ok: true, note: 'no telegram_id in metadata' });
+        console.warn('webhook: no telegram_id', {
+            trigger,
+            metadataKeys: Object.keys(meta),
+            metadata: meta,
+            attendeeEmail: payload.attendees && payload.attendees[0] && payload.attendees[0].email,
+            payloadKeys: Object.keys(payload),
+        });
+        return res.status(200).json({ ok: true, note: 'no telegram_id in metadata or by email' });
     }
 
     const calBookingId = String(payload.uid || payload.bookingId || payload.id || '');
