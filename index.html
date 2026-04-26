@@ -117,11 +117,35 @@
         }
 
         .overline-dot {
-            width: 5px;
-            height: 5px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--accent);
             flex-shrink: 0;
+            position: relative;
+            animation: heartbeat 1.4s ease-in-out infinite;
+        }
+
+        .overline-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            opacity: 0.6;
+            animation: pulseRing 1.4s ease-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 28%, 100% { transform: scale(1); }
+            14% { transform: scale(1.35); }
+            42% { transform: scale(1.2); }
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.7); opacity: 0.65; }
+            70% { transform: scale(2.4); opacity: 0; }
+            100% { transform: scale(2.4); opacity: 0; }
         }
 
         .hero h1 {
@@ -692,19 +716,53 @@
         }
 
         .svc-card {
-            background: var(--surface);
+            background: linear-gradient(180deg, var(--surface) 0%, var(--faint) 100%);
             border: 1px solid var(--border);
-            border-radius: var(--r);
-            padding: 20px;
+            border-radius: 14px;
+            padding: 22px 20px;
             display: grid;
-            grid-template-columns: 40px 1fr;
-            gap: 16px;
+            grid-template-columns: 44px 1fr;
+            gap: 18px;
             align-items: flex-start;
-            transition: border-color var(--ease);
-            margin-bottom: 8px;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.25s ease,
+                        box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .svc-card:active { border-color: var(--border-hi); }
+        .svc-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .svc-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-hi);
+            box-shadow: 0 12px 28px rgba(0,35,71,0.08);
+        }
+
+        .svc-card:hover::before { transform: scaleY(1); }
+
+        .svc-card:active {
+            transform: translateY(-1px);
+            border-color: var(--border-hi);
+        }
+
+        @media (max-width: 600px) {
+            .svc-card { padding: 18px 16px; }
+            .svc-card:hover { transform: none; box-shadow: none; }
+            .svc-card:active { transform: scale(0.985); }
+        }
 
         .svc-icon-wrap {
             width: 40px;
@@ -1593,7 +1651,7 @@
           <div class="ob-opt ob-opt-multi" data-val="organic" onclick="obToggleMulti(this,'service_interest')">
             <div class="ob-opt-icon">🌱</div>
             <div class="ob-opt-text">
-              <div class="ob-opt-label" data-ob="ch_organic">Органический контент / SMM</div>
+              <div class="ob-opt-label" data-ob="ch_organic">Органический контент</div>
             </div>
             <div class="ob-opt-check"></div>
           </div>
@@ -1751,39 +1809,38 @@
 <section class="hero">
     <div class="overline">
         <span class="overline-dot"></span>
-        <span data-t="hero_label">Marketing agentlik</span>
+        <span data-t="hero_label">Performance Marketing</span>
     </div>
     <h1>
         <span class="brand" data-t-html="hero_h1">MQSD &mdash;<br><span class="tagline">maqsad yetakchi</span></span>
     </h1>
-    <p class="hero-desc" data-t="hero_p">Reklamadan savdoga — bitta jamoa daromad uchun javobgar.</p>
+    <p class="hero-desc" data-t="hero_p">Reklama, kontent, bot va CRM — bitta jamoa, butun voronka. Hisobotlar emas — to'langan bitimlar uchun javobgarmiz.</p>
 </section>
 
 <!-- ── STATS ────────────────────────────────────────── -->
 <div class="stats">
     <div class="stat">
-        <div class="stat-val">50<sup>+</sup></div>
-        <div class="stat-lbl" data-t="s1">Loyiha</div>
+        <div class="stat-val"><span class="num" data-target="8">0</span><sup data-t="s1u">hafta</sup></div>
+        <div class="stat-lbl" data-t="s1">Ishga tushirish</div>
     </div>
     <div class="stat">
-        <div class="stat-val">$0</div>
-        <div class="stat-lbl" data-t="s2">Foto</div>
+        <div class="stat-val"><span class="num" data-target="4">0</span><sup>+</sup></div>
+        <div class="stat-lbl" data-t="s2">Reklama kanali</div>
     </div>
     <div class="stat">
-        <div class="stat-val">24/7</div>
-        <div class="stat-lbl" data-t="s3">Bot 24/7</div>
+        <div class="stat-val"><span class="num" data-target="24">0</span><sup>/7</sup></div>
+        <div class="stat-lbl" data-t="s3">Bot uzluksiz</div>
     </div>
     <div class="stat">
-        <div class="stat-val">48ч</div>
-        <div class="stat-lbl" data-t="s4">Natija</div>
+        <div class="stat-val"><span class="num" data-target="48">0</span><sup data-t="s4u">soat</sup></div>
+        <div class="stat-lbl" data-t="s4">Birinchi kreativ</div>
     </div>
 </div>
 
 <!-- ── TABS ─────────────────────────────────────────── -->
 <div class="tabs-wrap">
     <div class="tabs">
-        <button class="tab active" data-section="works" data-t="tab_works">Ishlarimiz</button>
-        <button class="tab" data-section="services" data-t="tab_svc">Xizmatlar</button>
+        <button class="tab active" data-section="services" data-t="tab_svc">Xizmatlar</button>
         <button class="tab" data-section="schedule" data-t="tab_sched">Sessiya</button>
         <button class="tab" data-section="about" data-t="tab_about">Haqimizda</button>
     </div>
@@ -1792,29 +1849,29 @@
 <!-- ═══════════════════════════════════════════════ -->
 <!-- WORKS                                           -->
 <!-- ═══════════════════════════════════════════════ -->
-<div id="works" class="section active">
+<div id="works" class="section" style="display:none">
 
     <!-- ── PROJECT FILTERS ──────────────────────────── -->
     <div class="filter-chips" id="projFilters">
         <button class="filter-chip active" data-filter="all" onclick="filterProjects('all')" data-t="filter_all">Barchasi</button>
-        <button class="filter-chip" data-filter="smm" onclick="filterProjects('smm')">SMM</button>
+        <button class="filter-chip" data-filter="content" onclick="filterProjects('content')" data-t="filter_content">Kontent</button>
         <button class="filter-chip" data-filter="automation" onclick="filterProjects('automation')" data-t="filter_auto">Avtomatizatsiya</button>
         <button class="filter-chip" data-filter="production" onclick="filterProjects('production')" data-t="filter_prod">Prodakshn</button>
         <button class="filter-chip" data-filter="targeting" onclick="filterProjects('targeting')" data-t="filter_target">Targeting</button>
     </div>
 
     <!-- Project 1 -->
-    <div class="project-card reveal" data-category="smm" onclick="openProject('p1')">
+    <div class="project-card reveal" data-category="content" onclick="openProject('p1')">
         <div class="project-ph">
             <span class="ph-index">01</span>
-            <span class="ph-type-badge" data-t="p1_type">SMM • Kontent</span>
+            <span class="ph-type-badge" data-t="p1_type">Kontent • Reklama</span>
             <!--
                 To add a real image, replace the project-ph div with:
                 <img class="project-thumb" src="project1.jpg" alt="Project name">
             -->
         </div>
         <div class="project-body">
-            <div class="project-type" data-t="p1_type">SMM • Kontent</div>
+            <div class="project-type" data-t="p1_type">Kontent • Reklama</div>
             <div class="project-name" data-t="p1_name">[Loyiha nomi]</div>
             <div class="project-client" data-t="p1_client">[Mijoz nomi]</div>
 
@@ -1837,7 +1894,7 @@
                 <ul class="bullet-list">
                     <li data-t="p1_s1">[Vizual kontent va foto mahsulot]</li>
                     <li data-t="p1_s2">[Reels / Shorts seriyasi]</li>
-                    <li data-t="p1_s3">[SMM boshqaruv va strategiya]</li>
+                    <li data-t="p1_s3">[Reklama uchun kontent strategiyasi]</li>
                 </ul>
             </div>
 
@@ -2016,7 +2073,7 @@
 <!-- ═══════════════════════════════════════════════ -->
 <!-- SERVICES                                        -->
 <!-- ═══════════════════════════════════════════════ -->
-<div id="services" class="section">
+<div id="services" class="section active">
     <div class="sec-head">
         <span class="sec-label" data-t="svc_label">Yo'nalishlar</span>
         <div class="sec-title" data-t="svc_title">Nima qilamiz</div>
@@ -2046,7 +2103,7 @@
             <p class="svc-finepoint" data-t="tier_audit_fine">Audit bepul. Hech qanday majburiyatsiz.</p>
         </div>
 
-        <div class="svc-divider" data-t="ladder_divider">Yoki to'liq tizim</div>
+        <div class="svc-divider" data-t="ladder_divider">To'liq tizim</div>
 
         <!-- Tier 2: System Build -->
         <div class="svc-tier reveal">
@@ -2060,7 +2117,7 @@
                 <li data-t="build_b5">Analitika va dashbordlar</li>
             </ul>
             <div class="svc-pricing">
-                <div class="svc-price">$4 000 – $12 000</div>
+                <div class="svc-price" data-t="tier_build_price">$4 000 dan</div>
                 <div class="svc-price-logic" data-t="build_logic">Yakuniy narx kontent hajmi, voronka murakkabligi va kanallar soniga bog'liq. Aniq narxni strategik sessiyadan keyin kelishamiz.</div>
             </div>
             <button class="svc-cta" onclick="showTab('schedule')" data-t="tier_build_cta">Sessiyada muhokama qilish</button>
@@ -2098,7 +2155,7 @@
                 <li data-t="co_b6">Doimiy optimizatsiya va masshtablash</li>
             </ul>
             <div class="svc-pricing">
-                <div class="svc-price">$1 500 – $6 000 / oy + reklama byudjetidan %</div>
+                <div class="svc-price" data-t="tier_co_price">$1 500 dan / oy</div>
                 <div class="svc-price-logic" data-t="co_logic">Reteyner hajmi ish miqdoriga bog'liq. Reklama byudjetidan foiz — odatda 10–15%. Aniq stavkani strategik sessiyadan keyin kelishamiz.</div>
             </div>
             <button class="svc-cta svc-cta--primary" onclick="showTab('schedule')" data-t="tier_co_cta">Sessiyada muhokama qilish</button>
@@ -2121,11 +2178,11 @@
             <div class="svc-body">
                 <div class="svc-label" data-t="svc1_label">Kontent ishlab chiqarish</div>
                 <div class="svc-name" data-t="svc1_name">Kontent</div>
-                <div class="svc-desc" data-t="svc1_desc">Vizuallar, video va SMM — fotosessiyasiz, jamoaning o'lchovida.</div>
+                <div class="svc-desc" data-t="svc1_desc">Vizuallar, video va kreativlar — reklama va targetlash uchun, fotosessiyasiz.</div>
                 <ul class="bullet-list">
                     <li data-t="svc1_b1">Vizual kontent va foto mahsulot</li>
                     <li data-t="svc1_b2">Reels / Shorts video</li>
-                    <li data-t="svc1_b3">SMM boshqaruv va strategiya</li>
+                    <li data-t="svc1_b3">Reklama kreativlari oqimi</li>
                     <li data-t="svc1_b4">Key Visuals va brending</li>
                 </ul>
             </div>
@@ -2383,17 +2440,18 @@
     // ── TRANSLATIONS ──────────────────────────────────
     const T = {
         uz: {
-            hero_label: "Marketing agentlik",
+            hero_label: "Performance Marketing",
             hero_h1: "MQSD &mdash;<br><span class=\"tagline\">maqsad yetakchi</span>",
-            hero_p: "Reklamadan savdoga — bitta jamoa daromad uchun javobgar.",
-            s1:"Loyiha", s2:"Foto", s3:"Bot 24/7", s4:"Natija",
+            hero_p: "Reklama, kontent, bot va CRM — bitta jamoa, butun voronka. Hisobotlar emas — to'langan bitimlar uchun javobgarmiz.",
+            s1:"Ishga tushirish", s2:"Reklama kanali", s3:"Bot uzluksiz", s4:"Birinchi kreativ",
+            s1u:"hafta", s4u:"soat",
             tab_works:"Ishlarimiz", tab_svc:"Xizmatlar", tab_sched:"Sessiya", tab_about:"Haqimizda",
             sched_label:"Bepul sessiya", sched_title:"Strategik sessiya — onlayn",
             sched_sub:"Qulay vaqtni tanlang. Uchrashuvda biznesingizni tahlil qilib, audit shu yerda tayyorlaymiz. ~30 daqiqa.",
             lbl_tools:"Instrumentlar", lbl_task:"Vazifa", lbl_solution:"Yechim",
-            p1_type:"SMM • Kontent", p1_name:"[Loyiha nomi]", p1_client:"[Mijoz nomi]",
+            p1_type:"Kontent • Reklama", p1_name:"[Loyiha nomi]", p1_client:"[Mijoz nomi]",
             p1_task:"[Yangi kolleksiya uchun vizual kontent — fotosessiyasiz, modellar va chiqishsiz]",
-            p1_s1:"Vizual kontent va foto mahsulot", p1_s2:"Reels / Shorts seriyasi", p1_s3:"SMM boshqaruv va strategiya",
+            p1_s1:"Vizual kontent va foto mahsulot", p1_s2:"Reels / Shorts seriyasi", p1_s3:"Reklama uchun kontent strategiyasi",
             p1_m1:"+47%", p1_m1l:"Qamrov", p1_m2:"8.3%", p1_m2l:"Engagement", p1_m3:"−30%", p1_m3l:"Lid narxi",
             p2_type:"Avtomatizatsiya • Bot", p2_name:"[Loyiha nomi]", p2_client:"[Mijoz nomi]",
             p2_task:"[Mijozlarni 24/7 qabul qilish va avtomatik ishlov berish tizimi]",
@@ -2405,7 +2463,9 @@
             p3_m1:"10x", p3_m1l:"Tezlik", p3_m2:"100%", p3_m2l:"Litsenziya", p3_m3:"−80%", p3_m3l:"Prodakshn",
             svc_label:"Yo'nalishlar", svc_title:"Nima qilamiz",
             ladder_sub:"Auditdan to to'liq voronkani boshqarishgacha — qatnashish darajasini siz tanlaysiz.",
-            ladder_divider:"Yoki to'liq tizim",
+            ladder_divider:"To'liq tizim",
+            tier_build_price:"$4 000 dan",
+            tier_co_price:"$1 500 dan / oy",
             capabilities_divider:"Imkoniyatlar",
             tier_audit_badge:"Cheklangan taklif",
             tier_audit_title:"Bepul audit + strategik sessiya",
@@ -2445,8 +2505,8 @@
             co_logic:"Reteyner hajmi ish miqdoriga bog'liq. Reklama byudjetidan foiz — odatda 10–15%. Aniq stavkani strategik sessiyadan keyin kelishamiz.",
             tier_co_cta:"Sessiyada muhokama qilish",
             svc1_label:"Kontent ishlab chiqarish", svc1_name:"Kontent",
-            svc1_desc:"Vizuallar, video va SMM — fotosessiyasiz, jamoaning o'lchovida.",
-            svc1_b1:"Vizual kontent va foto mahsulot", svc1_b2:"Reels / Shorts video", svc1_b3:"SMM boshqaruv va strategiya", svc1_b4:"Key Visuals va brending",
+            svc1_desc:"Vizuallar, video va kreativlar — reklama va targetlash uchun, fotosessiyasiz.",
+            svc1_b1:"Vizual kontent va foto mahsulot", svc1_b2:"Reels / Shorts video", svc1_b3:"Reklama kreativlari oqimi", svc1_b4:"Key Visuals va brending",
             svc2_label:"Avtomatlashtirish", svc2_name:"Tizimlar",
             svc2_desc:"Aqlli voronkalar va botlar — 24/7 sotadi, mijozlarga xizmat qiladi.",
             svc2_b1:"Bot savdo 24/7", svc2_b2:"Telegram / Instagram botlar", svc2_b3:"CRM va savdo voronkalari", svc2_b4:"Biznes jarayonlari avtomati",
@@ -2509,17 +2569,18 @@
             proj_gallery:"Galereya", proj_result:"Natija", proj_close:"Yopish",
         },
         ru: {
-            hero_label: "Маркетинговое агентство",
+            hero_label: "Performance Marketing",
             hero_h1: "MQSD &mdash;<br><span class=\"tagline\">цель превыше всего</span>",
-            hero_p: "От рекламы до продажи — одна команда отвечает за выручку.",
-            s1:"Проектов", s2:"Фото", s3:"Бот 24/7", s4:"Результат",
+            hero_p: "Реклама, контент, бот и CRM — одна команда, вся воронка. Отвечаем за оплаченные сделки, а не за охваты.",
+            s1:"Запуск", s2:"Рекламных канала", s3:"Бот без выходных", s4:"Первый креатив",
+            s1u:"нед", s4u:"ч",
             tab_works:"Работы", tab_svc:"Услуги", tab_sched:"Сессия", tab_about:"О нас",
             sched_label:"Бесплатная сессия", sched_title:"Стратегическая сессия — онлайн",
             sched_sub:"Выберите удобное время. На встрече разберём бизнес и подготовим аудит здесь же. ~30 минут.",
             lbl_tools:"Инструменты", lbl_task:"Задача", lbl_solution:"Решение",
-            p1_type:"SMM • Контент", p1_name:"[Название проекта]", p1_client:"[Название клиента]",
+            p1_type:"Контент • Реклама", p1_name:"[Название проекта]", p1_client:"[Название клиента]",
             p1_task:"[Быстрый запуск визуального контента при отсутствии готовых образцов — без фотосессий]",
-            p1_s1:"Визуальный контент и фото продукта", p1_s2:"Серия Reels / Shorts", p1_s3:"SMM-ведение и стратегия",
+            p1_s1:"Визуальный контент и фото продукта", p1_s2:"Серия Reels / Shorts", p1_s3:"Контент-стратегия для рекламы",
             p1_m1:"+47%", p1_m1l:"Охват", p1_m2:"8.3%", p1_m2l:"Engagement", p1_m3:"−30%", p1_m3l:"Стоимость лида",
             p2_type:"Автоматизация • Бот", p2_name:"[Название проекта]", p2_client:"[Название клиента]",
             p2_task:"[Приём клиентов 24/7 и автоматическая обработка заявок]",
@@ -2531,7 +2592,9 @@
             p3_m1:"10x", p3_m1l:"Скорость", p3_m2:"100%", p3_m2l:"Лицензия", p3_m3:"−80%", p3_m3l:"Стоимость",
             svc_label:"Направления", svc_title:"Чем занимаемся",
             ladder_sub:"От аудита до полного управления воронкой — выбираете уровень включённости.",
-            ladder_divider:"Или полная система",
+            ladder_divider:"Полная система",
+            tier_build_price:"от $4 000",
+            tier_co_price:"от $1 500 / мес",
             capabilities_divider:"Возможности",
             tier_audit_badge:"Ограниченное предложение",
             tier_audit_title:"Бесплатный аудит + стратегическая сессия",
@@ -2571,8 +2634,8 @@
             co_logic:"Размер ретейнера зависит от объёма работ. Процент от рекламного бюджета — обычно 10–15%. Точную ставку согласуем после стратегической сессии.",
             tier_co_cta:"Обсудить на сессии",
             svc1_label:"Производство контента", svc1_name:"Контент",
-            svc1_desc:"Визуалы, видео и SMM — без фотосессий, масштабируем без команды.",
-            svc1_b1:"Визуальный контент и фото продукта", svc1_b2:"Reels / Shorts видео", svc1_b3:"SMM-ведение и стратегия", svc1_b4:"Key Visuals и брендинг",
+            svc1_desc:"Визуалы, видео и креативы — для рекламы и таргета, без фотосессий.",
+            svc1_b1:"Визуальный контент и фото продукта", svc1_b2:"Reels / Shorts видео", svc1_b3:"Поток рекламных креативов", svc1_b4:"Key Visuals и брендинг",
             svc2_label:"Автоматизация", svc2_name:"Системы",
             svc2_desc:"Умные воронки и боты — продают и обслуживают клиентов круглосуточно.",
             svc2_b1:"Бот продаж 24/7", svc2_b2:"Telegram / Instagram боты", svc2_b3:"CRM и воронки продаж", svc2_b4:"Автоматизация бизнес-процессов",
@@ -2814,6 +2877,30 @@
         document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
     }
 
+    // ── STAT COUNTER ─────────────────────────────────
+    function animateCounter(el) {
+        const target = parseInt(el.dataset.target || '0', 10);
+        if (!target) { el.textContent = '0'; return; }
+        const duration = 1200;
+        const start = performance.now();
+        function step(now) {
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = Math.round(target * eased);
+            if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                animateCounter(e.target);
+                counterObserver.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.stat-val .num[data-target]').forEach(el => counterObserver.observe(el));
+
     // ── SCROLL TO CONTACT (About tab) ─────────────
     function scrollToContact() {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -2943,7 +3030,7 @@ const OB_T = {
         ch_meta: 'Instagram / Facebook reklama',
         ch_google: 'Google Ads',
         ch_telegram: 'Telegram (kanal/reklama)',
-        ch_organic: 'Organik kontent / SMM',
+        ch_organic: 'Organik kontent',
         ch_offline: 'Offline (bilbord, agentlar)',
         ch_none: 'Hozircha hech narsa',
         crm_yes: 'To\'liq CRM', crm_yes_d: 'Bitrix, AmoCRM, HubSpot va h.k.',
@@ -2984,7 +3071,7 @@ const OB_T = {
         ch_meta: 'Реклама Instagram / Facebook',
         ch_google: 'Google Ads',
         ch_telegram: 'Telegram (канал/реклама)',
-        ch_organic: 'Органический контент / SMM',
+        ch_organic: 'Органический контент',
         ch_offline: 'Офлайн (билборды, агенты)',
         ch_none: 'Пока ничего не работает',
         crm_yes: 'Полноценная CRM', crm_yes_d: 'Bitrix, AmoCRM, HubSpot и т.д.',
