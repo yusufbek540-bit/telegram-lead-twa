@@ -1533,14 +1533,22 @@
         </div>
       </div>
 
-      <!-- SLIDE 5: Top problem -->
+      <!-- SLIDE 5: Business intake -->
       <div class="ob-slide" id="ob-slide-5">
-        <span class="ob-sec-label" id="ob-q5-label">05 · Главная задача</span>
-        <div class="ob-q-title" id="ob-q5-title">Какая сейчас главная проблема в продажах?</div>
-        <div class="ob-q-sub" id="ob-q5-sub">Хватит одного-двух предложений</div>
+        <span class="ob-sec-label" id="ob-q5-label">05 · О бизнесе</span>
+        <div class="ob-q-title" id="ob-q5-title">Расскажите о бизнесе</div>
+        <div class="ob-q-sub" id="ob-q5-sub">Это поможет нам подготовиться к встрече</div>
         <div class="ob-field">
-          <label id="ob-biz-name-label">Опишите коротко</label>
-          <input type="text" id="ob-biz-name-input" placeholder="Например: лиды есть, но мало доходят до сделки">
+          <label id="ob-biz-name-label">Название бизнеса <span class="ob-req">*</span></label>
+          <input type="text" id="ob-biz-name-input" placeholder="Например: «Клиника N» или «Школа X»" maxlength="100">
+        </div>
+        <div class="ob-field">
+          <label id="ob-website-label">Сайт (если есть)</label>
+          <input type="url" id="ob-website-input" placeholder="https://..." maxlength="200">
+        </div>
+        <div class="ob-field">
+          <label id="ob-social-label">Соцсети — любой профиль</label>
+          <input type="text" id="ob-social-input" placeholder="@instagram или t.me/handle" maxlength="200">
         </div>
       </div>
 
@@ -2493,6 +2501,8 @@ const obState = {
         budget_range: null,
         phone: '',
         business_name: '',
+        website: '',
+        social_handle: '',
         contact_shared: false,
     }
 };
@@ -2506,15 +2516,20 @@ const OB_T = {
         q2_title: 'Hozir qaysi kanallar ishlaydi?', q2_sub: 'Bir nechta tanlash mumkin',
         q3_title: 'Lidlar va bitimlarni qanday yuritasiz?', q3_sub: 'Voronkani audit qilish uchun',
         q4_title: 'Oyiga reklamaga qancha sarflaysiz?', q4_sub: 'Taxminiy diapazon yetadi',
-        q5_title: 'Sotuvda eng katta muammo qaysi?', q5_sub: '1–2 jumla yetadi',
-        q6_title: 'Telefon raqamingizni ulashing', q6_sub: 'Partnyor 24 soat ichida bog\'lanadi',
-        biz_name_label: 'Qisqacha tasvirlang',
+        q5_title: 'Biznes haqida ayting', q5_sub: 'Bu uchrashuvga tayyorlanishga yordam beradi',
+        q6_title: 'Telefon raqamingizni ulashing', q6_sub: 'Partnyor siz bilan bog\'lanadi',
+        biz_name_label: 'Biznes nomi',
+        biz_name_placeholder: 'Masalan: «Klinika N» yoki «Maktab X»',
+        website_label: 'Sayt (agar bor bo\'lsa)',
+        website_placeholder: 'https://...',
+        social_label: 'Ijtimoiy tarmoqlar — har qanday profil',
+        social_placeholder: '@instagram',
         sec_01: '01 · Yo\'nalish', sec_02: '02 · Kanallar', sec_03: '03 · CRM',
-        sec_04: '04 · Reklama byudjeti', sec_05: '05 · Asosiy muammo', sec_06: '06 · Kontakt',
+        sec_04: '04 · Reklama byudjeti', sec_05: '05 · Biznes', sec_06: '06 · Kontakt',
         share_contact: '📱 Telegram orqali ulashish',
         share_contact_done: '✅ Kontakt ulashildi',
         privacy: 'Raqamingiz faqat audit yuborish uchun ishlatiladi',
-        done_title: 'Rahmat', done_sub: 'Auditingizni tayyorlamoqdamiz — partnyor 24 soat ichida bog\'lanadi.',
+        done_title: 'Rahmat', done_sub: 'Rahmat. Kontekst qabul qilindi. Bepul strategik sessiya uchun qulay vaqtni tanlang — uchrashuvda biznesingizni tahlil qilib, audit shu yerda tayyorlaymiz.',
         biz_realestate: 'Ko\'chmas mulk (devlopment)',
         biz_clinic: 'Xususiy klinika',
         biz_education: 'Ta\'lim / kouching',
@@ -2542,15 +2557,20 @@ const OB_T = {
         q2_title: 'Какие каналы работают сейчас?', q2_sub: 'Можно выбрать несколько',
         q3_title: 'Как вы ведёте лидов и сделки?', q3_sub: 'Это нужно для аудита воронки',
         q4_title: 'Сколько вы тратите на рекламу в месяц?', q4_sub: 'Примерно — диапазона достаточно',
-        q5_title: 'Какая сейчас главная проблема в продажах?', q5_sub: 'Хватит одного-двух предложений',
-        q6_title: 'Поделитесь номером', q6_sub: 'Партнёр свяжется в течение 24 часов',
-        biz_name_label: 'Опишите коротко',
+        q5_title: 'Расскажите о бизнесе', q5_sub: 'Это поможет нам подготовиться к встрече',
+        q6_title: 'Поделитесь номером', q6_sub: 'Партнёр свяжется с вами',
+        biz_name_label: 'Название бизнеса',
+        biz_name_placeholder: 'Например: «Клиника N» или «Школа X»',
+        website_label: 'Сайт (если есть)',
+        website_placeholder: 'https://...',
+        social_label: 'Соцсети — любой профиль',
+        social_placeholder: '@instagram или t.me/handle',
         sec_01: '01 · Направление', sec_02: '02 · Каналы', sec_03: '03 · CRM',
-        sec_04: '04 · Бюджет на рекламу', sec_05: '05 · Главная задача', sec_06: '06 · Контакт',
+        sec_04: '04 · Бюджет на рекламу', sec_05: '05 · О бизнесе', sec_06: '06 · Контакт',
         share_contact: '📱 Поделиться через Telegram',
         share_contact_done: '✅ Контакт отправлен',
         privacy: 'Номер используется только для отправки аудита',
-        done_title: 'Спасибо', done_sub: 'Готовим ваш аудит — партнёр свяжется в течение 24 часов.',
+        done_title: 'Спасибо', done_sub: 'Спасибо. Контекст получен. Выберите удобное время для бесплатной стратегической сессии — на встрече разберём бизнес и подготовим аудит вместе с вами.',
         biz_realestate: 'Жилая недвижимость / девелопмент',
         biz_clinic: 'Частная медицинская клиника',
         biz_education: 'Образование / коучинг',
@@ -2591,7 +2611,16 @@ function obSetLang(l) {
     document.getElementById('ob-q5-sub').textContent = t.q5_sub;
     document.getElementById('ob-q6-title').textContent = t.q6_title;
     document.getElementById('ob-q6-sub').textContent = t.q6_sub;
-    document.getElementById('ob-biz-name-label').textContent = t.biz_name_label;
+    document.getElementById('ob-biz-name-label').innerHTML = t.biz_name_label + ' <span class="ob-req">*</span>';
+    document.getElementById('ob-biz-name-input').placeholder = t.biz_name_placeholder || '';
+    const webLbl = document.getElementById('ob-website-label');
+    if (webLbl) webLbl.textContent = t.website_label;
+    const webIn = document.getElementById('ob-website-input');
+    if (webIn) webIn.placeholder = t.website_placeholder || '';
+    const socLbl = document.getElementById('ob-social-label');
+    if (socLbl) socLbl.textContent = t.social_label;
+    const socIn = document.getElementById('ob-social-input');
+    if (socIn) socIn.placeholder = t.social_placeholder || '';
     // Section labels on each slide
     for (let i = 1; i <= 6; i++) {
         const lbl = document.getElementById('ob-q' + i + '-label');
@@ -2688,8 +2717,13 @@ function obToggleMulti(el, field) {
 function obNext() {
     const slide = obState.slide;
     if (slide === 5) {
-        const bizVal = document.getElementById('ob-biz-name-input').value.trim();
-        if (bizVal) obState.answers.business_name = bizVal;
+        const biz = document.getElementById('ob-biz-name-input').value.trim();
+        const web = document.getElementById('ob-website-input').value.trim();
+        const soc = document.getElementById('ob-social-input').value.trim();
+        if (biz.length < 2) return;
+        obState.answers.business_name = biz;
+        obState.answers.website = web || '';
+        obState.answers.social_handle = soc || '';
         obGoToSlide(6);
     } else {
         obGoToSlide(slide + 1);
@@ -2741,6 +2775,8 @@ function obSendData() {
         budget_range: obState.answers.budget_range || '',
         phone: obState.answers.phone || '',
         business_name: obState.answers.business_name || '',
+        website: obState.answers.website || '',
+        social_handle: obState.answers.social_handle || '',
         contact_shared: !!obState.answers.contact_shared,
     };
     if (tg) {
@@ -2759,6 +2795,14 @@ function showOnboarding() {
     document.getElementById('main-app').style.display = 'none';
     const bizEl = document.getElementById('ob-biz-name-input');
     if (bizEl) bizEl.addEventListener('input', () => {
+        if (obState.slide === 5) obUpdateFooter();
+    });
+    const webEl = document.getElementById('ob-website-input');
+    if (webEl) webEl.addEventListener('input', () => {
+        if (obState.slide === 5) obUpdateFooter();
+    });
+    const socEl = document.getElementById('ob-social-input');
+    if (socEl) socEl.addEventListener('input', () => {
         if (obState.slide === 5) obUpdateFooter();
     });
     obSetLang(obState.lang);
