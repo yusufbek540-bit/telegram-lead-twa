@@ -24,11 +24,71 @@ function verifySignature(rawBody, signatureHeader, secret) {
     }
 }
 
-function fmtDateTime(iso) {
+function fmtDateTime(iso, lang = 'ru') {
     const d = new Date(iso);
-    const date = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', timeZone: TZ });
-    const time = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: TZ });
+    const locale = lang === 'uz' ? 'ru-RU' : 'ru-RU';
+    const date = d.toLocaleDateString(locale, { day: '2-digit', month: 'long', timeZone: TZ });
+    const time = d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', timeZone: TZ });
     return { date, time };
+}
+
+async function fetchLeadLang(telegramId) {
+    try {
+        const url = `${process.env.SUPABASE_URL}/rest/v1/leads?telegram_id=eq.${telegramId}&select=preferred_lang`;
+        const res = await fetch(url, {
+            headers: {
+                apikey: process.env.SUPABASE_SERVICE_KEY,
+                Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+            },
+        });
+        if (!res.ok) return 'ru';
+        const rows = await res.json();
+        return (rows[0] && rows[0].preferred_lang) || 'ru';
+    } catch {
+        return 'ru';
+    }
+}
+
+function buildUserMessage(trigger, startTime, lang, rescheduleUrl, attendee) {
+    const ru = lang === 'ru';
+    if (trigger === 'BOOKING_CREATED' || trigger === 'BOOKING_RESCHEDULED') {
+        if (!startTime) {
+            return ru
+                ? '✓ Сессия назначена. Подробности придут отдельным письмом.'
+                : '✓ Sessiya tayinlandi. Tafsilotlar alohida xabar bilan yuboriladi.';
+        }
+        const { date, time } = fmtDateTime(startTime, lang);
+        const verbRu = trigger === 'BOOKING_CREATED' ? 'назначена' : 'перенесена';
+        const verbUz = trigger === 'BOOKING_CREATED' ? 'tayinlandi' : 'ko‘chirildi';
+        const lines = ru
+            ? [
+                `✓ Стратегическая сессия ${verbRu}`,
+                ``,
+                `📅 <b>${date}</b> в <b>${time}</b> (Tashkent)`,
+                attendee && attendee.email ? `📧 ${attendee.email}` : null,
+                ``,
+                `За 2 часа до встречи мы пришлём напоминание с возможностью подтвердить, отменить или перенести.`,
+            ]
+            : [
+                `✓ Strategik sessiya ${verbUz}`,
+                ``,
+                `📅 <b>${date}</b> soat <b>${time}</b> da (Toshkent)`,
+                attendee && attendee.email ? `📧 ${attendee.email}` : null,
+                ``,
+                `Uchrashuvdan 2 soat oldin biz eslatma yuboramiz — tasdiqlash, bekor qilish yoki ko‘chirish imkoniyati bilan.`,
+            ];
+        if (rescheduleUrl) {
+            lines.push('');
+            lines.push(ru ? `Изменить время: ${rescheduleUrl}` : `Vaqtni o‘zgartirish: ${rescheduleUrl}`);
+        }
+        return lines.filter((l) => l !== null).join('\n');
+    }
+    if (trigger === 'BOOKING_CANCELLED') {
+        return ru
+            ? 'Сессия отменена. Если планы изменятся — выберите другое время в нашем боте.'
+            : 'Sessiya bekor qilindi. Rejalar o‘zgarsa — botimizda boshqa vaqt tanlang.';
+    }
+    return '';
 }
 
 async function supabaseRequest(path, opts = {}) {
@@ -98,54 +158,47 @@ export default async function handler(req, res) {
     const cancelUrl = payload.cancelUrl || payload.cancelLink || null;
 
     let nextStatus;
-    let userMessage;
     let adminLabel;
-
     if (trigger === 'BOOKING_CREATED') {
         nextStatus = 'scheduled';
-        if (startTime) {
-            const { date, time } = fmtDateTime(startTime);
-            userMessage = `✓ Сессия назначена на <b>${date}</b> в <b>${time}</b> (Tashkent).\n\nЧто дальше:\n• За 24 часа — напоминание\n• За 1 час — ссылка на встречу\n• На сессии — разбор бизнеса и бесплатный аудит` +
-                (rescheduleUrl ? `\n\nИзменить время: ${rescheduleUrl}` : '');
-        } else {
-            userMessage = '✓ Сессия назначена. Подробности придут отдельным письмом.';
-        }
         adminLabel = '📅 Новая запись';
     } else if (trigger === 'BOOKING_RESCHEDULED') {
         nextStatus = 'scheduled';
-        if (startTime) {
-            const { date, time } = fmtDateTime(startTime);
-            userMessage = `✓ Сессия перенесена на <b>${date}</b> в <b>${time}</b> (Tashkent).`;
-        } else {
-            userMessage = '✓ Сессия перенесена. Подробности придут отдельным письмом.';
-        }
         adminLabel = '📅 Перенос';
     } else if (trigger === 'BOOKING_CANCELLED') {
         nextStatus = 'cancelled';
-        userMessage = 'Сессия отменена. Если планы изменятся — выберите другое время в нашем боте.';
         adminLabel = '📅 Отмена';
     } else {
         return res.status(200).json({ ok: true, note: `unhandled trigger ${trigger}` });
     }
 
-    // Upsert booking row
-    await supabaseRequest('bookings', {
+    const lang = await fetchLeadLang(telegramId);
+    const userMessage = buildUserMessage(trigger, startTime, lang, rescheduleUrl, attendee);
+
+    // Upsert booking row. On RESCHEDULED we clear reminder_sent_at/confirmed_at
+    // so the new slot gets its own 2h reminder. On CANCELLED we clear them too.
+    const bookingRow = {
+        telegram_id: telegramId,
+        cal_booking_id: calBookingId,
+        cal_booking_uid: payload.uid || null,
+        scheduled_at: startTime,
+        ends_at: endTime,
+        status: nextStatus,
+        attendee_name: attendee.name || null,
+        attendee_email: attendee.email || null,
+        reschedule_url: rescheduleUrl,
+        cancel_url: cancelUrl,
+        raw_payload: body,
+        updated_at: new Date().toISOString(),
+    };
+    if (trigger === 'BOOKING_RESCHEDULED' || trigger === 'BOOKING_CANCELLED') {
+        bookingRow.reminder_sent_at = null;
+        bookingRow.confirmed_at = null;
+    }
+    await supabaseRequest('bookings?on_conflict=cal_booking_id', {
         method: 'POST',
         headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
-        body: JSON.stringify({
-            telegram_id: telegramId,
-            cal_booking_id: calBookingId,
-            cal_booking_uid: payload.uid || null,
-            scheduled_at: startTime,
-            ends_at: endTime,
-            status: nextStatus,
-            attendee_name: attendee.name || null,
-            attendee_email: attendee.email || null,
-            reschedule_url: rescheduleUrl,
-            cancel_url: cancelUrl,
-            raw_payload: body,
-            updated_at: new Date().toISOString(),
-        }),
+        body: JSON.stringify(bookingRow),
     });
 
     // Update lead
